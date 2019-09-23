@@ -1,0 +1,18 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 11
+    NAME Char (150) Index 1 ;
+    CITY Char (68) ;
+    PROV Char (2) ;
+    TRS_TYPE Char (25) ;
+    OWNER Char (68) ;
+    ROUTE Char (100) ;
+    TRS_NUM Char (8) ;
+    CODE Smallint ;
+    PREC_CODE Char (2) ;
+    ATTRIBCODE Char (2) ;
+    POI_ID Char (15) ;

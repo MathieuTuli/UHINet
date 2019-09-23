@@ -1,0 +1,24 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 17
+    TURN_ID Integer Index 1 ;
+    RDS_ID Integer Index 2 ;
+    RES_RDS_ID Integer Index 3 ;
+    VIA_RDS_ID Integer Index 4 ;
+    TRVLDIR Char (5) ;
+    TYPE Char (10) ;
+    TIME1_FROM Char (8) ;
+    TIME1_TO Char (8) ;
+    TIME2_FROM Char (8) ;
+    TIME2_TO Char (8) ;
+    DAY_FROM Char (10) ;
+    DAY_TO Char (10) ;
+    ON_RED_SIG Smallint ;
+    AUTH_VEHIC Smallint ;
+    BUS_EXCEPT Smallint ;
+    LEGISLATED Smallint ;
+    PROV Char (2) ;

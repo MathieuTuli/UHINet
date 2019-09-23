@@ -1,0 +1,9 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 2
+    EXIT_NUM Char (30) ;
+    EXIT_DIR Char (2) ;

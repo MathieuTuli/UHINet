@@ -1,0 +1,18 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 11
+    RDS_ID Integer Index 1 ;
+    L_MUN_96 Char (57) ;
+    R_MUN_96 Char (57) ;
+    L_MUN_01 Char (70) ;
+    R_MUN_01 Char (70) ;
+    L_MUN_06 Char (51) ;
+    R_MUN_06 Char (51) ;
+    L_MUN_11 Char (51) ;
+    R_MUN_11 Char (51) ;
+    L_MUN_16 Char (51) ;
+    R_MUN_16 Char (51) ;

@@ -1,0 +1,33 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 26
+    RDS_ID Integer Index 1 ;
+    ALIAS_NAME Char (69) ;
+    FORMERNAME Char (69) ;
+    HWY_NUM Char (20) ;
+    HWY_NUMNAM Char (69) ;
+    HWY_NAME Char (69) ;
+    RD_NUM Char (20) ;
+    RD_NUMNAM Char (69) ;
+    RD_NAME Char (69) ;
+    ALASKAHWY Smallint ;
+    CARIBOOHWY Smallint ;
+    CRWSNSTHWY Smallint ;
+    DEMPSTRHWY Smallint ;
+    JOHNHRTHWY Smallint ;
+    KLONDKEHWY Smallint ;
+    MCKNZIEHWY Smallint ;
+    TRNSCDAHWY Smallint ;
+    YELOWHDHWY Smallint ;
+    TOLL_RD Smallint ;
+    BRIDGE Smallint ;
+    TUNNEL Smallint ;
+    BRUNNELNAM Char (69) ;
+    TRAILNAME Char (100) ;
+    TRAILTYPE Char (50) ;
+    TRAILCLASS Char (20) ;
+    TRAILCODE Smallint ;

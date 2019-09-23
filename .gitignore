@@ -1,0 +1,96 @@
+# pytest
+*.coverage*
+
+# Stock Python things
+venv
+*.egg-info
+/.eggs
+__pycache__
+
+# Tools: MyPy, flake8, coverage, etc.
+/.*_cache
+/.coverage
+
+# IDE files never belong in a repo. Not unless the repo is tied to an IDE
+# (generally a bad idea). It's also diff noise.
+.idea
+
+# stdlib cProfile dumps
+*.pstats
+
+# Pickle files should never be committed.
+# They may break when library and Python versions change.
+*.pickle
+
+# We really don't care about Notebook checkpoints. Use git.
+.ipynb_checkpoints
+
+# Ctags
+# Would do /tags, but am going to assume people will accidentally generate some
+# in subdirs. Would rather not have them added by accident because nobody
+# checks git diff --cached before committing, rather than pointing them out
+# when they won't look.
+# -- Alex
+tags
+
+# NEVER TO BE COMMITTED TO REPO. May contain secrets, like embedded
+# username:password@ in DATABASE_URL.
+/.env
+*.pem
+
+# C extensions
+*.so
+/.idea
+
+# Project-specific
+*.avi
+*.h5
+*.caffemodel
+*.png
+*.xml
+*.MOV
+*.json
+*.pem
+*sample_videos/*
+*.key
+
+# Exhuberant C
+tags
+
+# GitHub wiki clone
+/wiki
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+*.un~
+*.swo
+*.swp
+build/*
+*.DS_Store

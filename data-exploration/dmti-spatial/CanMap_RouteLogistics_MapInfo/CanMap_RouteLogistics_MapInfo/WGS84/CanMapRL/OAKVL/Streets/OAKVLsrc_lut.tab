@@ -1,0 +1,10 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 3
+    RDS_ID Integer Index 1 ;
+    ACCURACY Integer ;
+    ACQ_TECH Integer ;

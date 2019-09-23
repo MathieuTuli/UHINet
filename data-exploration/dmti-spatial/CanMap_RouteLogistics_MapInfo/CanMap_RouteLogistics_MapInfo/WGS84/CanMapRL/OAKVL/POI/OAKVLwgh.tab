@@ -1,0 +1,24 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 17
+    NAME Char (150) Index 1 ;
+    LOCATION Char (100) ;
+    DELIV_MODE Char (25) ;
+    CITY Char (68) ;
+    PROV Char (2) ;
+    POST_CODE Char (7) ;
+    PHONE Char (15) ;
+    FAX Char (15) ;
+    WGH_TYPE Char (10) ;
+    DIRECTION Char (2) ;
+    HOURS Char (20) ;
+    YEAR_ROUND Smallint ;
+    RESTROOM Smallint ;
+    AVION401 Smallint ;
+    PREC_CODE Char (2) ;
+    ATTRIBCODE Char (2) ;
+    POI_ID Char (15) ;

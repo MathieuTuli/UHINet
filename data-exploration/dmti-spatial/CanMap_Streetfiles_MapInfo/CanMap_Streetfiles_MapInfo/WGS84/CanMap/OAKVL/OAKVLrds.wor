@@ -1,0 +1,123 @@
+!Workspace
+!Version 600
+!Charset WindowsLatin1
+Open Table "rds_legend" As Legend Interactive
+Open Table "Canada\CANprv" As CANprv Interactive
+Open Table "Streets\OAKVLmun" As OAKVLmun Interactive
+Open Table "Canada\CANwat" As CANwat Interactive
+Open Table "Streets\OAKVLhwy" As OAKVLhwy Interactive
+Open Table "Streets\OAKVLhrd" As OAKVLhrd Interactive
+Open Table "Streets\OAKVLrds" As OAKVLrds Interactive
+Open Table "POI\OAKVLppn" As OAKVLppn Interactive
+Open Table "Streets\OAKVLxit" As OAKVLxit Interactive
+Open Table "Canada\CANcap" As CANcap Interactive
+Map From Legend 
+  Position (0,0) Units "in"
+  Width 2.42708 Units "in" Height 6.16667 Units "in" 
+Set Window FrontWindow() ScrollBars On Autoscroll On
+Set Map
+  CoordSys NonEarth Units "mm"
+  Center (4.999246417,5.004013815)
+  Zoom 0.0009211267606 Units "mm"
+  Preserve Scale Display Zoom
+  Distance Units "mm" Area Units "sq mm" XY Units "mm"
+  Distance Type Cartesian
+Set Map
+  Layer 1
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Label Line Arrow Position Right Font ("Arial",0,9,0) Pen (1,2,0) 
+      With Item
+      Parallel On Auto Off Overlap Off Duplicates On Offset 2
+      Visibility On
+Set Window FrontWindow() Title "Map Legend"
+Set Window FrontWindow() Printer
+ Name "Microsoft XPS Document Writer" Orientation Portrait Copies 1
+ Papersize 1
+Map From CANcap,OAKVLxit,OAKVLppn,OAKVLrds,OAKVLhrd,OAKVLhwy,
+  CANwat,OAKVLmun,CANprv 
+  Position (2.51042,0) Units "in"
+  Width 8.07292 Units "in" Height 6.16667 Units "in" 
+Set Window FrontWindow() ScrollBars Off Autoscroll On
+Set Map
+  CoordSys Earth Projection 1, 33
+  Center (-79.668905,43.421023)
+  Zoom 103.6060026 Units "km"
+  Preserve Zoom Display Zoom
+  Distance Units "km" Area Units "sq km" XY Units "degree"
+Set Map
+  Layer 1
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Zoom (15, 9999) Units "km" 
+    Label Line None Position Above Right Font ("Arial",257,9,3158064,16777215) Pen (1,2,0) 
+      With NAME
+      Parallel On Auto On Overlap Off Duplicates On Offset 5
+      Visibility Zoom (15, 9999) Units "km"
+  Layer 2
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Zoom (0, 40) Units "km" 
+    Label Line None Position Right Font ("Arial",257,7,0,16777215) Pen (1,2,0) 
+      With EXIT_NUM
+      Parallel On Auto On Overlap Off Duplicates On Offset 2
+      Visibility Zoom (0, 20) Units "km"
+  Layer 3
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Zoom (0, 15) Units "km" 
+    Label Line None Position Above Right Font ("Arial",257,9,3158064,16777215) Pen (1,2,0) 
+      With NAME
+      Parallel On Auto On Overlap Off Duplicates On Offset 5
+      Visibility Zoom (0, 15) Units "km"
+  Layer 4
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Zoom (0, 40) Units "km" 
+    Label Line None Position Center Font ("Arial",257,7,0,16777215) Pen (1,2,0) 
+      With STREET
+      Parallel On Auto On Overlap Off Duplicates Off Offset 2
+      Visibility Zoom (0, 3) Units "km"
+  Layer 5
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Zoom (3, 300) Units "km" 
+    Label Line None Position Center Font ("Arial",257,7,0,16777215) Pen (1,2,0) 
+      With STREET
+      Parallel On Auto On Overlap Off Duplicates Off Offset 2
+      Visibility Zoom (3, 8) Units "km"
+  Layer 6
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Zoom (8, 700) Units "km" 
+    Label Line None Position Center Font ("Arial",257,7,0,16777215) Pen (1,2,0) 
+      With STREET
+      Parallel On Auto On Overlap Off Duplicates Off Offset 2
+      Visibility Zoom (8, 40) Units "km"
+  Layer 7
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Zoom (0, 100000) Units "km" 
+    Label Line None Position Center Font ("Arial",0,9,0) Pen (1,2,0) 
+      With NAME
+      Parallel On Auto Off Overlap Off Duplicates On Offset 2
+      Visibility On
+  Layer 8
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Zoom (0, 500) Units "km" 
+    Label Line None Position Center Font ("Arial",257,8,0,16777215) Pen (1,2,0) 
+      With NAME
+      Parallel On Auto On Overlap Off Duplicates On Offset 2
+      Visibility Zoom (15, 150) Units "km"
+  Layer 9
+    Display Graphic
+    Global Pen (1,2,0)  Brush (2,16777215,16777215)  Symbol (35,0,12)  Line (1,2,0)  Font ("Arial",0,9,0)
+    Label Line None Position Center Font ("Arial",0,9,0) Pen (1,2,0) 
+      With NAME
+      Parallel On Auto Off Overlap Off Duplicates On Offset 2
+      Visibility On
+Set Window FrontWindow() Title "CanMap® Streetfiles - Oakville"
+Set Window FrontWindow() Printer
+ Name "Microsoft XPS Document Writer" Orientation Portrait Copies 1
+ Papersize 1

@@ -1,0 +1,20 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 13
+    NAME Char (68) Index 1 ;
+    PROV Char (2) ;
+    LONGITUDE Decimal (11, 6) ;
+    LATITUDE Decimal (11, 6) ;
+    PPN_CODE Smallint ;
+    PREC_CODE Smallint ;
+    MJR_CITY Smallint ;
+    CAPITAL Smallint ;
+    PRCDCSD Char (8) ;
+    CSD_NAME Char (68) ;
+    CSD_POP01 Integer ;
+    PPN_ID Decimal (11, 0) Index 2 ;
+    RETIRED Integer ;

@@ -1,0 +1,12 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 5
+    UNIQUE_ID Integer Index 1 ;
+    NAME Char (70) ;
+    PROV Char (2) ;
+    TYPE Char (3) ;
+    EFF_DATE Char (8) ;

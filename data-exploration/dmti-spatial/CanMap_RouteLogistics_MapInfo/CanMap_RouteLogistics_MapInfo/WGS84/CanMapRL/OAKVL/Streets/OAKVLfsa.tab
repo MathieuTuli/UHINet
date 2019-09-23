@@ -1,0 +1,10 @@
+!table
+!version 450
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 3
+    FSA Char (3) Index 1 ;
+    PROV Char (2) ;
+    PROV_CODE Char (2) ;
