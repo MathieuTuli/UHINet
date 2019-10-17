@@ -1,4 +1,5 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+        unicode_literals
 
 import tensorflow as tf
 
@@ -6,7 +7,8 @@ import os
 import time
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
-_URL = 'https://people.eecs.berkeley.edu/~tinghuiz/projects/pix2pix/datasets/facades.tar.gz'
+_URL = 'https://people.eecs.berkeley.edu/~tinghuiz/projects/pix2pix/' + \
+       'datasets/facades.tar.gz'
 
 path_to_zip = tf.keras.utils.get_file('facades.tar.gz',
                                       origin=_URL,
@@ -17,21 +19,23 @@ BUFFER_SIZE = 400
 BATCH_SIZE = 1
 IMG_WIDTH = 256
 IMG_HEIGHT = 256
+
+
 def load(image_file):
-  image = tf.io.read_file(image_file)
-  image = tf.image.decode_jpeg(image)
+    image = tf.io.read_file(image_file)
+    image = tf.image.decode_jpeg(image)
 
-  w = tf.shape(image)[1]
+    w = tf.shape(image)[1]
 
-  w = w // 2
-  real_image = image[:, :w, :]
-  input_image = image[:, w:, :]
+    w = w // 2
+    real_image = image[:, :w, :]
+    input_image = image[:, w:, :]
 
-  input_image = tf.cast(input_image, tf.float32)
-  real_image = tf.cast(real_image, tf.float32)
+    input_image = tf.cast(input_image, tf.float32)
+    real_image = tf.cast(real_image, tf.float32)
 
-  return input_image, real_image
-  inp, re = load(PATH+'train/100.jpg')
+    return input_image, real_image
+inp, re = load(PATH+'train/100.jpg')
 # casting to int for matplotlib to show the image
 plt.figure()
 plt.imshow(inp/255.0)
