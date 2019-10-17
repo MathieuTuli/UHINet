@@ -23,9 +23,10 @@ if __name__ == "__main__":
     #          .select(['B10', 'B11'])
     # print(item)
 
-    landsat = ee.Image('LANDSAT/LE07/C01/T1_SR/LE07_044034_19990707')
-    # .select(['B10'])
-    # .filterDate('2017-01-01', '2017-12-31') \
+    landsat = ee.ImageCollection('LANDSAT/LC08/C01/T1') \
+                .select(['B10']) \
+                .filterDate('2017-01-01', '2017-01-02')
+    landsat = ee.Image('LANDSAT/LT05/C01/T1_SR/LT05_034033_20000913')
     geometry = ee.Geometry.Rectangle([43.945970, -79.477810,
                                       43.654350, -79.407530])
 
