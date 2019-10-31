@@ -4,7 +4,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .components import BBox, ImageSize, LandsatLayer
+from ..components import BBox, ImageSize, LandsatLayer
 
 
 class SentinelHubAccessor:
