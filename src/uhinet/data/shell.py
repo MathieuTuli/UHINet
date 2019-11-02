@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 import logging
 import sys
 
-from .SentinelHubAccessor import SentinelHubAccessor
+# from .SentinelHubAccessor import SentinelHubAccessor
 
 
 parser = ArgumentParser(description=__doc__)
@@ -44,7 +44,7 @@ def main():
     print("\nUHINet Data Module")
     if args.data_source.lower() == 'landsat':
         # TODO FIgure out proper way to use instance id
-        landsat_accessor = SentinelHubAccessor()
+        ...
     else:
         logging.error(
             f"Data source \"{args.data_source}\" unknown. Exiting.")
