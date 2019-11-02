@@ -25,9 +25,29 @@
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 43.65, lng: -79.4},
-          zoom: 14
+          zoom: 14.1
+        });
+
+        var coords = [
+          {lat: 43.648, lng: -79.3983},
+          {lat: 43.6483, lng: -79.401},
+          {lat: 43.6513, lng: -79.4013},
+          {lat: 43.651, lng: -79.398},
+        ];
+
+        new google.maps.Polygon({
+          map: map,
+          paths: coords,
+          strokeColor: '#23244b',
+          strokeOpacity: 0.8,
+          fillColor: '#808080',
+          fillOpacity: 0.35,
+          draggable: true,
+          editable: true,
+          geodesic: true
         });
       }
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEIC7R9Mn_olV37wKgM2H92QX75mWTUWU&callback=initMap" async defer></script>
   </body>
