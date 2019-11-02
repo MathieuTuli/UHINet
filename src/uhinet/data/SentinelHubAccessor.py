@@ -16,7 +16,7 @@ class SentinelHubAccessor:
                           date: str,
                           image_size: ImageSize,
                           bbox: BBox) -> Optional[np.ndarray]:
-        if not layer not in ['RGB', 'LST']:
+        if layer not in ['RGB', 'LST']:
             print("SentinelHubAccessor: Error: " +
                   "@param layer must be one of RGB of LST")
         if not isinstance(image_size, ImageSize):

@@ -10,8 +10,8 @@ class LatLon(NamedTuple):
     '''
     Bouding Box typed annotation
     '''
-    lat: int
-    lon: int
+    lat: float
+    lon: float
 
 
 class BBox(NamedTuple):
