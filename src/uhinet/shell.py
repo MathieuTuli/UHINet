@@ -1,2 +1,2 @@
 def main():
-    print("uhinet")
+    print("UHINet Module")
