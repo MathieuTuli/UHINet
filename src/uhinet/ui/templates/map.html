@@ -19,24 +19,30 @@
     </style>
   </head>
   <body>
+    <div id='floating-panel'>
+    </div>
+      <input onclick="removePolygon();" type=button value="Remove Polygon">
+      <input onclick="addPolygon();" type=button value="Restore Polygon">
     <div id="map"></div>
     <script>
+      var pol;
       var map;
+      var coords;
+
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 43.65, lng: -79.4},
           zoom: 14.1
         });
 
-        var coords = [
+        coords = [
           {lat: 43.648, lng: -79.3983},
           {lat: 43.6483, lng: -79.401},
           {lat: 43.6513, lng: -79.4013},
           {lat: 43.651, lng: -79.398},
         ];
 
-        new google.maps.Polygon({
-          map: map,
+        pol = new google.maps.Polygon({
           paths: coords,
           strokeColor: '#23244b',
           strokeOpacity: 0.8,
@@ -46,8 +52,16 @@
           editable: true,
           geodesic: true
         });
+
       }
 
+      function addPolygon(){
+        pol.setMap(map);
+      }
+
+      function removePolygon(){
+        pol.setMap(null);
+      }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEIC7R9Mn_olV37wKgM2H92QX75mWTUWU&callback=initMap" async defer></script>
   </body>
