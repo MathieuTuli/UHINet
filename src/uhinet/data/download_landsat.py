@@ -16,7 +16,7 @@ if not instance_id_path.exists():
 
 
 with instance_id_path.open() as f:
-    instance_id = f.readline()
+    instance_id = f.read()
 
 sentinelhub_accessor = SentinelHubAccessor(instance_id)
 
@@ -73,12 +73,15 @@ def download_lansat_from_file(file_name: Path) -> bool:
                     if year == year_to and month == month_to and day == day_to:
                         return True
                     for layer in layers:
+                        logging.info(
+                            f"Getting for {geometry['name']} at {year}-{month}-{day} and {layer}")
                         val = sentinelhub_accessor.get_landsat_image(
                             layer=layer,
                             date=f"{year}-{month}-{day}",
                             image_size=image_size,
                             bbox=bbox)
                     if val is not None:
+                        logging.info("Success")
                         save_pyplot_image(
                             save_dir / f"{month}_{day}_{layer}.jpg", val)
             year += 1

@@ -13,4 +13,7 @@ def save_pyplot_image(image_name: Path,
                       image: np.ndarray):
     """
     """
-    plt.savefig(image_name.str())
+    fig = plt.subplots(nrows=1, ncols=1, figsize=(15, 7))
+    plt.imshow(image)
+    plt.show()
+    plt.savefig(str(image_name))

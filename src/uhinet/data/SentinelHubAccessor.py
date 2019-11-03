@@ -1,7 +1,9 @@
-from sentinelhub import WmsRequest, DataSource, CustomUrlParam, CRS
+from sentinelhub import WmsRequest, DataSource, CustomUrlParam, CRS, \
+    BBox as SentinelBBox
 from typing import Optional
 
 import numpy as np
+import traceback
 
 from ..components import BBox, ImageSize
 
@@ -27,22 +29,24 @@ class SentinelHubAccessor:
                   "@param bbox must be of type BBox")
         try:
 
-            bbox = BBox(bbox=[bbox.top_left.long, bbox.top_left.lat,
-                              bbox.bottom_right.lon, bbox.bottom_right.lat],
-                        crs=CRS.WGS84)
+            coords = [bbox.top_left.lon, bbox.top_left.lat,
+                      bbox.bottom_right.lon, bbox.bottom_right.lat]
+            geometry = SentinelBBox(bbox=coords, crs=CRS.WGS84)
             request = WmsRequest(
                 data_source=DataSource.LANDSAT8,
                 layer=layer,
-                bbox=bbox,
+                bbox=geometry,
                 time=date,
                 height=image_size.height,
                 width=image_size.width,
-                instance_id=self.instance_id,
+                instance_id="5131c369-a0fe-48d9-921c-1ed575caab08",
                 custom_url_params={
                     CustomUrlParam.SHOWLOGO: False})
-            data = request.data()
+            print(request)
+            data = request.get_data()
             if len(data):
                 return data[-1]
             return None
         except Exception:
+            traceback.print_exc()
             return None
