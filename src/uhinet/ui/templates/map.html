@@ -20,8 +20,8 @@
   </head>
   <body>
     <div id='floating-panel'>
-      <input onclick="removePolygon();" type=button value="Remove Polygon"> 
-      <input onclick="addPolygon();" type=button value="Restore Polygon"> 
+      <input onclick="removePolygon();" type=button value="Delete Polygon"> 
+      <input onclick="addPolygon();" type=button value="Add Polygon"> 
       <input onclick="clearMarkers();" type=button value="Hide All Markers"> 
       <input onclick="showMarkers();" type=button value="Show All Markers"> 
       <input onclick="deleteMarkers();" type=button value="Delete markers"> 
@@ -110,12 +110,15 @@
           return;
         }
 
-        var coords = [];
-        for (var i = 0; i < markers.length; i++){
-          coords.push(markers[i].latLng);
+        if(markers.length < 3){
+          window.alert("You should mark at least 3 locations.");
+          return;
         }
 
-        window.alert(markers);
+        var coords = [];
+        for (var i = 0; i < markers.length; i++){
+          coords.push(markers[i].getPosition());
+        }
 
         // Construct the polygon.
         polygon = new google.maps.Polygon({
@@ -137,6 +140,7 @@
 
       function removePolygon(){
         polygon.setMap(null);
+        polygon = null;
       }
 
       function showArrays(event) {
