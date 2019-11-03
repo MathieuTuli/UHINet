@@ -40,29 +40,6 @@
           zoom: 14.1,
         });
 
-      /*  var coords = [
-            {lat: 43.648, lng: -79.3983},
-            {lat: 43.6483, lng: -79.401},
-            {lat: 43.6513, lng: -79.4013},
-            {lat: 43.651, lng: -79.398}
-        ];
-
-        // Construct the polygon.
-        polygon = new google.maps.Polygon({
-          paths: coords,
-          strokeColor: '#23244b',
-          strokeOpacity: 0.8,
-          strokeWeight: 3,
-          fillColor: '#808080',
-          fillOpacity: 0.35,
-          draggable: true,
-          editable: true,
-          geodesic: true
-        });
-
-        // Add a listener for the click event.
-        polygon.addListener('click', showArrays);
-*/
         infoWindow = new google.maps.InfoWindow;
 
         google.maps.event.addListener(map, 'click', function(event){
@@ -98,13 +75,6 @@
       }
 
       function addPolygon(){
-        //var coords = [
-        //    {lat: 43.648, lng: -79.3983},
-        //    {lat: 43.6483, lng: -79.401},
-        //    {lat: 43.6513, lng: -79.4013},
-        //    {lat: 43.651, lng: -79.398}
-        //];
-
         if(markers.length == 0){
           window.alert("Please mark locations first.");
           return;
