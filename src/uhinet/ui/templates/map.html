@@ -22,6 +22,9 @@
     <div id='floating-panel'>
       <input onclick="removePolygon();" type=button value="Remove Polygon"> 
       <input onclick="addPolygon();" type=button value="Restore Polygon"> 
+      <input onclick="clearMarkers();" type=button value="Hide All Markers"> 
+      <input onclick="showMarkers();" type=button value="Show All Markers"> 
+      <input onclick="deleteMarkers();" type=button value="Delete markers"> 
     </div>
     <div id="map"></div>
     <script>
@@ -29,6 +32,7 @@
       var map;
       var polygon;
       var infoWindow;
+      var markers = [];
 
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -36,7 +40,7 @@
           zoom: 14.1,
         });
 
-        var coords = [
+      /*  var coords = [
             {lat: 43.648, lng: -79.3983},
             {lat: 43.6483, lng: -79.401},
             {lat: 43.6513, lng: -79.4013},
@@ -58,11 +62,76 @@
 
         // Add a listener for the click event.
         polygon.addListener('click', showArrays);
-
+*/
         infoWindow = new google.maps.InfoWindow;
+
+        google.maps.event.addListener(map, 'click', function(event){
+          addMarker(event.latLng);
+        });
+      }
+
+      function addMarker(location){
+        var marker = new google.maps.Marker({
+          position:location,
+          map:map,
+        });
+        markers.push(marker);
+      }
+
+      function setMapOnAll(map){
+        for (var i = 0; i < markers.length; i++){
+          markers[i].setMap(map);
+        }
+      }
+
+      function clearMarkers(){
+        setMapOnAll(null);
+      }
+
+      function showMarkers(){
+        setMapOnAll(map);
+      }
+
+      function deleteMarkers(){
+        clearMarkers();
+        markers = [];
       }
 
       function addPolygon(){
+        //var coords = [
+        //    {lat: 43.648, lng: -79.3983},
+        //    {lat: 43.6483, lng: -79.401},
+        //    {lat: 43.6513, lng: -79.4013},
+        //    {lat: 43.651, lng: -79.398}
+        //];
+
+        if(markers.length == 0){
+          window.alert("Please mark locations first.");
+          return;
+        }
+
+        var coords = [];
+        for (var i = 0; i < markers.length; i++){
+          coords.push(markers[i].latLng);
+        }
+
+        window.alert(markers);
+
+        // Construct the polygon.
+        polygon = new google.maps.Polygon({
+          paths: coords,
+          strokeColor: '#23244b',
+          strokeOpacity: 0.8,
+          strokeWeight: 3,
+          fillColor: '#808080',
+          fillOpacity: 0.35,
+          draggable: true,
+          editable: true,
+          geodesic: true
+        });
+
+        // Add a listener for the click event.
+        polygon.addListener('click', showArrays);
         polygon.setMap(map);
       }
 
