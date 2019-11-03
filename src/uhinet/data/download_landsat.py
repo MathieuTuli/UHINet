@@ -80,10 +80,10 @@ def download_lansat_from_file(file_name: Path) -> bool:
                             date=f"{year}-{str(month).zfill(2)}-{str(day).zfill(2)}",
                             image_size=image_size,
                             bbox=bbox)
-                    if val is not None:
-                        logging.info("Success")
-                        save_pyplot_image(
-                            save_dir / f"{month}_{day}_{layer}.jpg", val)
+                        if val is not None:
+                            logging.info("Success")
+                            save_pyplot_image(
+                                save_dir / f"{month}_{day}_{layer}.jpg", val)
             year += 1
         return True
 

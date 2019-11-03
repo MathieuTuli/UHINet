@@ -32,17 +32,12 @@ class SentinelHubAccessor:
             coords = [bbox.top_left.lon, bbox.top_left.lat,
                       bbox.bottom_right.lon, bbox.bottom_right.lat]
             geometry = SentinelBBox(bbox=coords, crs=CRS.WGS84)
-            print(layer)
-            print(date)
-            print(image_size.height)
-            print(image_size.width)
-            print(self.instance_id)
             request = WmsRequest(
                 data_source=DataSource.LANDSAT8,
                 layer=layer,
                 bbox=geometry,
                 time=date,
-                # height=image_size.height,
+                height=image_size.height,
                 width=image_size.width,
                 instance_id=self.instance_id,
                 custom_url_params={
