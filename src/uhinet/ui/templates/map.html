@@ -21,7 +21,7 @@
   <body>
     <div id='floating-panel'>
       <input onclick="removePolygon();" type=button value="Delete Polygon"> 
-      <input onclick="addPolygon();" type=button value="Add Polygon"> 
+      <input onclick="addPolygon();" type=button value="Create Polygon"> 
       <input onclick="clearMarkers();" type=button value="Hide All Markers"> 
       <input onclick="showMarkers();" type=button value="Show All Markers"> 
       <input onclick="deleteMarkers();" type=button value="Delete markers"> 
@@ -61,19 +61,23 @@
         }
       }
 
+      /* Hide markers */
       function clearMarkers(){
         setMapOnAll(null);
       }
 
+      /* Show hidden markers */
       function showMarkers(){
         setMapOnAll(map);
       }
 
+      /* Delete all markers */
       function deleteMarkers(){
         clearMarkers();
         markers = [];
       }
 
+      /* Construct the polygon using markers */
       function addPolygon(){
         if(markers.length == 0){
           window.alert("Please mark locations first.");
@@ -90,7 +94,6 @@
           coords.push(markers[i].getPosition());
         }
 
-        // Construct the polygon.
         polygon = new google.maps.Polygon({
           paths: coords,
           strokeColor: '#23244b',
@@ -108,11 +111,13 @@
         polygon.setMap(map);
       }
 
+      /* Delete the current polygon */
       function removePolygon(){
         polygon.setMap(null);
         polygon = null;
       }
 
+      /* Show coordinates of the polygon */
       function showArrays(event) {
         var vertices = this.getPath();
 
@@ -130,6 +135,7 @@
 
         infoWindow.open(map);
       }
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEIC7R9Mn_olV37wKgM2H92QX75mWTUWU&callback=initMap" async defer></script>
   </body>
