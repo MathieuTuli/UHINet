@@ -15,5 +15,5 @@ def save_pyplot_image(image_name: Path,
     """
     fig = plt.subplots(nrows=1, ncols=1, figsize=(15, 7))
     plt.imshow(image)
-    plt.show()
+    # plt.show()
     plt.savefig(str(image_name))

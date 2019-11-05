@@ -3,10 +3,12 @@ from calendar import monthrange
 
 import logging
 import json
+import cv2
 
+from .file_manager import save_pyplot_image, init_dirs
 from .SentinelHubAccessor import SentinelHubAccessor
 from ..components import ImageSize, BBox, LatLon
-from .file_manager import save_pyplot_image, init_dirs
+from .image_formatting import square_resize
 
 logging.root.setLevel(logging.INFO)
 instance_id_path = Path("instance_id.txt")
@@ -21,6 +23,7 @@ with instance_id_path.open() as f:
 sentinelhub_accessor = SentinelHubAccessor(instance_id)
 
 
+# TODO figure out optimal zoom
 def download_lansat_from_file(file_name: Path) -> bool:
     '''
     file_name: Pathlib Path to .csv file
@@ -75,15 +78,16 @@ def download_lansat_from_file(file_name: Path) -> bool:
                     for layer in layers:
                         logging.info(
                             f"Getting for {geometry['name']} at {year}-{month}-{day} and {layer}")
-                        val = sentinelhub_accessor.get_landsat_image(
+                        img = sentinelhub_accessor.get_landsat_image(
                             layer=layer,
                             date=f"{year}-{str(month).zfill(2)}-{str(day).zfill(2)}",
                             image_size=image_size,
                             bbox=bbox)
-                        if val is not None:
+                        if img is not None:
+                            img = square_resize(img, 512, cv2.INTER_AREA)
                             logging.info("Success")
                             save_pyplot_image(
-                                save_dir / f"{month}_{day}_{layer}.jpg", val)
+                                save_dir / f"{month}_{day}_{layer}.png", img)
             year += 1
         return True
 

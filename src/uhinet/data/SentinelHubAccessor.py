@@ -37,7 +37,6 @@ class SentinelHubAccessor:
                 layer=layer,
                 bbox=geometry,
                 time=date,
-                height=image_size.height,
                 width=image_size.width,
                 instance_id=self.instance_id,
                 custom_url_params={
