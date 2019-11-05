@@ -13,7 +13,13 @@ def save_pyplot_image(image_name: Path,
                       image: np.ndarray):
     """
     """
-    fig = plt.subplots(nrows=1, ncols=1, figsize=(15, 7))
-    plt.imshow(image)
+    # fig = plt.subplots(nrows=1, ncols=1, figsize=(15, 7))
+
+    fig = plt.figure(frameon=False)
+    # plt.imshow(image)
+    ax = plt.Axes(fig, [0., 0., 1., 1.])
+    ax.set_axis_off()
+    fig.add_axes(ax)
+    ax.imshow(image)
     # plt.show()
     plt.savefig(str(image_name))
