@@ -96,6 +96,7 @@ def download_lansat_from_file(file_name: Path) -> bool:
                                 logging.info("Success")
                                 save_pyplot_image(
                                     save_dir / f"{month}_{day}_{layer}_img_{count}.png", img)
+                                count += 1
             year += 1
     return True
 
