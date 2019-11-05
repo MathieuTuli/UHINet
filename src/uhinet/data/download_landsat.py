@@ -65,19 +65,25 @@ def download_lansat_from_file(file_name: Path) -> bool:
                     bottom_right=LatLon(lat=geometry['br_lat'],
                                         lon=geometry['br_lon']))
         year = year_from
+        next_geometry = False
         while year <= year_to:
             save_dir = Path(f"data/images/{geometry['name']}/{year}")
             init_dirs(save_dir)
+            if next_geometry:
+                break
             for month in range(1, 13):  # Month is always 1..12
+                if next_geometry:
+                    break
                 for day in range(1, monthrange(year, month)[1] + 1):
                     if year == year_from and month < month_from \
                             and day < day_from:
                         continue
-                    if year == year_to and month == month_to and day == day_to:
-                        return True
+                    if year == year_to and month == month_to and day > day_to:
+                        next_geometry = True
+                        break
                     for layer in layers:
                         logging.info(
-                            f"Getting for {geometry['name']} at {year}-{month}-{day} and {layer}")
+                            f"Getting for {geometry['name']} at {year}-{str(month).zfill(2)}-{str(day).zfill(2)} and {layer}")
                         img = sentinelhub_accessor.get_landsat_image(
                             layer=layer,
                             date=f"{year}-{str(month).zfill(2)}-{str(day).zfill(2)}",
@@ -89,7 +95,7 @@ def download_lansat_from_file(file_name: Path) -> bool:
                             save_pyplot_image(
                                 save_dir / f"{month}_{day}_{layer}.png", img)
             year += 1
-        return True
+    return True
 
 
 if __name__ == "__main__":
