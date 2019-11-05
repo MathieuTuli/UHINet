@@ -1,6 +1,6 @@
 from sentinelhub import WmsRequest, DataSource, CustomUrlParam, CRS, \
     BBox as SentinelBBox
-from typing import Optional
+from typing import List
 
 import numpy as np
 import traceback
@@ -17,7 +17,7 @@ class SentinelHubAccessor:
                           layer: str,
                           date: str,
                           image_size: ImageSize,
-                          bbox: BBox) -> Optional[np.ndarray]:
+                          bbox: BBox) -> List[np.ndarray]:
         if layer not in ['RGB', 'LST']:
             print("SentinelHubAccessor: Error: " +
                   "@param layer must be one of RGB of LST")
@@ -44,7 +44,7 @@ class SentinelHubAccessor:
             print(request.get_url_list())
             data = request.get_data()
             if len(data):
-                return data[-1]
+                return data
             return None
         except Exception:
             traceback.print_exc()
