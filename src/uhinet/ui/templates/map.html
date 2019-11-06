@@ -18,63 +18,66 @@
     </style>
   </head>
   <body>
-  	<aside id = "selection">
-	  	<div id='UHI Setting'>
-	  	    <strong><big>UHI Setting</strong></big>
-	  	 	<div id='Temporal Resolution'>
-				<strong>Temporay Resolution</strong>
-				<br>
-				<input type="radio" name = "Temporal Resolution" value = "Mar. - May" Checked> Mar. - May
-				<br>
-				<input type="radio" name = "Temporal Resolution" value = "Jun. - Aug."> Jun. - Aug.
-				<br>
-				<input type="radio" name = "Temporal Resolution" value = "Sep. - Nov."> Sep. - Nov.
-				<br>
-				<input type="radio" name = "Temporal Resolution" value = "Dec. - Feb."> Dec. - Feb.
-	  	 	</div id='Temporal Resolution'>
-	  	 	<div id='UHI Indicator'>
-				<strong>UHI Indicator</strong>
-				<br>
-				<input type="radio" name = "UHI Indicator" value = "Daytime Temperature" Checked> Daytime Temperature
-				<br>
-				<input type="radio" name = "UHI Indicator" value = "Nighttime Temperature"> Nighttime Temperature
-				<br>
-				<input type="radio" name = "UHI Indicator" value = "Diurnal Temperature"> Diurnal Temperature
-			</div id='UHI Indicator'>
-		</div id='UHI Setting'>
-				<br>
-		<div id='Map Setting'>
-	  	    <strong><big>Map Setting</strong></big>
-	  	 	<div id='UHI Comparison'>		
-				<strong>UHI Comparison</strong>
-				<br>
-				<input type="radio" name = "UHI Comparison" value = "Default" Checked> Default
-				<br>
-				<input type="radio" name = "UHI Comparison" value = "Prediction"> Prediction
-				<br>
-				<input type="radio" name = "UHI Comparison" value = "Difference"> Difference
-	  	 	</div id='UHI Comparison'>	
-		</div id='Map Setting'>
-	</aside>
-	<br>
-	<nav = "navigation">
-		<div id='Generate Result'>
-			<strong><big>Generate Result</strong></big>
+  	<div id='floating-panel'>
+	  <input onclick="removePolygon();" type=button value="Delete Polygon"> 
+	  <input onclick="addPolygon();" type=button value="Create Polygon"> 
+	  <input onclick="clearMarkers();" type=button value="Hide All Markers"> 
+	  <input onclick="showMarkers();" type=button value="Show All Markers"> 
+	  <input onclick="deleteMarkers();" type=button value="Delete markers"> 
+	</div>
+	<hr>
+	<div class="row">
+	  	<div class="col-md-2" id = "selection">
+		  	<div id='UHI Setting'>
+		  	    <strong><big>UHI Setting</strong></big>
+		  	 	<div id='Temporal Resolution'>
+					<strong>Temporay Resolution</strong>
+					<br>
+					<input type="radio" name = "Temporal Resolution" value = "Mar. - May" Checked> Mar. - May
+					<br>
+					<input type="radio" name = "Temporal Resolution" value = "Jun. - Aug."> Jun. - Aug.
+					<br>
+					<input type="radio" name = "Temporal Resolution" value = "Sep. - Nov."> Sep. - Nov.
+					<br>
+					<input type="radio" name = "Temporal Resolution" value = "Dec. - Feb."> Dec. - Feb.
+		  	 	</div id='Temporal Resolution'>
+		  	 	<div id='UHI Indicator'>
+					<strong>UHI Indicator</strong>
+					<br>
+					<input type="radio" name = "UHI Indicator" value = "Daytime Temperature" Checked> Daytime Temperature
+					<br>
+					<input type="radio" name = "UHI Indicator" value = "Nighttime Temperature"> Nighttime Temperature
+					<br>
+					<input type="radio" name = "UHI Indicator" value = "Diurnal Temperature"> Diurnal Temperature
+				</div id='UHI Indicator'>
+			</div id='UHI Setting'>
+					<br>
+			<div id='Map Setting'>
+		  	    <strong><big>Map Setting</strong></big>
+		  	 	<div id='UHI Comparison'>		
+					<strong>UHI Comparison</strong>
+					<br>
+					<input type="radio" name = "UHI Comparison" value = "Default" Checked> Default
+					<br>
+					<input type="radio" name = "UHI Comparison" value = "Prediction"> Prediction
+					<br>
+					<input type="radio" name = "UHI Comparison" value = "Difference"> Difference
+		  	 	</div id='UHI Comparison'>	
+			</div id='Map Setting'>
 			<br>
-		<input type="submit" value="Generate!">
-		</div id='Generate Result'>
-		<br>
-	    <div id='floating-panel'>
-			<strong><big>Area Selection</stong></big>
+			<nav id="navigation">
+				<div id='Generate Result'>
+					<strong><big>Generate Result</strong></big>
+					<br>
+				<input type="submit" value="Generate!">
+			</div id='Generate Result'>
 			<br>
-	      <input onclick="removePolygon();" type=button value="Delete Polygon"> 
-	      <input onclick="addPolygon();" type=button value="Create Polygon"> 
-	      <input onclick="clearMarkers();" type=button value="Hide All Markers"> 
-	      <input onclick="showMarkers();" type=button value="Show All Markers"> 
-	      <input onclick="deleteMarkers();" type=button value="Delete markers"> 
-	    </div>
-	</nav>
-	<div id="map"></div>
+			</nav>
+		</div>
+		<div class="col-md-9" id="cmap">
+			<div id="map"></div>
+		</div>
+	</div>
   </body>
 </html>
 
