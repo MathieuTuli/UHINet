@@ -2,23 +2,17 @@ from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
 import tensorflow as tf
+from pathlib import Path
 
 import os
 import time
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
-_URL = 'https://people.eecs.berkeley.edu/~tinghuiz/projects/pix2pix/' + \
-       'datasets/facades.tar.gz'
-
-path_to_zip = tf.keras.utils.get_file('facades.tar.gz',
-                                      origin=_URL,
-                                      extract=True)
-
-PATH = os.path.join(os.path.dirname(path_to_zip), 'facades/')
+PATH = os.path.join('/home/mat/github/U-of-T/capstone/uhinet/src/uhinet/data/images/', 'formatted/')
 BUFFER_SIZE = 400
 BATCH_SIZE = 1
-IMG_WIDTH = 256
-IMG_HEIGHT = 256
+IMG_WIDTH = 512
+IMG_HEIGHT = 512
 
 
 def load(image_file):
@@ -36,14 +30,7 @@ def load(image_file):
 
     return input_image, real_image
 
-
-inp, re = load(PATH+'train/100.jpg')
-# casting to int for matplotlib to show the image
-plt.figure()
-plt.imshow(inp/255.0)
-plt.figure()
-plt.imshow(re/255.0)
-
+inp, re = load(PATH+'train/0.jpg')
 
 def resize(input_image, real_image, height, width):
     input_image = tf.image.resize(
@@ -94,15 +81,6 @@ def random_jitter(input_image, real_image):
 # 1. Resize an image to bigger height and width
 # 2. Randomnly crop to the original size
 # 3. Randomnly flip the image horizontally
-
-
-plt.figure(figsize=(6, 6))
-for i in range(4):
-    rj_inp, rj_re = random_jitter(inp, re)
-    plt.subplot(2, 2, i+1)
-    plt.imshow(rj_inp/255.0)
-    plt.axis('off')
-plt.show()
 
 
 def load_image_train(image_file):
@@ -341,7 +319,6 @@ def generate_images(model, test_input, tar):
         # getting the pixel values between [0, 1] to plot it.
         plt.imshow(display_list[i] * 0.5 + 0.5)
         plt.axis('off')
-    plt.show()
 
 
 @tf.function
@@ -393,6 +370,7 @@ def fit(train_ds, epochs, test_ds):
         fit(train_dataset, EPOCHS, test_dataset)
 
 
+fit(train_dataset, EPOCHS, test_dataset)
 checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
 
 # Run the trained model on the entire test dataset
