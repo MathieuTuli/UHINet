@@ -17,18 +17,25 @@ class SentinelHubAccessor:
                           layer: str,
                           date: str,
                           image_size: ImageSize,
-                          bbox: BBox) -> List[np.ndarray]:
+                          bbox: BBox,
+                          cloud_cov_perc: float) -> List[np.ndarray]:
         if layer not in ['RGB', 'LST']:
             print("SentinelHubAccessor: Error: " +
                   "@param layer must be one of RGB of LST")
+            return []
         if not isinstance(image_size, ImageSize):
             print("SentinelHubAccessor: Error: " +
                   "@param image_size must be of type ImageSize")
+            return []
         if not isinstance(bbox, BBox):
             print("SentinelHubAccessor: Error: " +
                   "@param bbox must be of type BBox")
+            return []
+        if not cloud_cov_perc < 0.0 or cloud_cov_perc > 1.0:
+            print("SentinelHubAccessor: Error: " +
+                  "@param cloud_cov_perc must be in the range [0, 1]")
+            return []
         try:
-
             coords = [bbox.top_left.lon, bbox.top_left.lat,
                       bbox.bottom_right.lon, bbox.bottom_right.lat]
             geometry = SentinelBBox(bbox=coords, crs=CRS.WGS84)
@@ -39,6 +46,7 @@ class SentinelHubAccessor:
                 time=date,
                 width=image_size.width,
                 instance_id=self.instance_id,
+                maxcc=cloud_cov_perc,
                 custom_url_params={
                     CustomUrlParam.SHOWLOGO: False})
             print(request.get_url_list())
