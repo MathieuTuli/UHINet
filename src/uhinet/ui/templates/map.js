@@ -1,5 +1,7 @@
 var drawingManager;
 var selectedShape;
+var map;
+var overlay;
 
 function clearSelection () {
     if (selectedShape) {       
@@ -20,13 +22,23 @@ function deleteSelectedShape () {
     }
 }
 
-function initialize () {
+function initMap () {
 
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14.1,
         center: new google.maps.LatLng(43.65, -79.4),
         zoomControl: true
     });
+
+    var imageBounds = {
+        north: 43.670826,
+        south: 43.621760,
+        east: -79.360921,
+        west: -79.435593
+    };
+
+    overlay = new google.maps.GroundOverlay(
+        'image.png', imageBounds);
 
     var Options = {
         strokeWeight: 0,
@@ -52,8 +64,8 @@ function initialize () {
         google.maps.event.addListener(newShape, 'click', function (shp) {
             setSelection(newShape);
         });
-        
-        google.maps.event.addListener(newShape,'mouseover', function (shp) { //this part doesnt work at all yet
+        google.maps.event.addListener(newShape,'mouseover', function (shp) {
+            
             
             var vertices = this.getPath();
 
@@ -65,7 +77,8 @@ function initialize () {
                 xy.lng();
             }
 
-            infoWindow.setContent(contentString);=
+            infoWindow.setContent(contentString);
+            infoWindow.setPosition(event.latLng);
             infoWindow.open(map);
         });
         setSelection(newShape);
@@ -78,7 +91,14 @@ function initialize () {
         if (e.key ==="Backspace" || e.key === "Delete") {
             deleteSelectedShape();
         }
-    });
+     });
+}
 
+function addOverlay(){
+  overlay.setMap(map);
+}
+
+function removeOverlay(){
+  overlay.setMap(null);
 }
 google.maps.event.addDomListener(window, 'load', initialize);

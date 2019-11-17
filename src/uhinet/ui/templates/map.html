@@ -15,22 +15,10 @@
     	#navigation{
     		padding-top: 0px;
     	}
-    	#map, html, body {
-            padding: 0;
-            margin: 0;
-            width: 960px;
-            height: 700px;
-        }
-
-        #delete-button {
-            margin-top: 5px;
-        }
     </style>
   </head>
   <body>
-  	<div id='floating-panel', align= 'center'>
-	  <button id ="delete-button">Delete Shape</button>
-	</div>
+  	<div>
 	<hr>
 	<div class="row">
 	  	<div class="col-md-2" id = "selection">
@@ -81,6 +69,10 @@
 			</nav>
 		</div>
 		<div class="col-md-9" id="cmap">
+			<div id="floating-panel">
+				<input onclick="removeOverlay();" type="button" value="Remove overlay">
+				<input onclick="addOverlay();" type="button" value="Show overlay">
+			</div>
 			<div id="map"></div>
 		</div>
 	</div>
