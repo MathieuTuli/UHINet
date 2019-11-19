@@ -18,13 +18,7 @@
     </style>
   </head>
   <body>
-  	<div id='floating-panel'>
-	  <input onclick="removePolygon();" type=button value="Delete Polygon"> 
-	  <input onclick="addPolygon();" type=button value="Create Polygon"> 
-	  <input onclick="clearMarkers();" type=button value="Hide All Markers"> 
-	  <input onclick="showMarkers();" type=button value="Show All Markers"> 
-	  <input onclick="deleteMarkers();" type=button value="Delete markers"> 
-	</div>
+  	<div>
 	<hr>
 	<div class="row">
 	  	<div class="col-md-2" id = "selection">
@@ -75,6 +69,10 @@
 			</nav>
 		</div>
 		<div class="col-md-9" id="cmap">
+			<div id="floating-panel">
+				<input onclick="removeOverlay();" type="button" value="Remove overlay">
+				<input onclick="addOverlay();" type="button" value="Show overlay">
+			</div>
 			<div id="map"></div>
 		</div>
 	</div>
