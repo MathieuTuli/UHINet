@@ -38,7 +38,8 @@ def download_lansat_from_file(file_name: Path) -> bool:
     with file_name.open() as f:
         content = json.load(f)
 
-    valid_keys = ['geometries', 'date_from', 'date_to', 'image_size', 'layers']
+    valid_keys = ['geometries', 'date_from', 'date_to',
+                  'image_size', 'layers', 'cloud_coverage_percentage']
     for key in content.keys():
         if key not in valid_keys:
             logging.info(
@@ -58,6 +59,7 @@ def download_lansat_from_file(file_name: Path) -> bool:
     image_height, image_width = content['image_size']
     layers = content['layers']
     image_size = ImageSize(height=image_height, width=image_width)
+    cloud_cov_perc = float(content['cloud_coverage_percentage'])
 
     for geometry in geometries:
         bbox = BBox(top_left=LatLon(lat=geometry['tl_lat'],
@@ -88,6 +90,7 @@ def download_lansat_from_file(file_name: Path) -> bool:
                             layer=layer,
                             date=f"{year}-{str(month).zfill(2)}-{str(day).zfill(2)}",
                             image_size=image_size,
+                            cloud_cov_perc=cloud_cov_perc,
                             bbox=bbox)
                         if imgs is not None:
                             count = 0

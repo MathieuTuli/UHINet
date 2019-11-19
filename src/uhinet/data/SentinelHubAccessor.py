@@ -31,7 +31,7 @@ class SentinelHubAccessor:
             print("SentinelHubAccessor: Error: " +
                   "@param bbox must be of type BBox")
             return []
-        if not cloud_cov_perc < 0.0 or cloud_cov_perc > 1.0:
+        if cloud_cov_perc < 0.0 or cloud_cov_perc > 1.0:
             print("SentinelHubAccessor: Error: " +
                   "@param cloud_cov_perc must be in the range [0, 1]")
             return []
