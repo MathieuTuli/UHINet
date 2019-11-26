@@ -11,27 +11,15 @@ from .SentinelHubAccessor import SentinelHubAccessor
 from ..components import ImageSize, BBox, LatLon
 from .image_formatting import square_resize
 
-logging.root.setLevel(logging.INFO)
-instance_id_path = Path("instance_id.txt")
-if not instance_id_path.exists():
-    logging.error(
-        "download_landsat: Instance id file not found. Please " +
-        "create an \"instance_id.txt\" file.")
 
-
-with instance_id_path.open() as f:
-    instance_id = f.read().strip()
-
-sentinelhub_accessor = SentinelHubAccessor(instance_id)
-
-
-# TODO figure out optimal zoom
-def download_lansat_from_file(file_name: Path) -> bool:
+def download_lansat_from_file(
+        sentinelhub_accessor: SentinelHubAccessor,
+        file_name: Path) -> bool:
     '''
     file_name: Pathlib Path to .csv file
     '''
 
-    if not file_exists(file_name) or check_suffix(file_name, '.json'):
+    if not file_exists(file_name) or not check_suffix(file_name, '.json'):
         return False
     with file_name.open() as f:
         content = json.load(f)
@@ -87,7 +75,7 @@ def download_lansat_from_file(file_name: Path) -> bool:
                             "download_landsat: Getting for " +
                             f"{geometry['name']} at " +
                             f"{year}-{str(month).zfill(2)}-" +
-                            "{str(day).zfill(2)} and {layer}")
+                            f"{str(day).zfill(2)} and {layer}")
                         imgs = sentinelhub_accessor.get_landsat_image(
                             layer=layer,
                             date=f"{year}-{str(month).zfill(2)}-" +

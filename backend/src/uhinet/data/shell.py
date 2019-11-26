@@ -1,19 +1,23 @@
 """
 UHINet Data Module
 """
-print("\n---------------------------------")
-print("UHINet Data Module")
-print("---------------------------------\n")
 from argparse import ArgumentParser
 from pathlib import Path
 
-import logging
 import sys
+import logging
 
-# from .SentinelHubAccessor import SentinelHubAccessor
 from .download_landsat import download_lansat_from_file
+from .SentinelHubAccessor import SentinelHubAccessor
 from ..file_manager import file_exists
 from ..components import LogLevel
+
+print("\n---------------------------------")
+print("UHINet Data Module")
+print("---------------------------------\n")
+
+
+# from .SentinelHubAccessor import SentinelHubAccessor
 
 
 parser = ArgumentParser(description=__doc__)
@@ -39,7 +43,7 @@ parser.add_argument(
     help="File name of instance id for data-set-specific API Accessor")
 parser.add_argument(
     '--shopping-list', type=str,
-    default='shopping_list.txt',
+    default='shopping_list.json',
     dest='shopping_list',
     help="File name of settings and API demands for data-set-specific" +
     " download. See \"shopping_list_example.txt\" for an example.")
@@ -58,28 +62,33 @@ elif args.log_level == 'CRITICAL':
 else:
     logging.root.setLevel(logging.INFO)
     logging.warning(
-        f"Shell: Log level \"{args.log_level}\" unknown, defaulting" +
+        f"Data Shell: Log level \"{args.log_level}\" unknown, defaulting" +
         " to INFO.")
 logging.info(
-    f"Shell: Log level set to \"{logging.getLogger()}\"")
+    f"Data Shell: Log level set to \"{logging.getLogger()}\"")
 logging.info(
-    f"Shell: Instance ID file used \"{args.instance_id}\"")
+    f"Data Shell: Instance ID file used \"{args.instance_id}\"")
 logging.info(
-    f"Shell: Shopping List file used \"{args.shopping_list}\"")
+    f"Data Shell: Shopping List file used \"{args.shopping_list}\"")
 
 
 def main():
     if args.data_source.lower() == 'landsat':
         logging.warning(
-            "Shell: Currently, only landsat downloads from a " +
+            "Data Shell: Currently, only landsat downloads from a " +
             "shopping list file are permitted")
         path = Path(args.shopping_list)
         if file_exists(path):
-            logging.info("Shell: Downloading landsat from shopping " +
-                         "list found at \"{args.shopping_list}\"")
-            download_lansat_from_file(path)
+            logging.info("Data Shell: Downloading landsat from shopping " +
+                         f"list found at \"{args.shopping_list}\"")
+
+            with Path(args.instance_id).open() as f:
+                instance_id = f.read().strip()
+
+            sentinelhub_accessor = SentinelHubAccessor(instance_id)
+            download_lansat_from_file(sentinelhub_accessor, path)
 
     else:
         logging.error(
-            f"Shell: Data source \"{args.data_source.lower()}\" unknown.")
+            f"Data Shell: Data source \"{args.data_source.lower()}\" unknown.")
         sys.exit(0)
