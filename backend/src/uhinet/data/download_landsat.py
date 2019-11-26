@@ -5,7 +5,7 @@ import logging
 import json
 import cv2
 
-from .file_manager import save_pyplot_image, init_dirs, check_suffix, \
+from ..file_manager import save_pyplot_image, init_dirs, check_suffix, \
     file_exists
 from .SentinelHubAccessor import SentinelHubAccessor
 from ..components import ImageSize, BBox, LatLon
@@ -15,7 +15,7 @@ logging.root.setLevel(logging.INFO)
 instance_id_path = Path("instance_id.txt")
 if not instance_id_path.exists():
     logging.error(
-        "download_landsat: Error: Instance id file not found. Please " +
+        "download_landsat: Instance id file not found. Please " +
         "create an \"instance_id.txt\" file.")
 
 
@@ -41,7 +41,7 @@ def download_lansat_from_file(file_name: Path) -> bool:
     for key in content.keys():
         if key not in valid_keys:
             logging.Error(
-                f"download_landsat: Error: Invalid key \"{key}\". Must be one" +
+                f"download_landsat: Invalid key \"{key}\". Must be one" +
                 f" of {valid_keys}")
             return False
     geometries = content['geometries']
@@ -84,7 +84,7 @@ def download_lansat_from_file(file_name: Path) -> bool:
                         break
                     for layer in layers:
                         logging.info(
-                            "download_landsat: Message: Getting for " +
+                            "download_landsat: Getting for " +
                             f"{geometry['name']} at " +
                             f"{year}-{str(month).zfill(2)}-" +
                             "{str(day).zfill(2)} and {layer}")

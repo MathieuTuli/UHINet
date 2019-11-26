@@ -21,19 +21,19 @@ class SentinelHubAccessor:
                           bbox: BBox,
                           cloud_cov_perc: float) -> List[np.ndarray]:
         if layer not in ['RGB', 'LST']:
-            logging.error("SentinelHubAccessor: Error: " +
+            logging.error("SentinelHubAccessor: " +
                           "@param layer must be one of RGB of LST")
             return []
         if not isinstance(image_size, ImageSize):
-            logging.error("SentinelHubAccessor: Error: " +
+            logging.error("SentinelHubAccessor: " +
                           "@param image_size must be of type ImageSize")
             return []
         if not isinstance(bbox, BBox):
-            logging.error("SentinelHubAccessor: Error: " +
+            logging.error("SentinelHubAccessor: " +
                           "@param bbox must be of type BBox")
             return []
         if cloud_cov_perc < 0.0 or cloud_cov_perc > 1.0:
-            logging.error("SentinelHubAccessor: Error: " +
+            logging.error("SentinelHubAccessor: " +
                           "@param cloud_cov_perc must be in the range [0, 1]")
             return []
         try:
@@ -50,10 +50,11 @@ class SentinelHubAccessor:
                 maxcc=cloud_cov_perc,
                 custom_url_params={
                     CustomUrlParam.SHOWLOGO: False})
-            logging.debug(request.get_url_list())
+            logging.debug(
+                f"SentinelHubAccessor: URLs: {request.get_url_list()}")
             data = request.get_data()
             if len(data):
-                logging.info("SentinelHubAccessor: Message: URL retrieved.")
+                logging.info("SentinelHubAccessor: URL retrieved.")
                 return data
             return None
         except Exception:

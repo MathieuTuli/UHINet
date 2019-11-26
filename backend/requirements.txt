@@ -27,7 +27,6 @@ eo-learn-io==0.6.0
 eo-learn-mask==0.6.0
 eo-learn-ml-tools==0.6.0
 eo-learn-visualization==0.6.0
-Fiona==1.8.9.post2
 Flask==1.1.1
 future==0.18.0
 gast==0.2.2
@@ -63,9 +62,9 @@ munch==2.5.0
 networkx==2.4
 numba==0.46.0
 numpy==1.17.2
-opencv-contrib-python==4.1.1.26
-opencv-contrib-python-headless==4.1.1.26
-opencv-python==4.1.1.26
+opencv-contrib-python==4.1
+opencv-contrib-python-headless==4.1
+opencv-python==4.1
 opt-einsum==3.1.0
 pandas==0.25.2
 Pillow==6.2.1

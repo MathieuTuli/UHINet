@@ -8,7 +8,7 @@ setup(
     package_dir={'': 'src'},
     include_package_data=True,
     zip_safe=False,
-    url='https://github.com/mathieutuli/uhinet',
+    url='https://github.com/mathieutuli/uhinet/backend',
     python_requires='~=3.7',
     install_requires=[
     ],
@@ -27,7 +27,6 @@ setup(
         # packages
     ],
     setup_requires=[
-        'setuptools_scm',  # for git-based versioning
     ],
     # DO NOT do tests_require; just call pytest or python -m pytest.
     license='License :: Other/Proprietary License',
