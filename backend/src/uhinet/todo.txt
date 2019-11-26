@@ -1,0 +1,7 @@
+- Cloud free data generation
+- Temporal data generation (just seperate after the fact)
+- Height maps
+- Tests (patch, historical, whole image)
+- zoom agnostic data generation
+- training pipeline
+- testing pipeline
