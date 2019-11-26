@@ -16,16 +16,17 @@ print("\n---------------------------------")
 print("UHINet Data Module")
 print("---------------------------------\n")
 
-
-# from .SentinelHubAccessor import SentinelHubAccessor
-
-
 parser = ArgumentParser(description=__doc__)
+parser.add_argument(
+    '-vv', '--very-verbose', action='store_true',
+    dest='very_verbose',
+    help="Set verbose. In effect, set --log-level to DEBUG.")
 parser.add_argument(
     '-v', '--verbose', action='store_true',
     dest='verbose',
-    help="Set verbosity. In effect, set --log-level to DEBUG.")
+    help="Set verbose. In effect, set --log-level to INFO.")
 parser.set_defaults(verbose=False)
+parser.set_defaults(very_verbose=False)
 parser.add_argument('--log-level', type=LogLevel.__getitem__,
                     default=LogLevel.INFO,
                     choices=LogLevel.__members__.values(),
@@ -47,11 +48,16 @@ parser.add_argument(
     dest='shopping_list',
     help="File name of settings and API demands for data-set-specific" +
     " download. See \"shopping_list_example.txt\" for an example.")
+parser.add_argument(
+    '--save-to', type=str,
+    default='data/images',
+    dest='save_to',
+    help="Directory to save images to.")
 
 args = parser.parse_args()
-if args.log_level == 'DEBUG' or args.verbose:
+if args.log_level == 'DEBUG' or args.very_verbose:
     logging.root.setLevel(logging.DEBUG)
-elif args.log_level == 'INFO':
+elif args.log_level == 'INFO' or args.verbose:
     logging.root.setLevel(logging.INFO)
 elif args.log_level == 'WARNING':
     logging.root.setLevel(logging.WARNING)
@@ -86,7 +92,8 @@ def main():
                 instance_id = f.read().strip()
 
             sentinelhub_accessor = SentinelHubAccessor(instance_id)
-            download_lansat_from_file(sentinelhub_accessor, path)
+            download_lansat_from_file(
+                sentinelhub_accessor, path, Path(args.save_to))
 
     else:
         logging.error(

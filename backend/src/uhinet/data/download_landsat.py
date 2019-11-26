@@ -14,7 +14,8 @@ from .image_formatting import square_resize
 
 def download_lansat_from_file(
         sentinelhub_accessor: SentinelHubAccessor,
-        file_name: Path) -> bool:
+        file_name: Path,
+        save_to: Path) -> bool:
     '''
     file_name: Pathlib Path to .csv file
     '''
@@ -56,7 +57,7 @@ def download_lansat_from_file(
         year = year_from
         next_geometry = False
         while year <= year_to:
-            save_dir = Path(f"data/images/{geometry['name']}/{year}")
+            save_dir = save_to / f"{geometry['name']}/{year}"
             init_dirs(save_dir)
             if next_geometry:
                 break
@@ -79,7 +80,7 @@ def download_lansat_from_file(
                         imgs = sentinelhub_accessor.get_landsat_image(
                             layer=layer,
                             date=f"{year}-{str(month).zfill(2)}-" +
-                                 f"{str(day).zfill(2)}",
+                            f"{str(day).zfill(2)}",
                             image_size=image_size,
                             cloud_cov_perc=cloud_cov_perc,
                             bbox=bbox)
