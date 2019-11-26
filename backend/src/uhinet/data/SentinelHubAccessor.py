@@ -4,6 +4,7 @@ from typing import List
 
 import numpy as np
 import traceback
+import logging
 
 from ..components import BBox, ImageSize
 
@@ -20,20 +21,20 @@ class SentinelHubAccessor:
                           bbox: BBox,
                           cloud_cov_perc: float) -> List[np.ndarray]:
         if layer not in ['RGB', 'LST']:
-            print("SentinelHubAccessor: Error: " +
-                  "@param layer must be one of RGB of LST")
+            logging.error("SentinelHubAccessor: Error: " +
+                          "@param layer must be one of RGB of LST")
             return []
         if not isinstance(image_size, ImageSize):
-            print("SentinelHubAccessor: Error: " +
-                  "@param image_size must be of type ImageSize")
+            logging.error("SentinelHubAccessor: Error: " +
+                          "@param image_size must be of type ImageSize")
             return []
         if not isinstance(bbox, BBox):
-            print("SentinelHubAccessor: Error: " +
-                  "@param bbox must be of type BBox")
+            logging.error("SentinelHubAccessor: Error: " +
+                          "@param bbox must be of type BBox")
             return []
         if cloud_cov_perc < 0.0 or cloud_cov_perc > 1.0:
-            print("SentinelHubAccessor: Error: " +
-                  "@param cloud_cov_perc must be in the range [0, 1]")
+            logging.error("SentinelHubAccessor: Error: " +
+                          "@param cloud_cov_perc must be in the range [0, 1]")
             return []
         try:
             coords = [bbox.top_left.lon, bbox.top_left.lat,
@@ -49,9 +50,10 @@ class SentinelHubAccessor:
                 maxcc=cloud_cov_perc,
                 custom_url_params={
                     CustomUrlParam.SHOWLOGO: False})
-            print(request.get_url_list())
+            logging.debug(request.get_url_list())
             data = request.get_data()
             if len(data):
+                logging.info("SentinelHubAccessor: Message: URL retrieved.")
                 return data
             return None
         except Exception:

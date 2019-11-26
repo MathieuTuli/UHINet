@@ -5,7 +5,8 @@ import logging
 import json
 import cv2
 
-from .file_manager import save_pyplot_image, init_dirs
+from .file_manager import save_pyplot_image, init_dirs, check_suffix, \
+    file_exists
 from .SentinelHubAccessor import SentinelHubAccessor
 from ..components import ImageSize, BBox, LatLon
 from .image_formatting import square_resize
@@ -14,7 +15,8 @@ logging.root.setLevel(logging.INFO)
 instance_id_path = Path("instance_id.txt")
 if not instance_id_path.exists():
     logging.error(
-        "Instance id file not found. Please create \"instance_id.txt\"")
+        "download_landsat: Error: Instance id file not found. Please " +
+        "create an \"instance_id.txt\" file.")
 
 
 with instance_id_path.open() as f:
@@ -28,12 +30,8 @@ def download_lansat_from_file(file_name: Path) -> bool:
     '''
     file_name: Pathlib Path to .csv file
     '''
-    if not file_name.exists():
-        logging.warning(f"File path {file_name} invalid. File not found.")
-        return False
-    if file_name.suffix != ".json":
-        logging.warning(
-            f"File suffix {file_name.suffix} invalid. Must be .json.")
+
+    if not file_exists(file_name) or check_suffix(file_name, '.json'):
         return False
     with file_name.open() as f:
         content = json.load(f)
@@ -42,8 +40,9 @@ def download_lansat_from_file(file_name: Path) -> bool:
                   'image_size', 'layers', 'cloud_coverage_percentage']
     for key in content.keys():
         if key not in valid_keys:
-            logging.info(
-                f"Invalid key. Must be one of {valid_keys}")
+            logging.Error(
+                f"download_landsat: Error: Invalid key \"{key}\". Must be one" +
+                f" of {valid_keys}")
             return False
     geometries = content['geometries']
 
@@ -85,10 +84,14 @@ def download_lansat_from_file(file_name: Path) -> bool:
                         break
                     for layer in layers:
                         logging.info(
-                            f"Getting for {geometry['name']} at {year}-{str(month).zfill(2)}-{str(day).zfill(2)} and {layer}")
+                            "download_landsat: Message: Getting for " +
+                            f"{geometry['name']} at " +
+                            f"{year}-{str(month).zfill(2)}-" +
+                            "{str(day).zfill(2)} and {layer}")
                         imgs = sentinelhub_accessor.get_landsat_image(
                             layer=layer,
-                            date=f"{year}-{str(month).zfill(2)}-{str(day).zfill(2)}",
+                            date=f"{year}-{str(month).zfill(2)}-" +
+                                 f"{str(day).zfill(2)}",
                             image_size=image_size,
                             cloud_cov_perc=cloud_cov_perc,
                             bbox=bbox)
@@ -96,9 +99,10 @@ def download_lansat_from_file(file_name: Path) -> bool:
                             count = 0
                             for img in imgs:
                                 img = square_resize(img, 512, cv2.INTER_AREA)
-                                logging.info("Success")
                                 save_pyplot_image(
-                                    save_dir / f"{month}_{day}_{layer}_img_{count}.png", img)
+                                    save_dir /
+                                    f"{month}_{day}_{layer}_img_{count}.png",
+                                    img)
                                 count += 1
             year += 1
     return True
