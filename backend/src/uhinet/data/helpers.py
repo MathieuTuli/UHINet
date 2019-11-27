@@ -5,7 +5,7 @@ import math
 
 from ..components import BBox, LatLon, ImageSize
 
-EARTH_RADIUS = 6378.1
+EARTH_RADIUS = 6378.1 * 1000  # in metres
 
 
 def metres_to_latitude(metres: float) -> float:
@@ -36,10 +36,12 @@ def conform_coordinates_to_spatial_resolution(
     if bbox is not None:
         center = LatLon(lat=(bbox.top_left.lat + bbox.bottom_right.lat) / 2,
                         lon=(bbox.top_left.lon + bbox.bottom_right.lon) / 2)
+    dx = image_size.width / 2
+    dy = image_size.height / 2
     top_left = lat_lon_plus_dx_dy(
             center,
-            -image_size.width / 2, -image_size.height / 2)
+            -dx * spatial_resolution, dy * spatial_resolution)
     bottom_right = lat_lon_plus_dx_dy(
             center,
-            image_size.height / 2, image_size.height / 2)
+            dx * spatial_resolution, -dy * spatial_resolution)
     return BBox(top_left=top_left, bottom_right=bottom_right)
