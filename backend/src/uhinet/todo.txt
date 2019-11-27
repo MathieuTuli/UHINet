@@ -4,3 +4,4 @@
 - training pipeline
 - testing pipeline
 - stitch mult landsat images together
+- make subparser -> python -m uhinet.data download --data...

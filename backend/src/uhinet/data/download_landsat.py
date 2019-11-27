@@ -10,6 +10,7 @@ from ..file_manager import save_pyplot_image, init_dirs, check_suffix, \
 from .SentinelHubAccessor import SentinelHubAccessor
 from ..components import ImageSize, BBox, LatLon
 from .image_formatting import square_resize
+from .helpers import conform_coordinates_to_spatial_resolution
 
 
 def download_lansat_from_file(
@@ -83,7 +84,8 @@ def download_lansat_from_file(
                             f"{str(day).zfill(2)}",
                             image_size=image_size,
                             cloud_cov_perc=cloud_cov_perc,
-                            bbox=bbox)
+                            bbox=conform_coordinates_to_spatial_resolution(
+                                spatial_resolution=30, image_size=image_size, bbox=bbox)
                         if imgs is not None:
                             count = 0
                             for img in imgs:
