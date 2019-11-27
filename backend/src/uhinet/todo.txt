@@ -3,3 +3,4 @@
 - zoom agnostic data generation
 - training pipeline
 - testing pipeline
+- stitch mult landsat images together

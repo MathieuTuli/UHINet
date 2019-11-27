@@ -1,10 +1,7 @@
 from typing import List
 
 import numpy as np
-import logging
 import cv2
-
-from ..components import BBox, LatLon, ImageSize
 
 
 def concatenate_horizontal(images: List[np.ndarray],
@@ -41,17 +38,6 @@ def square_resize(
         mask = np.zeros((dif, dif, c), dtype=img.dtype)
         mask[y_pos:y_pos+h, x_pos:x_pos+w, :] = img[:h, :w, :]
     return cv2.resize(mask, (size, size), cv2_interpolation)
-
-
-def clip_to_spatial_resolution(
-        img: np.ndarray,
-        spatial_resolution: int,
-        image_size: ImageSize,
-        center: LatLon = None,
-        bbox: BBox = None,) -> np.ndarray:
-    if center is None and bbox is None:
-        logging.Error(
-            "image_formatting: Must specify a center of bounding box")
 
 
 def clip(width: int, height: int, channels: int):
