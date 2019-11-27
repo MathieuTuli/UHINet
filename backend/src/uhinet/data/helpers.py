@@ -36,8 +36,8 @@ def conform_coordinates_to_spatial_resolution(
     if bbox is not None:
         center = LatLon(lat=(bbox.top_left.lat + bbox.bottom_right.lat) / 2,
                         lon=(bbox.top_left.lon + bbox.bottom_right.lon) / 2)
-    dx = image_size.width / 2
-    dy = image_size.height / 2
+    dx = (image_size.width / 2)
+    dy = (image_size.height / 2) + 1
     top_left = lat_lon_plus_dx_dy(
             center,
             -dx * spatial_resolution, dy * spatial_resolution)

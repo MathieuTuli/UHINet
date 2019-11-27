@@ -4,8 +4,9 @@ UHINet Data Module
 from argparse import ArgumentParser
 from pathlib import Path
 
-import sys
 import logging
+import signal
+import sys
 
 from .download_landsat import download_lansat_from_file
 from .SentinelHubAccessor import SentinelHubAccessor
@@ -76,6 +77,16 @@ logging.info(
     f"Data Shell: Instance ID file used \"{args.instance_id}\"")
 logging.info(
     f"Data Shell: Shopping List file used \"{args.shopping_list}\"")
+
+
+def control_c_handler(_signal, frame):
+    print("\n---------------------------------")
+    print("Data Shell: Ctrl-C. Shutting Down.")
+    print("---------------------------------")
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, control_c_handler)
 
 
 def main():

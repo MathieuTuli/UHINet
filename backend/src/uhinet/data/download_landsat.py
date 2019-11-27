@@ -85,7 +85,8 @@ def download_lansat_from_file(
                             image_size=image_size,
                             cloud_cov_perc=cloud_cov_perc,
                             bbox=conform_coordinates_to_spatial_resolution(
-                                spatial_resolution=30, image_size=image_size, bbox=bbox)
+                                spatial_resolution=30, image_size=image_size,
+                                bbox=bbox))
                         if imgs is not None:
                             count = 0
                             for img in imgs:

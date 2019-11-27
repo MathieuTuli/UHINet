@@ -56,6 +56,7 @@ class SentinelHubAccessor:
             if len(data):
                 logging.info("SentinelHubAccessor: URL retrieved.")
                 return data
+            logging.info("SentinelHubAccessor: No URL retrieved.")
             return None
         except Exception:
             traceback.print_exc()
