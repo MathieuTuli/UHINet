@@ -5,6 +5,9 @@
     <meta charset="utf-8">
     <title>UHI Map</title>
     <!-- <script type='text/javascript' src='key.js' async defer></script> -->
+    <script type="text/javascript">
+    	var image = '{{ url_for('static', filename='image.png') }}';
+    </script>
     <script src="{{ url_for('static', filename='map.js') }}"></script>
     <script type="text/javascript" src="{{ key }}" async defer></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">

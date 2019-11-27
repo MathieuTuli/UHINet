@@ -38,7 +38,7 @@ function initMap () {
     };
 
     overlay = new google.maps.GroundOverlay(
-        'image.png', imageBounds);
+        image, imageBounds);
 
     var Options = {
         strokeWeight: 0,
