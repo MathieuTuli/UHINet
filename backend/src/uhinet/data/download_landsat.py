@@ -72,8 +72,11 @@ def download_lansat_from_file(
                     if year == year_to and month == month_to and day > day_to:
                         next_geometry = True
                         break
+                    skip_rest = False
                     for layer in layers:
-                        logging.info(
+                        if skip_rest:
+                            continue
+                        logging.debug(
                             "download_landsat: Getting for " +
                             f"{geometry['name']} at " +
                             f"{year}-{str(month).zfill(2)}-" +
@@ -88,6 +91,11 @@ def download_lansat_from_file(
                                 spatial_resolution=30, image_size=image_size,
                                 bbox=bbox))
                         if imgs is not None:
+                            logging.info(
+                                    "SentinelHubAccessor: URL retrieved " +
+                                    f"for {geometry['name']} at " +
+                                    f"{year}-{str(month).zfill(2)}-" +
+                                    f"{str(day).zfill(2)} and {layer}")
                             count = 0
                             for img in imgs:
                                 img = square_resize(img, 512, cv2.INTER_AREA)
@@ -96,6 +104,13 @@ def download_lansat_from_file(
                                     f"{month}_{day}_{layer}_img_{count}.png",
                                     img)
                                 count += 1
+                        else:
+                            skip_rest = True
+                            logging.info(
+                                    "SentinelHubAccessor: No URL retrieved " +
+                                    f"for {geometry['name']} at " +
+                                    f"{year}-{str(month).zfill(2)}-" +
+                                    f"{str(day).zfill(2)} and {layer}")
             year += 1
     return True
 

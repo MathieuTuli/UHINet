@@ -54,9 +54,7 @@ class SentinelHubAccessor:
                 f"SentinelHubAccessor: URLs: {request.get_url_list()}")
             data = request.get_data()
             if len(data):
-                logging.info("SentinelHubAccessor: URL retrieved.")
                 return data
-            logging.info("SentinelHubAccessor: No URL retrieved.")
             return None
         except Exception:
             traceback.print_exc()
