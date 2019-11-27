@@ -1,9 +1,13 @@
 from flask import Flask, render_template
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def map():
-    return render_template('index.html')
+    f = open("input", "r")
+    s = f.read().splitlines()[0]
+    f.close()
+    key = 'https://maps.googleapis.com/maps/api/js?key='+ s +'&libraries=drawing&callback=initMap'
+    return render_template('map.html', key=key)
 
 if __name__ == '__main__':
     app.run(debug=True)
