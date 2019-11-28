@@ -29,13 +29,15 @@ function initMap () {
         center: new google.maps.LatLng(43.65, -79.4),
         zoomControl: true
     });
-
     var imageBounds = {
-        north: 43.670826,
-        south: 43.621760,
-        east: -79.360921,
-        west: -79.435593
+            north:43.71928751019047, west:-79.47656815720673, south:43.58076648980952, east:-79.2858718427933
     };
+    // var imageBounds = {
+    //     north: 43.670826,
+    //     south: 43.621760,
+    //     east: -79.360921,
+    //     west: -79.435593
+    // };
 
     overlay = new google.maps.GroundOverlay(
         image, imageBounds);
