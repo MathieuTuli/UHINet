@@ -27,7 +27,8 @@ def download_lansat_from_file(
         content = json.load(f)
 
     valid_keys = ['geometries', 'date_from', 'date_to',
-                  'image_size', 'layers', 'cloud_coverage_percentage']
+                  'image_size', 'layers', 'cloud_coverage_percentage',
+                  'spatial_resolution']
     for key in content.keys():
         if key not in valid_keys:
             logging.Error(
@@ -49,6 +50,7 @@ def download_lansat_from_file(
     layers = content['layers']
     image_size = ImageSize(height=image_height, width=image_width)
     cloud_cov_perc = float(content['cloud_coverage_percentage'])
+    spatial_resolution = int(content['spatial_resolution'])
 
     for geometry in geometries:
         bbox = BBox(top_left=LatLon(lat=geometry['tl_lat'],
@@ -63,10 +65,12 @@ def download_lansat_from_file(
             if next_geometry:
                 break
             for month in range(1, 13):  # Month is always 1..12
+                if month < month_from :
+                    continue
                 if next_geometry:
                     break
                 for day in range(1, monthrange(year, month)[1] + 1):
-                    if year == year_from and month < month_from \
+                    if year == year_from \
                             and day < day_from:
                         continue
                     if year == year_to and month == month_to and day > day_to:
@@ -88,7 +92,8 @@ def download_lansat_from_file(
                             image_size=image_size,
                             cloud_cov_perc=cloud_cov_perc,
                             bbox=conform_coordinates_to_spatial_resolution(
-                                spatial_resolution=30, image_size=image_size,
+                                spatial_resolution=spatial_resolution,
+                                image_size=image_size,
                                 bbox=bbox))
                         if imgs is not None:
                             logging.info(
