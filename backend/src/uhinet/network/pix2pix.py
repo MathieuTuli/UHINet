@@ -1,3 +1,8 @@
+'''
+UHINET Network Pix2Pix Module
+
+@author: Google (https://www.tensorflow.org/tutorials/generative/pix2pix)
+'''
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -15,6 +20,7 @@ IMG_WIDTH = 512
 IMG_HEIGHT = 512
 
 
+# TODO : which direction , this used left to right
 def load(image_file):
     image = tf.io.read_file(image_file)
     image = tf.image.decode_jpeg(image)
