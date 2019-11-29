@@ -11,7 +11,7 @@ import sys
 from .download_landsat import download_lansat_from_file
 from .SentinelHubAccessor import SentinelHubAccessor
 from ..file_manager import file_exists
-from ..components import LogLevel
+from .components import LogLevel
 
 print("\n---------------------------------")
 print("UHINet Data Module")

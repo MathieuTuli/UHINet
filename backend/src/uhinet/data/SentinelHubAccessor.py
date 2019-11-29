@@ -6,7 +6,7 @@ import numpy as np
 import traceback
 import logging
 
-from ..components import BBox, ImageSize
+from .components import BBox, ImageSize
 
 
 class SentinelHubAccessor:

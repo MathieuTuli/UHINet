@@ -3,7 +3,7 @@
 import logging
 import math
 
-from ..components import BBox, LatLon, ImageSize
+from .components import BBox, LatLon, ImageSize
 
 EARTH_RADIUS = 6378.1 * 1000  # in metres
 

@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import shutil
 import random
 import cv2
 
