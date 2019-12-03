@@ -6,20 +6,13 @@ UHINET Network Pix2Pix Module
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 from IPython.display import clear_output
-from typing import Tuple
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import time
-import os
 
-
-PATH = os.path.join('images')
-BUFFER_SIZE = 400
-BATCH_SIZE = 1
-IMG_WIDTH = 512
-IMG_HEIGHT = 512
+from .data_helpers import load, resize, random_crop, normalize, random_jitter,\
+        load_image_train, load_image_test, downsample, upsample
 
 
 class Pix2Pix():
@@ -30,7 +23,7 @@ class Pix2Pix():
         return 'Pix2Pix'
 
 
-def Generator():
+def Generator(output_channels: int) -> tf.keras.Model:
     down_stack = [
         downsample(64, 4, apply_batchnorm=False),  # (bs, 128, 128, 64)
         downsample(128, 4),  # (bs, 64, 64, 128)
@@ -54,7 +47,7 @@ def Generator():
 
     initializer = tf.random_normal_initializer(0., 0.02)
     last = tf.keras.layers.Conv2DTranspose(
-        OUTPUT_CHANNELS, 4,
+        output_channels, 4,
         strides=2,
         padding='same',
         kernel_initializer=initializer,
@@ -83,12 +76,7 @@ def Generator():
     return tf.keras.Model(inputs=inputs, outputs=x)
 
 
-generator = Generator()
-gen_output = generator(inp[tf.newaxis, ...], training=False)
-plt.imshow(gen_output[0, ...])
-
-
-def Discriminator():
+def Discriminator() -> tf.keras.Model:
     initializer = tf.random_normal_initializer(0., 0.02)
 
     inp = tf.keras.layers.Input(shape=[None, None, 3], name='input_image')
@@ -120,19 +108,12 @@ def Discriminator():
     return tf.keras.Model(inputs=[inp, tar], outputs=last)
 
 
-discriminator = Discriminator()
-disc_out = discriminator([inp[tf.newaxis, ...], gen_output], training=False)
-plt.imshow(disc_out[0, ..., -1], vmin=-20, vmax=20, cmap='RdBu_r')
-plt.colorbar()
-
-LAMBDA = 100
-
-
-loss_object = tf.keras.losses.BinaryCrossentropy(from_logits=True)
-
-
-def discriminator_loss(disc_real_output, disc_generated_output):
-    real_loss = loss_object(tf.ones_like(disc_real_output), disc_real_output)
+def discriminator_loss(
+        disc_real_output: tf.keras.Model,
+        disc_generated_output: tf.keras.Model,
+        loss_object: tf.losses.BinaryCrossentropy):
+    real_loss = loss_object(tf.ones_like(
+        disc_real_output), disc_real_output)
 
     generated_loss = loss_object(tf.zeros_like(
         disc_generated_output), disc_generated_output)
@@ -142,34 +123,27 @@ def discriminator_loss(disc_real_output, disc_generated_output):
     return total_disc_loss
 
 
-def generator_loss(disc_generated_output, gen_output, target):
+def generator_loss(
+        disc_generated_output: tf.keras.Model,
+        gen_output: tf.keras.Model,
+        loss_object: tf.losses.BinaryCrossentropy,
+        target,
+        _lambda: int):
     gan_loss = loss_object(tf.ones_like(
         disc_generated_output), disc_generated_output)
 
     # mean absolute error
     l1_loss = tf.reduce_mean(tf.abs(target - gen_output))
 
-    total_gen_loss = gan_loss + (LAMBDA * l1_loss)
+    total_gen_loss = gan_loss + (_lambda * l1_loss)
 
     return total_gen_loss
 
 
-generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-
-checkpoint_dir = './training_checkpoints'
-checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
-checkpoint = tf.train.Checkpoint(
-    generator_optimizer=generator_optimizer,
-    discriminator_optimizer=discriminator_optimizer,
-    generator=generator,
-    discriminator=discriminator)
-
-
-EPOCHS = 150
-
-
-def generate_images(model, test_input, tar):
+def generate_images(
+        model: tf.keras.Model,
+        test_input,
+        tar):
     # the training=True is intentional here since
     # we want the batch statistics while running the model
     # on the test dataset. If we use training=False, we will get
@@ -190,7 +164,13 @@ def generate_images(model, test_input, tar):
 
 
 @tf.function
-def train_step(input_image, target):
+def train_step(
+        input_image,
+        target,
+        generator: tf.keras.Model,
+        discriminator: tf.keras.Model,
+        generator_optimizer: tf.keras.optimizers.Optimizer,
+        discriminator_optimizer: tf.keras.optimizers.Optimizer):
     with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
         gen_output = generator(input_image, training=True)
 
@@ -214,7 +194,14 @@ def train_step(input_image, target):
             discriminator.trainable_variables))
 
 
-def fit(train_ds, epochs, test_ds):
+def fit(train_ds,
+        epochs,
+        test_ds,
+        generator: tf.keras.Model,
+        checkpoint,
+        checkpoint_prefix,
+        train_dataset,
+        test_dataset):
     for epoch in range(epochs):
         start = time.time()
 
@@ -235,12 +222,4 @@ def fit(train_ds, epochs, test_ds):
         print('Time taken for epoch {} is {} sec\n'.format(epoch + 1,
                                                            time.time()-start))
 
-        fit(train_dataset, EPOCHS, test_dataset)
-
-
-fit(train_dataset, EPOCHS, test_dataset)
-checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
-
-# Run the trained model on the entire test dataset
-for inp, tar in test_dataset.take(5):
-    generate_images(generator, inp, tar)
+        fit(train_dataset, epochs, test_dataset)
