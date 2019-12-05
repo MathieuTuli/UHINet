@@ -13,8 +13,8 @@ $(function() {
     }
     $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
       a: JSON.stringify(coords),
-    }, function(data) {
-      // do some stuff here.
+    }, function(image_name) {
+      document.getElementById('test_image').src='/static/' + image_name;
     });
     return false;
   });

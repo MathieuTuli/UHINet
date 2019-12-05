@@ -12,8 +12,11 @@ def map():
 @app.route("/send_coordinates")
 def add_numbers():
     a = request.args.get('a')
+    print('\n')
     print(a)
-    return jsonify(a)
+    print('\n')
+    image_name = str('image.png')
+    return jsonify(image_name)
 
 if __name__ == '__main__':
     app.run(debug=True)
