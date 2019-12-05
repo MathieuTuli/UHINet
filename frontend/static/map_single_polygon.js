@@ -6,15 +6,15 @@ var coords = [];
 
 
 $(function() {
-  $('a#calculate').bind('click', function() {
+  $('input#send_coords_button').bind('click', function() {
     if (coords.length < 1){
       window.alert('Please create a polygon first.');
       return;
     }
-    $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+    $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
       a: JSON.stringify(coords),
     }, function(data) {
-      $("#result").text(data.result);
+      // do some stuff here.
     });
     return false;
   });

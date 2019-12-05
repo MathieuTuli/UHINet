@@ -9,7 +9,7 @@ def map():
     key = 'https://maps.googleapis.com/maps/api/js?key='+ s +'&libraries=drawing&callback=initMap'
     return render_template('map_single_polygon.html', key=key)
 
-@app.route("/_add_numbers")
+@app.route("/send_coordinates")
 def add_numbers():
     a = request.args.get('a')
     print(a)
