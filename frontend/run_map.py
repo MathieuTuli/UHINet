@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, request
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
@@ -8,6 +8,12 @@ def map():
     f.close()
     key = 'https://maps.googleapis.com/maps/api/js?key='+ s +'&libraries=drawing&callback=initMap'
     return render_template('map_single_polygon.html', key=key)
+
+@app.route("/_add_numbers")
+def add_numbers():
+    a = request.args.get('a')
+    print(a)
+    return jsonify(a)
 
 if __name__ == '__main__':
     app.run(debug=True)
