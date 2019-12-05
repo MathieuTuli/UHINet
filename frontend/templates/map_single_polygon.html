@@ -8,9 +8,9 @@
     <script type=text/javascript>
       $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     </script>
-    <script src="{{ url_for('static', filename='map.js') }}"></script>
+    <script src="{{ url_for('static', filename='map_single_polygon.js') }}"></script>
     <script type="text/javascript" src="{{ key }}" async defer></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='map.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='map_single_polygon.css') }}">
   </head>
   <body>
     <div id='floating-panel'>
