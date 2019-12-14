@@ -2,7 +2,8 @@ from argparse import ArgumentParser
 import logging
 
 from .components import LogLevel
-from .backend.shell import backend_main, backend_args
+from .backend.network.shell import network_main, network_args
+from .backend.data.shell import data_main, data_args
 from .frontend.run import frontend_main, frontend_args
 
 
@@ -27,8 +28,10 @@ parser.add_argument('--config', type=str,
                     dest='config_file',
                     help="YAML config file location.")
 subparser = parser.add_subparsers(dest='command')
-backend_subparser = subparser.add_parser('backend', help='Backend commands')
-backend_args(backend_subparser)
+data_subparser = subparser.add_parser('data', help='Backend commands')
+data_args(data_subparser)
+network_subparser = subparser.add_parser('network', help='Backend commands')
+network_args(network_subparser)
 frontend_subparser = subparser.add_parser('frontend', help='Frontend commands')
 frontend_args(frontend_subparser)
 
@@ -50,9 +53,11 @@ else:
         " to INFO.")
 
 if __name__ == "__main__":
-    if str(args.command) == 'backend':
-        backend_main()
-    elif str(args.command) == 'backend':
+    if str(args.command) == 'data':
+        data_main()
+    elif str(args.command) == 'network':
+        network_main()
+    elif str(args.command) == 'frontend':
         frontend_main()
     else:
         logging.critical(f"UHINET: Unknown subcommand {args.command}")
