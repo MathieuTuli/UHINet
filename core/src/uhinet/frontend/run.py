@@ -1,14 +1,64 @@
 from flask import Flask, render_template, jsonify, request
+from argparse import ArgumentParse
+from pathlib import Path
+
+import logging
+import yaml
+
+from ..components import LogLevel
+
 app = Flask(__name__)
+
+parser = ArugmentParser(description=__doc__)
+parser.add_argument(
+    '-vv', '--very-verbose', action='store_true',
+    dest='very_verbose',
+    help="Set verbose. In effect, set --log-level to DEBUG.")
+parser.add_argument(
+    '-v', '--verbose', action='store_true',
+    dest='verbose',
+    help="Set verbose. In effect, set --log-level to INFO.")
+parser.set_defaults(verbose=False)
+parser.set_defaults(very_verbose=False)
+parser.add_argument('--log-level', type=LogLevel.__getitem__,
+                    default=LogLevel.INFO,
+                    choices=LogLevel.__members__.values(),
+                    dest='log_level',
+                    help="Log level.")
+parser.add_argument('--config', type=str,
+                    default='instance/config.json',
+                    dest='config_file',
+                    help="YAML config file location.")
+
+args = parser.parse_args()
+if args.log_level == 'DEBUG' or args.very_verbose:
+    logging.root.setLevel(logging.DEBUG)
+elif args.log_level == 'INFO' or args.verbose:
+    logging.root.setLevel(logging.INFO)
+elif args.log_level == 'WARNING':
+    logging.root.setLevel(logging.WARNING)
+elif args.log_level == 'ERROR':
+    logging.root.setLevel(logging.ERROR)
+elif args.log_level == 'CRITICAL':
+    logging.root.setLevel(logging.CRITICAL)
+else:
+    logging.root.setLevel(logging.INFO)
+    logging.warning(
+        f"Frontend: Log level \"{args.log_level}\" unknown, defaulting" +
+        " to INFO.")
 
 
 @app.route("/", methods=["GET"])
 def map():
-    f = open("input", "r")
-    s = f.read().splitlines()[0]
-    f.close()
-    key = 'https://maps.googleapis.com/maps/api/js?key=' + \
-        s + '&libraries=drawing&callback=initMap'
+    config_file = Path(args.config_file)
+    if not config_file.exists():
+        logging.error(
+            f"Frontend: config file {args.config_file} was not found")
+        return
+    with config_file.open() as yaml_file:
+        settings = yaml.load(yaml_file)
+    key = f"https://maps.googleapis.com/maps/api/js?key={settings['key']}" + \
+        "&libraries=drawing&callback=initMap"
     return render_template('map_single_polygon.html', key=key)
 
 

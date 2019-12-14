@@ -9,7 +9,7 @@ import signal
 import sys
 
 from ..file_manager import file_exists
-from ..components import LogLevel
+from .....components import LogLevel
 
 print("\n---------------------------------")
 print("UHINet Testing Module")

@@ -7,7 +7,7 @@ import logging
 import signal
 import sys
 
-from ..components import LogLevel
+from ...components import LogLevel
 
 print("\n---------------------------------")
 print("UHINet Pix2Pix Module")
