@@ -4,6 +4,7 @@ from argparse import _SubParsersAction, Namespace as APNamespace
 from pathlib import Path
 
 import logging
+import jinja2
 import yaml
 
 
@@ -11,10 +12,20 @@ def main(args: APNamespace):
     print("\n---------------------------------")
     print("UHINet Frontend Module")
     print("---------------------------------\n")
+    template_dir = Path.cwd() / 'frontend/build/templates'
+    assert(template_dir.exists())
     app = Flask(__name__)
+    loader = jinja2.ChoiceLoader([
+        app.jinja_loader,
+        jinja2.FileSystemLoader(str(template_dir)),
+    ])
+    app.jinja_loader = loader
 
     @app.route("/", methods=["GET"])
-    def map(config_file: Path):
+    def map():
+        # NOTE: All paths must be specified with relative path from top-level
+        # module uhinet
+        config_file = Path.cwd() / 'frontend/instance/config.yaml'
         if not config_file.exists():
             logging.error(
                 f"Frontend: config file {config_file} was not found")
@@ -25,7 +36,7 @@ def main(args: APNamespace):
             f"key={settings['google_maps_key']}" + \
             "&libraries=drawing&callback=initMap"
         logging.debug(f"Frontend: url specified: {url}")
-        index = Path.cwd() / 'app/static/index.html'
+        index = Path('index.html')
         return render_template(str(index), key=url)
 
     @app.route("/send_coordinates")
@@ -40,7 +51,4 @@ def main(args: APNamespace):
 
 
 def args(parser: _SubParsersAction) -> None:
-    parser.add_argument('--config', type=str,
-                        default='instance/config.yaml',
-                        dest='config_file',
-                        help="YAML config file location.")
+    ...
