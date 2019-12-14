@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request
-from argparse import ArgumentParse
+from argparse import ArgumentParser
 from pathlib import Path
 
 import logging
@@ -7,9 +7,8 @@ import yaml
 
 from ..components import LogLevel
 
-app = Flask(__name__)
 
-parser = ArugmentParser(description=__doc__)
+parser = ArgumentParser(description=__doc__)
 parser.add_argument(
     '-vv', '--very-verbose', action='store_true',
     dest='very_verbose',
@@ -26,26 +25,28 @@ parser.add_argument('--log-level', type=LogLevel.__getitem__,
                     dest='log_level',
                     help="Log level.")
 parser.add_argument('--config', type=str,
-                    default='instance/config.json',
+                    default='instance/config.yaml',
                     dest='config_file',
                     help="YAML config file location.")
 
 args = parser.parse_args()
-if args.log_level == 'DEBUG' or args.very_verbose:
+if str(args.log_level) == 'DEBUG' or args.very_verbose:
     logging.root.setLevel(logging.DEBUG)
-elif args.log_level == 'INFO' or args.verbose:
+elif str(args.log_level) == 'INFO' or args.verbose:
     logging.root.setLevel(logging.INFO)
-elif args.log_level == 'WARNING':
+elif str(args.log_level) == 'WARNING':
     logging.root.setLevel(logging.WARNING)
-elif args.log_level == 'ERROR':
+elif str(args.log_level) == 'ERROR':
     logging.root.setLevel(logging.ERROR)
-elif args.log_level == 'CRITICAL':
+elif str(args.log_level) == 'CRITICAL':
     logging.root.setLevel(logging.CRITICAL)
 else:
     logging.root.setLevel(logging.INFO)
     logging.warning(
         f"Frontend: Log level \"{args.log_level}\" unknown, defaulting" +
         " to INFO.")
+
+app = Flask(__name__)
 
 
 @app.route("/", methods=["GET"])
@@ -56,10 +57,11 @@ def map():
             f"Frontend: config file {args.config_file} was not found")
         return
     with config_file.open() as yaml_file:
-        settings = yaml.load(yaml_file)
-    key = f"https://maps.googleapis.com/maps/api/js?key={settings['key']}" + \
+        settings = yaml.load(yaml_file, Loader=yaml.FullLoader)
+    url = f"https://maps.googleapis.com/maps/api/js?key={settings['key']}" + \
         "&libraries=drawing&callback=initMap"
-    return render_template('map_single_polygon.html', key=key)
+    logging.debug(f"Frontend: url specified: {url}")
+    return render_template('map_single_polygon.html', key=url)
 
 
 @app.route("/send_coordinates")

@@ -31,20 +31,20 @@ parser.add_argument('--log-level', type=LogLevel.__getitem__,
                     help="Log level.")
 
 args = parser.parse_args()
-if args.log_level == 'DEBUG' or args.very_verbose:
+if str(args.log_level) == 'DEBUG' or args.very_verbose:
     logging.root.setLevel(logging.DEBUG)
-elif args.log_level == 'INFO' or args.verbose:
+elif str(args.log_level) == 'INFO' or args.verbose:
     logging.root.setLevel(logging.INFO)
-elif args.log_level == 'WARNING':
+elif str(args.log_level) == 'WARNING':
     logging.root.setLevel(logging.WARNING)
-elif args.log_level == 'ERROR':
+elif str(args.log_level) == 'ERROR':
     logging.root.setLevel(logging.ERROR)
-elif args.log_level == 'CRITICAL':
+elif str(args.log_level) == 'CRITICAL':
     logging.root.setLevel(logging.CRITICAL)
 else:
     logging.root.setLevel(logging.INFO)
     logging.warning(
-        f"Data Shell: Log level \"{args.log_level}\" unknown, defaulting" +
+        f"Frontend: Log level \"{args.log_level}\" unknown, defaulting" +
         " to INFO.")
 logging.info(
     f"Data Shell: Log level set to \"{logging.getLogger()}\"")
