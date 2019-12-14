@@ -1,5 +1,5 @@
 print("\n---------------------------------")
-print("UHINet Module")
+print("UHINet Backend Module")
 print("---------------------------------\n")
 
 
