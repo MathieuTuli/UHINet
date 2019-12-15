@@ -12,14 +12,20 @@ def main(args: APNamespace):
     print("\n---------------------------------")
     print("UHINet Frontend Module")
     print("---------------------------------\n")
-    template_dir = Path.cwd() / 'frontend/build/templates'
+    build_dir = Path.cwd() / 'frontend/build'
+    template_dir = build_dir / 'templates'
+    static_dir = build_dir / 'static'
+    assert(build_dir.exists())
     assert(template_dir.exists())
-    app = Flask(__name__)
-    loader = jinja2.ChoiceLoader([
-        app.jinja_loader,
-        jinja2.FileSystemLoader(str(template_dir)),
-    ])
-    app.jinja_loader = loader
+    assert(static_dir.exists())
+    app = Flask(__name__, template_folder=str(
+        template_dir), static_folder=str(static_dir))
+    # loader = jinja2.ChoiceLoader([
+    #     # app.jinja_loader,
+    #     jinja2.FileSystemLoader(str(build_dir)),
+    #     jinja2.FileSystemLoader(str(template_dir)),
+    # ])
+    # app.jinja_loader = loader
 
     @app.route("/", methods=["GET"])
     def map():
