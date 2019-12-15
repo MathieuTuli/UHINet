@@ -3,8 +3,9 @@
 ## A tool for predicting Urban Heat Island Effect, with a focus on the Greater Toronto Area
 
 ### Backend
-Uses a combination of Object Oriented and Data Oriented Programming
 authors: [Mathieu Tuli](https://github.com/MathieuTuli)
+Directory structure
 
 ### Frontend
-authors: [Joe Sismondo](https://github.com/joesismondo) & [Quanzhou Li](https://github.com/licandow) & [Trevor Zhuang](https://github.com/zianaiz)
+authors: [Mathieu Tuli](https://github.com/MathieuTuli) & [Joe Sismondo](https://github.com/joesismondo) & [Quanzhou Li](https://github.com/licandow) & [Trevor Zhuang](https://github.com/zianaiz)
+Directory Structure
