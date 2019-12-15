@@ -57,4 +57,4 @@ def main(args: APNamespace):
 
 
 def args(parser: _SubParsersAction) -> None:
-    ...
+    return
