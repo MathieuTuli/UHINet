@@ -23,10 +23,6 @@ parser.add_argument('--log-level', type=LogLevel.__getitem__,
                     choices=LogLevel.__members__.values(),
                     dest='log_level',
                     help="Log level.")
-parser.add_argument('--config', type=str,
-                    default='instance/config.yaml',
-                    dest='config_file',
-                    help="YAML config file location.")
 subparser = parser.add_subparsers(dest='command')
 data_subparser = subparser.add_parser(
     'data', help='Data commands')

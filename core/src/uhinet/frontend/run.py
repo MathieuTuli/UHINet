@@ -53,8 +53,17 @@ def main(args: APNamespace):
         print('\n')
         image_name = str('image.png')
         return jsonify(image_name)
-    app.run(debug=True, host='127.0.0.1')
+    app.run(debug=args.verbose or args.very_verbose, host='127.0.0.1')
 
 
 def args(parser: _SubParsersAction) -> None:
-    return
+    parser.add_argument(
+        '-vv', '--very-verbose', action='store_true',
+        dest='very_verbose',
+        help="Set flask debug mode")
+    parser.add_argument(
+        '-v', '--verbose', action='store_true',
+        dest='verbose',
+        help="Set flask debug mode")
+    parser.set_defaults(verbose=False)
+    parser.set_defaults(very_verbose=False)
