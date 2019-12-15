@@ -9,12 +9,14 @@ EARTH_RADIUS = 6378.1 * 1000  # in metres
 
 
 def metres_to_latitude(metres: float) -> float:
+    """Returns a latitude difference from 0 to metres"""
     return (metres / EARTH_RADIUS) * (180 / math.pi)
 
 
 def metres_to_longitude(latitude: float, metres: float) -> float:
+    """Returns a longitude difference from 0 to metres"""
     return (metres / EARTH_RADIUS) * (180 / math.pi) / \
-            math.cos(latitude * math.pi / 180.0)
+        math.cos(latitude * math.pi / 180.0)
 
 
 def lat_lon_plus_dx_dy(lat_lon: LatLon, dx, dy) -> LatLon:
@@ -39,9 +41,9 @@ def conform_coordinates_to_spatial_resolution(
     dx = (image_size.width / 2)
     dy = (image_size.height / 2) + 1
     top_left = lat_lon_plus_dx_dy(
-            center,
-            -dx * spatial_resolution, dy * spatial_resolution)
+        center,
+        -dx * spatial_resolution, dy * spatial_resolution)
     bottom_right = lat_lon_plus_dx_dy(
-            center,
-            dx * spatial_resolution, -dy * spatial_resolution)
+        center,
+        dx * spatial_resolution, -dy * spatial_resolution)
     return BBox(top_left=top_left, bottom_right=bottom_right)

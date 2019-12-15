@@ -30,17 +30,18 @@ def main(args: APNamespace):
         logging.warning(
             "Data Shell: Currently, only landsat downloads from a " +
             "shopping list file are permitted")
-        path = Path(args.shopping_list)
-        if file_exists(path):
+        shopping_list_path = Path(args.shopping_list)
+        instance_id_path = Path(args.instance_id)
+        if file_exists(shopping_list_path) and file_exists(instance_id_path):
             logging.info("Data Shell: Downloading landsat from shopping " +
                          f"list found at \"{args.shopping_list}\"")
 
-            with Path(args.instance_id).open() as f:
+            with instance_id_path.open() as f:
                 instance_id = f.read().strip()
 
             sentinelhub_accessor = SentinelHubAccessor(instance_id)
             download_lansat_from_file(
-                sentinelhub_accessor, path, Path(args.save_to))
+                sentinelhub_accessor, shopping_list_path, Path(args.save_to))
 
     else:
         logging.error(
