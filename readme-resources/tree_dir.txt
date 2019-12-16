@@ -1,0 +1,16 @@
+├── core
+│   ├── src
+│   │   ├── uhinet
+│   │   │   ├── backend
+│   │   │   │   ├── data
+│   │   │   │   ├── network
+│   │   │   │   │   └── testing
+│   │   │   │   ├── sentinel_hub_layers
+│   │   │   ├── frontend
+│   │   │   │   ├── build
+│   │   │   │   │   ├── static
+│   │   │   │   │   └── templates
+│   │   │   │   └── instance
+│   │   └── uhinet.egg-info
+│   └── tests
+│       └── images

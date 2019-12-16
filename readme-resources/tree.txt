@@ -1,0 +1,71 @@
+├── core
+│   ├── Makefile
+│   ├── mypy.ini
+│   ├── pytest.ini
+│   ├── requirements.txt
+│   ├── setup.py
+│   ├── src
+│   │   ├── uhinet
+│   │   │   ├── backend
+│   │   │   │   ├── data
+│   │   │   │   │   ├── components.py
+│   │   │   │   │   ├── download_landsat.py
+│   │   │   │   │   ├── helpers.py
+│   │   │   │   │   ├── image_formatting.py
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── SentinelHubAccessor.py
+│   │   │   │   │   ├── shell.py
+│   │   │   │   │   └── split_dataset.py
+│   │   │   │   ├── file_manager.py
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── network
+│   │   │   │   │   ├── components.py
+│   │   │   │   │   ├── data_helpers.py
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── pix2pix.py
+│   │   │   │   │   ├── shell.py
+│   │   │   │   │   └── testing
+│   │   │   │   │       ├── __init__.py
+│   │   │   │   │       └── shell.py
+│   │   │   │   ├── sentinel_hub_layers
+│   │   │   │   │   ├── lst.js
+│   │   │   │   │   └── rgb.js
+│   │   │   │   ├── shell.py
+│   │   │   │   └── todo.txt
+│   │   │   ├── components.py
+│   │   │   ├── frontend
+│   │   │   │   ├── build
+│   │   │   │   │   ├── static
+│   │   │   │   │   │   ├── jquery.js
+│   │   │   │   │   │   ├── map.css
+│   │   │   │   │   │   ├── map.js
+│   │   │   │   │   │   ├── map_single_polygon.css
+│   │   │   │   │   │   └── map_single_polygon.js
+│   │   │   │   │   └── templates
+│   │   │   │   │       ├── index.html
+│   │   │   │   │       ├── map.html
+│   │   │   │   │       └── map_single_polygon.html
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── instance
+│   │   │   │   │   ├── config.yaml
+│   │   │   │   │   └── template_config.yaml
+│   │   │   │   ├── pseudocode.js
+│   │   │   │   └── run.py
+│   │   │   ├── __init__.py
+│   │   │   ├── __main__.py
+│   │   └── uhinet.egg-info
+│   │       ├── dependency_links.txt
+│   │       ├── not-zip-safe
+│   │       ├── PKG-INFO
+│   │       ├── requires.txt
+│   │       ├── SOURCES.txt
+│   │       └── top_level.txt
+│   ├── tests
+│   │   ├── images
+│   │   │   ├── 1_2_LST_img_0.png
+│   │   │   └── 1_2_RGB_img_0.png
+│   │   ├── support.py
+│   │   ├── test_data_helpers.py
+│   │   └── test_data_image_formatting.py
+├── README.md
+└── tree.txt
