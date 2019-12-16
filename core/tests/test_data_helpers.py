@@ -24,3 +24,6 @@ def test_conform_coordinates_to_spatial_resolution():
         spatial_resolution=30,
         image_size=ImageSize(width=256, height=256),
         center=LatLon(lat=40, lon=-70),)
+    fail_if(conform_coordinates_to_spatial_resolution(
+        spatial_resolution=30,
+        image_size=ImageSize(width=256, height=256),) is not None)

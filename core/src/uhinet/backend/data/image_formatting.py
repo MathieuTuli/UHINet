@@ -15,7 +15,9 @@ def concatenate_horizontal(images: List[np.ndarray],
 
 
 def square_resize(
-        img: np.ndarray, size: int, cv2_interpolation: int = cv2.INTER_AREA) -> np.ndarray:
+        img: np.ndarray,
+        size: int,
+        cv2_interpolation: int = cv2.INTER_AREA) -> np.ndarray:
     '''
     @ credit: Alexey Antonenko
         https://stackoverflow.com/users/4949040/alexey-antonenko

@@ -29,8 +29,29 @@ def test_concatenate_horizontal():
 def test_square_resize():
     images_dir = Path.cwd() / 'tests/images'
     fail_if(not images_dir.exists())
+
     image = cv2.imread(str(images_dir / '1_2_RGB_img_0.png'))
     fail_if(image is None)
+    size = 50
+    img = square_resize(image, size)
+    h, w, c = img.shape
+    fail_if(h != size or w != size or c != image.shape[2])
+
+    # scenario sending already squared image
+    size = 10
+    img = square_resize(img, size=size)
+    h, w, c = img.shape
+    fail_if(h != size or w != size or c != image.shape[2])
+
+    # test width > height
+    image = cv2.resize(image, (50, 100))
+    size = 50
+    img = square_resize(image, size)
+    h, w, c = img.shape
+    fail_if(h != size or w != size or c != image.shape[2])
+
+    # test height > width
+    image = cv2.resize(image, (100, 50))
     size = 50
     img = square_resize(image, size)
     h, w, c = img.shape

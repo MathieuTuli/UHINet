@@ -1,5 +1,7 @@
 '''
 '''
+from typing import Optional
+
 import logging
 import math
 
@@ -31,10 +33,11 @@ def conform_coordinates_to_spatial_resolution(
         spatial_resolution: int,
         image_size: ImageSize,
         center: LatLon = None,
-        bbox: BBox = None,) -> BBox:
+        bbox: BBox = None,) -> Optional[BBox]:
     if center is None and bbox is None:
-        logging.Error(
+        logging.error(
             "image_formatting: Must specify a center of bounding box")
+        return None
     if bbox is not None:
         center = LatLon(lat=(bbox.top_left.lat + bbox.bottom_right.lat) / 2,
                         lon=(bbox.top_left.lon + bbox.bottom_right.lon) / 2)
