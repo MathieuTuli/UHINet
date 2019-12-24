@@ -15,12 +15,12 @@ def control_c_handler(_signal, frame):
     sys.exit(0)
 
 
-def main(ags: APNamespace):
+def main(args: APNamespace):
     print("\n---------------------------------")
     print("UHINet Pix2Pix Module")
     print("---------------------------------\n")
     signal.signal(signal.SIGINT, control_c_handler)
 
 
-def args(parser: _SubParsersAction) -> None:
+def args(sub_parser: _SubParsersAction) -> None:
     ...

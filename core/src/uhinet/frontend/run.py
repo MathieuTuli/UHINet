@@ -56,14 +56,14 @@ def main(args: APNamespace):
     app.run(debug=args.verbose or args.very_verbose, host='127.0.0.1')
 
 
-def args(parser: _SubParsersAction) -> None:
-    parser.add_argument(
+def args(sub_parser: _SubParsersAction) -> None:
+    sub_parser.add_argument(
         '-vv', '--very-verbose', action='store_true',
         dest='very_verbose',
         help="Set flask debug mode")
-    parser.add_argument(
+    sub_parser.add_argument(
         '-v', '--verbose', action='store_true',
         dest='verbose',
         help="Set flask debug mode")
-    parser.set_defaults(verbose=False)
-    parser.set_defaults(very_verbose=False)
+    sub_parser.set_defaults(verbose=False)
+    sub_parser.set_defaults(very_verbose=False)

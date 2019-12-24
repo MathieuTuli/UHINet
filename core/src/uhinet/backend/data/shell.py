@@ -49,24 +49,24 @@ def main(args: APNamespace):
         sys.exit(0)
 
 
-def args(parser: _SubParsersAction) -> None:
-    parser.add_argument('--data-source', type=str.lower,
-                        dest='data_source',
-                        choices=['landsat'],
-                        required=True,
-                        help="Data source for download.")
-    parser.add_argument(
+def args(sub_parser: _SubParsersAction) -> None:
+    sub_parser.add_argument('--data-source', type=str.lower,
+                            dest='data_source',
+                            choices=['landsat'],
+                            required=True,
+                            help="Data source for download.")
+    sub_parser.add_argument(
         '--instance-id', type=str,
         default='instance_id.txt',
         dest='instance_id',
         help="File name of instance id for data-set-specific API Accessor")
-    parser.add_argument(
+    sub_parser.add_argument(
         '--shopping-list', type=str,
         default='shopping_list.json',
         dest='shopping_list',
         help="File name of settings and API demands for data-set-specific" +
         " download. See \"shopping_list_example.txt\" for an example.")
-    parser.add_argument(
+    sub_parser.add_argument(
         '--save-to', type=str,
         default='data/images',
         dest='save_to',
