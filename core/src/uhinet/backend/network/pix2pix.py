@@ -6,8 +6,10 @@ UHINET Network Pix2Pix Module
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 from IPython.display import clear_output
+from pathlib import Path
 
 import tensorflow as tf
+import logging
 import time
 
 from .data_helpers import load, resize, random_crop, normalize, random_jitter,\
@@ -15,8 +17,21 @@ from .data_helpers import load, resize, random_crop, normalize, random_jitter,\
 
 
 class Pix2Pix():
-    def __init__(self) -> None:
-        ...
+    def __init__(self,
+                 output_channels: int,
+                 checkpoint_path: Path) -> None:
+        self.generator: tf.keras.Model = Pix2Pix.generator(output_channels)
+        self.discriminator: tf.keras.Model = Pix2Pix.discriminator()
+        self.generator_optimizer: tf.keras.optimizers.Optimizer = \
+            tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+        self.discriminator_optimizer: tf.keras.optimizers.Optimizer = \
+            tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+        self.checkpoint = tf.train.Checkpoint(
+            generator_optimizer=self.generator_optimizer,
+            discriminator_optimizer=self.discriminator_optimizer,
+            generator=self.generator,
+            discriminator=self.discriminator)
+        self.loss_object = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
     def __str__(self) -> str:
         return 'Pix2Pix'
@@ -108,30 +123,28 @@ class Pix2Pix():
 
         return tf.keras.Model(inputs=[inp, tar], outputs=last)
 
-    @staticmethod
     def discriminator_loss(
+            self,
             disc_real_output: tf.keras.Model,
             disc_generated_output: tf.keras.Model,
     ) -> tf.losses.BinaryCrossentropy:
-        loss_object = tf.keras.losses.BinaryCrossentropy(from_logits=True)
-        real_loss = loss_object(tf.ones_like(
+        real_loss = self.loss_object(tf.ones_like(
             disc_real_output), disc_real_output)
 
-        generated_loss = loss_object(tf.zeros_like(
+        generated_loss = self.loss_object(tf.zeros_like(
             disc_generated_output), disc_generated_output)
 
         total_disc_loss = real_loss + generated_loss
 
         return total_disc_loss
 
-    @staticmethod
     def generator_loss(
+            self,
             disc_generated_output: tf.keras.Model,
             gen_output: tf.keras.Model,
             target: tf.data.Dataset,
             _lambda: int) -> tf.losses.BinaryCrossentropy:
-        loss_object = tf.keras.losses.BinaryCrossentropy(from_logits=True)
-        gan_loss = loss_object(tf.ones_like(
+        gan_loss = self.loss_object(tf.ones_like(
             disc_generated_output), disc_generated_output)
 
         # mean absolute error
@@ -166,18 +179,15 @@ class Pix2Pix():
 
     @tf.function
     def train_step(
+            self,
             input_image: tf.data.Dataset,
-            target: tf.data.Dataset,
-            generator: tf.keras.Model,
-            discriminator: tf.keras.Model,
-            generator_optimizer: tf.keras.optimizers.Optimizer,
-            discriminator_optimizer: tf.keras.optimizers.Optimizer) -> None:
+            target: tf.data.Dataset,) -> None:
         with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
-            gen_output = generator(input_image, training=True)
+            gen_output = self.generator(input_image, training=True)
 
-            disc_real_output = discriminator(
+            disc_real_output = self.discriminator(
                 [input_image, target], training=True)
-            disc_generated_output = discriminator(
+            disc_generated_output = self.discriminator(
                 [input_image, gen_output], training=True)
 
             gen_loss = Pix2Pix.generator_loss(
@@ -185,24 +195,25 @@ class Pix2Pix():
             disc_loss = Pix2Pix.discriminator_loss(
                 disc_real_output, disc_generated_output)
 
-        generator_gradients = gen_tape.gradient(gen_loss,
-                                                generator.trainable_variables)
+        generator_gradients = gen_tape.gradient(
+            gen_loss,
+            self.generator.trainable_variables)
         discriminator_gradients = disc_tape.gradient(
             disc_loss,
-            discriminator.trainable_variables)
+            self.discriminator.trainable_variables)
 
-        generator_optimizer.apply_gradients(zip(generator_gradients,
-                                                generator.trainable_variables))
-        discriminator_optimizer.apply_gradients(
+        self.generator_optimizer.apply_gradients(
+            zip(generator_gradients,
+                self.generator.trainable_variables))
+        self.discriminator_optimizer.apply_gradients(
             zip(discriminator_gradients,
-                discriminator.trainable_variables))
+                self.discriminator.trainable_variables))
 
-    @staticmethod
-    def fit(train_ds: tf.data.Dataset,
+    def fit(self,
+            train_ds: tf.data.Dataset,
             test_ds: tf.data.Dataset,
             epochs: int,
-            generator: tf.keras.Model,
-            checkpoint_path: str,) -> None:
+            checkpoint_path: str) -> None:
         for epoch in range(epochs):
             start = time.time()
 
@@ -215,11 +226,11 @@ class Pix2Pix():
             # easily seen.
             for example_input, example_target in test_ds.take(1):
                 Pix2Pix.generate_images(
-                    generator, example_input, example_target)
+                    self.generator, example_input, example_target)
 
             # saving (checkpoint) the model every 20 epochs
             if (epoch + 1) % 20 == 0:
-                checkpoint.save(file_prefix=checkpoint_prefix)
+                self.checkpoint.save(file_prefix=checkpoint_path)
 
             print(
                 'Time taken for epoch {} is {} sec\n'.format(
