@@ -34,6 +34,9 @@ def conform_coordinates_to_spatial_resolution(
         image_size: ImageSize,
         center: LatLon = None,
         bbox: BBox = None,) -> Optional[BBox]:
+    """
+    if both center and bbox are specified, bbox will be used
+    """
     if center is None and bbox is None:
         logging.error(
             "image_formatting: Must specify a center of bounding box")

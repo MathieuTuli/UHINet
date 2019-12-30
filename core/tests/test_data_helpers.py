@@ -1,7 +1,7 @@
 from uhinet.backend.data.helpers import metres_to_latitude, \
     metres_to_longitude, lat_lon_plus_dx_dy, \
     conform_coordinates_to_spatial_resolution
-from uhinet.backend.data.components import LatLon, ImageSize
+from uhinet.backend.data.components import LatLon, ImageSize, BBox
 from support import fail_if
 
 
@@ -27,3 +27,7 @@ def test_conform_coordinates_to_spatial_resolution():
     fail_if(conform_coordinates_to_spatial_resolution(
         spatial_resolution=30,
         image_size=ImageSize(width=256, height=256),) is not None)
+    fail_if(conform_coordinates_to_spatial_resolution(
+        spatial_resolution=30,
+        image_size=ImageSize(width=256, height=256),
+        bbox=BBox(top_left=LatLon(lat=0, lon=0), bottom_right=LatLon(lat=1, lon=1))) is None)
