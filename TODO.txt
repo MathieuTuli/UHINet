@@ -1,0 +1,30 @@
+- backend return image to frontend based on coordinate (polygon request) and coords of viewing window
+- frontend
+   - request to backend needs to send polygon coords and viewing window coords
+- backend needs to get landsat image for viewing window, and stitch them together, then return before, after, and difference with tl/br coords
+
+other...
+- frontend
+  - send polygon + viewing coordinates
+  - send building properties
+  - interface
+    - recv image
+    - overlay it
+    - filter between the before, after diff
+    - polygon tool
+    - generate button
+    - building properties selection
+    - search bar
+    - seasons? -> time selector
+    - make it look pretty
+    - transparency of layers (heat map)
+    - toggle between satellite and coloured map
+- backend
+  - train small image patches
+  - train on building energy maps
+  - train building heat maps
+  - take in building properties, time, and coords, and return predictions + stitched heat maps
+  - generating new image based on properies
+
+properties
+  - building material not really, so height, expected energy consumption
