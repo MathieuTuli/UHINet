@@ -37,6 +37,7 @@ class Pix2Pix():
         return 'Pix2Pix'
 
     @staticmethod
+    @tf.function
     def generator(output_channels: int) -> tf.keras.Model:
         down_stack = [
             downsample(64, 4, apply_batchnorm=False),  # (bs, 128, 128, 64)
@@ -90,6 +91,7 @@ class Pix2Pix():
         return tf.keras.Model(inputs=inputs, outputs=x)
 
     @staticmethod
+    @tf.function
     def discriminator() -> tf.keras.Model:
         initializer = tf.random_normal_initializer(0., 0.02)
 
@@ -123,6 +125,7 @@ class Pix2Pix():
 
         return tf.keras.Model(inputs=[inp, tar], outputs=last)
 
+    @tf.function
     def discriminator_loss(
             self,
             disc_real_output: tf.keras.Model,
@@ -138,6 +141,7 @@ class Pix2Pix():
 
         return total_disc_loss
 
+    @tf.function
     def generator_loss(
             self,
             disc_generated_output: tf.keras.Model,
@@ -209,6 +213,7 @@ class Pix2Pix():
             zip(discriminator_gradients,
                 self.discriminator.trainable_variables))
 
+    @tf.function
     def fit(self,
             train_ds: tf.data.Dataset,
             test_ds: tf.data.Dataset,

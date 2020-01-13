@@ -3,19 +3,26 @@ UHINET Network Pix2Pix Data Helpers
 
 @credit: Google (https://www.tensorflow.org/tutorials/generative/pix2pix)
 '''
+from pathlib import Path
 from typing import Tuple, Optional, List
+
 import tensorflow as tf
+import logging
 
 from .components import ImageDirection
 
 
 # TODO : which direction , this used left to right
-def load(image_path: str,
+def load(image_path: Path,
          direction: ImageDirection) -> Tuple[tf.Tensor, tf.Tensor]:
     '''
     @returns: Tuple, (input_image, target_image)
     '''
-    image = tf.io.read_file(image_path)
+    if not image_path.exists():
+        logging.error(f"Helper - load: Image path {image_path} does not exist")
+        raise
+
+    image = tf.io.read_file(str(image_path))
     image = tf.image.decode_jpeg(image)
 
     w = tf.shape(image)[1]
@@ -85,57 +92,30 @@ def random_jitter(input_image: tf.Tensor,
     return input_image, real_image
 
 
-def load_image_train(image_file: str) -> Tuple[tf.Tensor, tf.Tensor]:
-    input_image, real_image = load(image_file)
+def load_image_train(image_path: Path) -> Tuple[tf.Tensor, tf.Tensor]:
+    if not image_path.exists():
+        logging.error(
+            f"Helper - load_image_train: Image path {image_path} "
+            + "does not exist")
+        raise
+    input_image, real_image = load(str(image_path))
     input_image, real_image = random_jitter(input_image, real_image)
     input_image, real_image = normalize(input_image, real_image)
 
     return input_image, real_image
 
 
-def load_image_test(image_file: str,
+def load_image_test(image_path: Path,
                     img_width: int,
                     img_height: int) -> Tuple[tf.Tensor, tf.Tensor]:
-    input_image, real_image = load(image_file)
+    if not image_path.exists():
+        logging.error(
+            f"Helper - load_image_test: Image path {image_path} "
+            + "does not exist")
+        raise
+    input_image, real_image = load(str(image_path))
     input_image, real_image = resize(input_image, real_image,
                                      img_height, img_width)
     input_image, real_image = normalize(input_image, real_image)
 
     return input_image, real_image
-
-
-def downsample(filters: int,
-               kernel_size: Optional[int, Tuple[int, int], List[int, int]],
-               apply_batchnorm: bool = True) -> tf.keras.Sequential:
-    initializer = tf.random_normal_initializer(0., 0.02)
-    result = tf.keras.Sequential()
-    result.add(
-        tf.keras.layers.Conv2D(filters, kernel_size, strides=2, padding='same',
-                               kernel_initializer=initializer, use_bias=False))
-
-    if apply_batchnorm:
-        result.add(tf.keras.layers.BatchNormalization())
-
-    result.add(tf.keras.layers.LeakyReLU())
-    return result
-
-
-def upsample(filters: int,
-             kernel_size: Optional[int, Tuple[int, int], List[int, int]],
-             apply_dropout: bool = False) -> tf.keras.Sequential:
-    initializer = tf.random_normal_initializer(0., 0.02)
-
-    result = tf.keras.Sequential()
-    result.add(
-        tf.keras.layers.Conv2DTranspose(filters, kernel_size, strides=2,
-                                        padding='same',
-                                        kernel_initializer=initializer,
-                                        use_bias=False))
-
-    result.add(tf.keras.layers.BatchNormalization())
-
-    if apply_dropout:
-        result.add(tf.keras.layers.Dropout(0.5))
-
-    result.add(tf.keras.layers.ReLU())
-    return result
