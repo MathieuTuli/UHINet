@@ -32,3 +32,6 @@ Authors: [Mathieu Tuli](https://github.com/MathieuTuli) & [Joe Sismondo](https:/
 ```
 
 ### Installation
+
+For mac-users, note that you will not be able to install the python `sentinelhub` package unless you have `geos` installed.
+  To install `geos`, use brew... `brew install geos`
