@@ -1,13 +1,11 @@
 from pathlib import Path
-from calendar import monthrange
-
 import logging
 import json
 import cv2
 
 from ..file_manager import save_pyplot_image, init_dirs, check_suffix, \
     file_exists
-from .SentinelHubAccessor import SentinelHubAccessor
+from .sentinel_hub import SentinelHubAccessor
 from .components import ImageSize, BBox, LatLon
 from .image_formatting import square_resize
 from .helpers import conform_coordinates_to_spatial_resolution

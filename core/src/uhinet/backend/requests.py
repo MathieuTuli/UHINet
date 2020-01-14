@@ -1,20 +1,29 @@
 from typing import Tuple
 
+from TFPix2Pix import Predictor
 from ..frontend.components import Layer, Polygon, Orientation, Season
+from .data.image_formatting import alter_area
+from .data.sentinel_hub import SentinelHubAccessor
 
 
-def getn_raw_LST() -> Layer:
-    ...
+class Requests():
+    def __init__(self):
+        self.predictor = Predictor()
+        self.sha = SentinelHubAccessor()
 
+    def __str__(self):
+        return 'Requests'
 
-def get_updated_LST() -> Layer:
-    ...
+    def get_raw_LST() -> Layer:
+        ...
 
+    def get_updated_LST() -> Layer:
+        ...
 
-def get_diff_LST() -> Layer:
-    ...
+    def get_diff_LST() -> Layer:
+        ...
 
-
-def predict(polygon: Polygon,
-            season: Season) -> Tuple[Layer, Layer, Layer]:
-    ...
+    def predict(self,
+                polygon: Polygon,
+                season: Season) -> Tuple[Layer, Layer, Layer]:
+        new_image = alter_area(polygon=polygon, season=season)

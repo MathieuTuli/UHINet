@@ -9,7 +9,7 @@ import signal
 import sys
 
 from .download_landsat import download_lansat_from_file
-from .SentinelHubAccessor import SentinelHubAccessor
+from .sentinel_hub import SentinelHubAccessor
 from ..file_manager import file_exists
 
 
