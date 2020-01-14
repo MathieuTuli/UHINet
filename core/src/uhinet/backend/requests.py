@@ -18,15 +18,6 @@ class Requests():
     def __str__(self) -> str:
         return 'Requests'
 
-    def get_raw_LST() -> Layer:
-        ...
-
-    def get_updated_LST() -> Layer:
-        ...
-
-    def get_diff_LST() -> Layer:
-        ...
-
     def predict(self,
                 polygon: Polygon,
                 season: Season) -> Tuple[Layer, Layer, Layer]:
