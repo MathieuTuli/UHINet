@@ -6,12 +6,22 @@ import numpy as np
 from ..backend.data.components import BBox, LatLon
 
 
+class Season(Enum):
+    FALL = 0
+    WINTER = 1
+    SPRING = 2
+    SUMMER = 3
+
+    def __str__(self):
+        return self.name
+
+
 class Orientation(Enum):
     '''
     Just an enum to define the orientation of the polygon coordinates
     use like -> orientation = Orientation.CCW
     '''
-    CCW = 1
+    CCW = 0
     CW = 1
 
     def __str__(self):
@@ -67,4 +77,5 @@ class Polygon(NamedTuple):
                       orientation=Orientation.CWW) // or CW
     '''
     coordinates: List[LatLon]
+    viewing_window: BBox
     orientation: Orientation
