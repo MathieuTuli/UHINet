@@ -1,0 +1,70 @@
+from typing import NamedTuple, List, Union
+from pathlib import Path
+from enum import Enum
+import numpy as np
+
+from ..backend.data.components import BBox, LatLon
+
+
+class Orientation(Enum):
+    '''
+    Just an enum to define the orientation of the polygon coordinates
+    use like -> orientation = Orientation.CCW
+    '''
+    CCW = 1
+    CW = 1
+
+    def __str__(self):
+        return self.name
+
+
+class Layer(NamedTuple):
+    '''
+    A layer to display on the map. The image is either
+    a numpy array or a Path to an image file.
+
+    NameTuples are immutable, meaning once created, you can't change
+    their values, only access them. So, you would create it like
+
+    layer = Layer(image=..., coordinates=...)
+    and then access it like layer.image or layer.coordinates.
+
+    note that there is a weird behaviour if you create a variable
+    and then assign to to a member of a NamedTuple.
+    ie. don't do bbox = BBox(top_left=LatLon(lat=..., lon=...),
+                             bottom_right=LatLon(lat=..., lon=...))
+
+            then layer = Layer(image=..., coordinates=bbox)
+
+            do
+            layer = Layer(
+                image=...,
+                coordinates=BBox(
+                        top_left=LatLon(lat=..., lon=...),
+                        bottom_right=LatLon(lat=..., lon=...)))
+
+
+        and to that extent, don't do
+
+            tl = LatLon(lat=..., lon=...)
+            br = LatLon(lat=..., lon=...)
+            BBox(top_left=tl,
+                 bottom_right=br)
+    '''
+    image: Union[np.ndarray, Path]
+    coordinates: BBox
+
+
+class Polygon(NamedTuple):
+    '''
+    Nothing new here that you can't learn from above
+    use as
+
+    polygon = Polygon(coordinates=[LatLon(lat=..., lon=...),
+                                   LatLon(lat=..., lon=...),
+                                   LatLon(lat=..., lon=...),
+                                   ...],
+                      orientation=Orientation.CWW) // or CW
+    '''
+    coordinates: List[LatLon]
+    orientation: Orientation
