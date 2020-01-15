@@ -48,3 +48,11 @@ def clip(width: int, height: int, channels: int):
 
 def pad(width: int, height: int, channels: int, pad_value: float):
     ...
+
+
+def diff_images(first: np.ndarray, second: np.ndarray) -> np.ndarray:
+    ...
+
+
+def stitch(images: List[np.ndarray]) -> np.ndarray:
+    return images

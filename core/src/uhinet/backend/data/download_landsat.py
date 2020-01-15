@@ -1,19 +1,17 @@
 from pathlib import Path
-from calendar import monthrange
-
 import logging
 import json
 import cv2
 
 from ..file_manager import save_pyplot_image, init_dirs, check_suffix, \
     file_exists
-from .SentinelHubAccessor import SentinelHubAccessor
+from .sentinel_hub import SentinelHubAccessor
 from .components import ImageSize, BBox, LatLon
 from .image_formatting import square_resize
 from .helpers import conform_coordinates_to_spatial_resolution
 
 
-def download_lansat_from_file(
+def download_landsat_from_file(
         sentinelhub_accessor: SentinelHubAccessor,
         file_name: Path,
         save_to: Path) -> bool:
@@ -59,6 +57,7 @@ def download_lansat_from_file(
                                         lon=geometry['br_lon']))
         year = year_from
         next_geometry = False
+        # TODO try the range feature
         while year <= year_to:
             save_dir = save_to / f"{geometry['name']}/{year}"
             init_dirs(save_dir)
