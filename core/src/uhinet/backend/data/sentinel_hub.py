@@ -1,6 +1,6 @@
 from sentinelhub import WmsRequest, DataSource, CustomUrlParam, CRS, \
     BBox as SentinelBBox
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 import traceback
@@ -19,26 +19,29 @@ class SentinelHubAccessor:
     # TODO try image_format
     def get_landsat_image(self,
                           layer: str,
-                          date: str,
                           image_size: ImageSize,
                           bbox: BBox,
-                          cloud_cov_perc: float) -> np.ndarray:
+                          cloud_cov_perc: float,
+                          date: str) -> Optional[np.ndarray]:
+        '''
+        date: 'latest' for latest image
+              (str, str) for range
+        '''
         if layer not in ['RGB', 'LST']:
-            logging.error("SentinelHubAccessor: " +
-                          "@param layer must be one of RGB of LST")
-            return []
+            logging.warning("SentinelHubAccessor: " +
+                            "@param layer should be one of RGB of LST")
         if not isinstance(image_size, ImageSize):
             logging.error("SentinelHubAccessor: " +
                           "@param image_size must be of type ImageSize")
-            return []
+            return None
         if not isinstance(bbox, BBox):
             logging.error("SentinelHubAccessor: " +
                           "@param bbox must be of type BBox")
-            return []
+            return None
         if cloud_cov_perc < 0.0 or cloud_cov_perc > 1.0:
             logging.error("SentinelHubAccessor: " +
                           "@param cloud_cov_perc must be in the range [0, 1]")
-            return []
+            return None
         try:
             coords = [bbox.top_left.lon, bbox.top_left.lat,
                       bbox.bottom_right.lon, bbox.bottom_right.lat]
@@ -49,6 +52,8 @@ class SentinelHubAccessor:
                 bbox=geometry,
                 time=date,
                 width=image_size.width,
+                # should be not to just use one of them
+                height=image_size.height,
                 instance_id=self.instance_id,
                 maxcc=cloud_cov_perc,
                 custom_url_params={
