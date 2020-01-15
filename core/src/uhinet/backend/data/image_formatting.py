@@ -3,6 +3,8 @@ from typing import List
 import numpy as np
 import cv2
 
+from ...frontend.components import Polygon, Season
+
 
 def concatenate_horizontal(images: List[np.ndarray],
                            interpolation=cv2.INTER_CUBIC) -> np.ndarray:
@@ -47,6 +49,12 @@ def clip(width: int, height: int, channels: int):
 
 
 def pad(width: int, height: int, channels: int, pad_value: float):
+    ...
+
+
+def alter_area(image: np.ndarray,
+               polygon: Polygon,
+               season: Season) -> np.ndarray:
     ...
 
 

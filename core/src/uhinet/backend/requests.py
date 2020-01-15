@@ -1,6 +1,8 @@
 from typing import Tuple
 from pathlib import Path
 
+import logging
+
 from TFPix2Pix import Predictor
 from ..frontend.components import GISLayer, Polygon, Orientation, Season
 from .data.image_formatting import alter_area, diff_images
@@ -21,13 +23,20 @@ class Requests():
     def predict(self,
                 polygon: Polygon,
                 season: Season) -> Tuple[GISLayer, GISLayer, GISLayer]:
+        vw = polygon.viewing_window
         before_rgb = self.accessor.get_landsat_image(
                 layer='RGB',
-                date=None,
+                date='latest',
                 image_size=ImageSize(width=None, height=None),
-                cloud_cov_perc=None,
-                bbox=BBox(top_left=LatLon(lat=None, lon=None),
-                          bottom_right=LatLon(lat=None, lon=None)))
+                cloud_cov_perc=0.1,
+                bbox=BBox(top_left=LatLon(lat=vw.top_left.lat,
+                                          lon=vw.top_left.lon),
+                          bottom_right=LatLon(lat=vw.bottom_right.lat,
+                                              lon=vw.bottom_right.lon)))
+        if before_rgb is None:
+            logging.critical(
+                    'Requests: no RGB image found for those coordinates')
+            raise
         after_rgb = alter_area(image=before_rgb,
                                polygon=polygon,
                                season=season)
