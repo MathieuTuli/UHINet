@@ -15,11 +15,12 @@
   <body>
     <div id='floating-panel'>
       <img id=test_image>
-      <input onclick="removePolygon();" type=button value="Delete Polygon"> 
-      <input onclick="addPolygon();" type=button value="Create Polygon"> 
-      <input onclick="clearMarkers();" type=button value="Hide All Markers"> 
-      <input onclick="showMarkers();" type=button value="Show All Markers"> 
-      <input onclick="deleteMarkers();" type=button value="Delete markers"> 
+      <div id="panel">
+            <div id="color-palette"></div>
+            <div>
+                <button id="delete-button">Delete Selected Shape</button>
+            </div>
+      </div>
       <input id=send_coords_button type=button value="Send coordinates">
     </div>
     <div id="map"></div>
