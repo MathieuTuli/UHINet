@@ -8,7 +8,7 @@ import logging
 import signal
 import sys
 
-from .download_landsat import download_lansat_from_file
+from .download_landsat import download_landsat_from_file
 from .sentinel_hub import SentinelHubAccessor
 from ..file_manager import file_exists
 
@@ -40,7 +40,7 @@ def main(args: APNamespace):
                 instance_id = f.read().strip()
 
             sentinelhub_accessor = SentinelHubAccessor(instance_id)
-            download_lansat_from_file(
+            download_landsat_from_file(
                 sentinelhub_accessor, shopping_list_path, Path(args.save_to))
 
     else:

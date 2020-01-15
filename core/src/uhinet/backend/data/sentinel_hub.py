@@ -7,6 +7,7 @@ import traceback
 import logging
 
 from .components import BBox, ImageSize
+from .image_formatting import stitch
 
 
 class SentinelHubAccessor:
@@ -14,12 +15,14 @@ class SentinelHubAccessor:
                  instance_id: str = ''):
         self.instance_id = instance_id
 
+    # TODO try data_folder and save_data=True
+    # TODO try image_format
     def get_landsat_image(self,
                           layer: str,
                           date: str,
                           image_size: ImageSize,
                           bbox: BBox,
-                          cloud_cov_perc: float) -> List[np.ndarray]:
+                          cloud_cov_perc: float) -> np.ndarray:
         if layer not in ['RGB', 'LST']:
             logging.error("SentinelHubAccessor: " +
                           "@param layer must be one of RGB of LST")
@@ -54,7 +57,7 @@ class SentinelHubAccessor:
                 f"SentinelHubAccessor: URLs: {request.get_url_list()}")
             data = request.get_data()
             if len(data):
-                return data
+                return stitch(data)
             return None
         except Exception:
             traceback.print_exc()
