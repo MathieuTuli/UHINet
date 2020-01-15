@@ -2,7 +2,6 @@ from argparse import ArgumentParser
 import logging
 
 from .components import LogLevel
-from .backend.network.shell import main as network_main, args as network_args
 from .backend.data.shell import main as data_main, args as data_args
 from .frontend.run import main as frontend_main, args as frontend_args
 
@@ -27,9 +26,6 @@ subparser = parser.add_subparsers(dest='command')
 data_subparser = subparser.add_parser(
     'data', help='Data commands')
 data_args(data_subparser)
-network_subparser = subparser.add_parser(
-    'network', help='Network commands')
-network_args(network_subparser)
 frontend_subparser = subparser.add_parser(
     'frontend', help='Frontend commands')
 frontend_args(frontend_subparser)
@@ -54,8 +50,6 @@ else:
 if __name__ == "__main__":
     if str(args.command) == 'data':
         data_main(args)
-    elif str(args.command) == 'network':
-        network_main(args)
     elif str(args.command) == 'frontend':
         frontend_main(args)
     else:
