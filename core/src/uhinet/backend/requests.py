@@ -2,7 +2,7 @@ from typing import Tuple
 from pathlib import Path
 
 from TFPix2Pix import Predictor
-from ..frontend.components import Layer, Polygon, Orientation, Season
+from ..frontend.components import GISLayer, Polygon, Orientation, Season
 from .data.image_formatting import alter_area, diff_images
 from .data.components import BBox, ImageSize, LatLon
 from .data.sentinel_hub import SentinelHubAccessor
@@ -20,7 +20,7 @@ class Requests():
 
     def predict(self,
                 polygon: Polygon,
-                season: Season) -> Tuple[Layer, Layer, Layer]:
+                season: Season) -> Tuple[GISLayer, GISLayer, GISLayer]:
         before_rgb = self.accessor.get_landsat_image(
                 layer='RGB',
                 date=None,
@@ -36,8 +36,9 @@ class Requests():
 
         diff = diff_images(first=before_lst, second=after_lst)
 
-        before_lst = Layer(image=before_lst,
-                           coordinates=polygon.viewing_window)
-        after_lst = Layer(image=after_lst, coordinates=polygon.viewing_window)
-        diff = Layer(image=diff, coordinates=polygon.viewing_window)
+        before_lst = GISLayer(image=before_lst,
+                              coordinates=polygon.viewing_window)
+        after_lst = GISLayer(image=after_lst,
+                             coordinates=polygon.viewing_window)
+        diff = GISLayer(image=diff, coordinates=polygon.viewing_window)
         return (before_lst, after_lst, diff)

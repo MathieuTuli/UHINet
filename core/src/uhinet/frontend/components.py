@@ -28,7 +28,7 @@ class Orientation(Enum):
         return self.name
 
 
-class Layer(NamedTuple):
+class GISLayer(NamedTuple):
     '''
     A layer to display on the map. The image is either
     a numpy array or a Path to an image file.
