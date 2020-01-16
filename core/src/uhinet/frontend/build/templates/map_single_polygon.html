@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple Map</title>
+    <script type=text/javascript src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script type=text/javascript>
+      $SCRIPT_ROOT = {{ request.script_root|tojs<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple Map</title>
+    <script type=text/javascript src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script type=text/javascript>
+      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    <script src="{{ url_for('static', filename='map_single_polygon.js') }}"></script>
+    <script type="text/javascript" src="{{ key }}" async defer></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='map_single_polygon.css') }}">
+  </head>
+  <body>
+    <div id='floating-panel'>
+      <img id=test_image>
+<<<<<<< HEAD
+      <div id="panel">
+            <div id="color-palette"></div>
+            <div>
+                <button id="delete-button">Delete Selected Shape</button>
+            </div>
+      </div>
+=======
+      <div>
+          <button id="delete-button">Delete Selected Shape</button>
+      </div>
+      <input id=send_coords_button type=button value="Send coordinates">
+    </div>
+    <div id="map"></div>
+  </body>
+</html>
+on|safe }};
+    </script>
+    <script src="{{ url_for('static', filename='map_single_polygon.js') }}"></script>
+    <script type="text/javascript" src="{{ key }}" async defer></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='map_single_polygon.css') }}">
+  </head>
+  <body>
+    <div id='floating-panel'>
+      <img id=test_image>
+>>>>>>> 359d10ffa92d92ef0ff028c4c8af7c3d54bd83d0
+      <input id=send_coords_button type=button value="Send coordinates">
+    </div>
+    <div id="map"></div>
+  </body>
+</html>
