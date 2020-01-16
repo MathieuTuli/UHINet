@@ -61,7 +61,7 @@ class GISLayer(NamedTuple):
             BBox(top_left=tl,
                  bottom_right=br)
     '''
-    image: Union[np.ndarray, Path]
+    image: Path
     coordinates: BBox
 
 

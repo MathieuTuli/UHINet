@@ -21,7 +21,7 @@ function setSelection (shape) {
         clearSelection();
         shape.setEditable(true);
     }
-    
+
     selectedShape = shape;
 }
 
@@ -90,9 +90,9 @@ function initMap () {
             setSelection(newShape);
         });
         google.maps.event.addListener(newShape,'mouseover', function (shp) {
-            
-            
-            var vertices = this.getPath();
+
+
+            var vertices = newShape.getPath();
 
             var contentString = '<b>Polygon</b><br>';
 
@@ -102,9 +102,7 @@ function initMap () {
                 xy.lng();
             }
 
-            infoWindow.setContent(contentString);
-            infoWindow.setPosition(event.latLng);
-            infoWindow.open(map);
+            console.log(contentString)
         });
         setSelection(newShape);
     });
@@ -120,8 +118,8 @@ function initMap () {
 }
 
 function clearSelection () {
-    if (selectedShape) {       
-        selectedShape.setEditable(false);     
+    if (selectedShape) {
+        selectedShape.setEditable(false);
         selectedShape = null;
     }
 }
