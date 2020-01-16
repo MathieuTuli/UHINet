@@ -1,11 +1,12 @@
 var map;
 var polygon;
-var infoWindow;
 var markers = [];
-var coords = [];
 var overlay;
 var drawingManager;
 var selectedShape;
+var coords = [];  // coordinates of the created polygon
+var coords_bound; // coordinates of the current viewport
+var coords_overlay; //coordinates of the current overlay
 
 function clearSelection () {
     if (selectedShape) {
@@ -17,11 +18,11 @@ function clearSelection () {
 }
 
 function setSelection (shape) {
+
     if (shape.type !== 'marker') {
         clearSelection();
         shape.setEditable(true);
     }
-
     selectedShape = shape;
 }
 
@@ -37,8 +38,10 @@ $(function() {
       window.alert('Please create a polygon first.');
       return;
     }
+    coords_overlay = coords_bound;
     $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
-      a: JSON.stringify(coords),
+      coords_polygon: JSON.stringify(coords),
+      coords_bound: JSON.stringify(coords_bound),
     }, function(image_name) {
       document.getElementById('test_image').src='/static/' + image_name;
     });
@@ -71,6 +74,9 @@ function initMap () {
         editable: true,
         draggable: true
     };
+    google.maps.event.addListener(map, 'bounds_changed', function(){
+        coords_bound = map.getBounds();
+    });
 
     drawingManager = new google.maps.drawing.DrawingManager({
         drawingControl: true,
@@ -88,28 +94,14 @@ function initMap () {
         drawingManager.setDrawingMode(null);
         google.maps.event.addListener(newShape, 'click', function (shp) {
             setSelection(newShape);
-        });
-        google.maps.event.addListener(newShape,'mouseover', function (shp) {
-
-
-            var vertices = newShape.getPath();
-
-            var contentString = '<b>Polygon</b><br>';
-
-            for (var i =0; i < vertices.getLength(); i++) {
-                var xy = vertices.getAt(i);
-                contentString += '<br>' + 'Coordinate ' + i + ':<br>' + xy.lat() + ',' +
-                xy.lng();
-            }
-
-            console.log(contentString)
+            coords = newShape.getPath();
+            console.log(coords);
         });
         setSelection(newShape);
     });
 
     google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
     google.maps.event.addListener(map, 'click', clearSelection);
-    google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
     google.maps.event.addDomListener(document, 'keydown', function (e) {
         if (e.key ==="Backspace" || e.key === "Delete") {
             deleteSelectedShape();
@@ -143,5 +135,3 @@ function addOverlay(){
 function removeOverlay(){
   overlay.setMap(null);
 }
-
-google.maps.event.addDomListener(window, 'load', initialize);
