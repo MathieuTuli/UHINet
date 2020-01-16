@@ -8,6 +8,7 @@ var coords_overlay; //coordinates of the current overlay
 var overlay = null;
 var image_path;
 
+// Send coordinates of the polygon and the viewport to the backend
 // and get an image from the backend
 $(function() {
   $('input#send_coords_button').bind('click', function() {
@@ -27,6 +28,7 @@ $(function() {
 });
 
 
+// Main function the google map
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 43.65, lng: -79.4},
@@ -35,6 +37,7 @@ function initMap() {
 
   infoWindow = new google.maps.InfoWindow;
 
+  // Function to create an overlay
   function createOverlay(){
     if(coords_overlay == null){
       window.alert("Please send coordinates first to get the overlay")
@@ -46,6 +49,7 @@ function initMap() {
   var button_createOverlay = document.getElementById("create_overlay");
   button_createOverlay.addEventListener("click", createOverlay);
 
+  // Function to show the created overlay
   function showOverlay(){
     if(overlay == null){
       window.alert("Please create a overlay first");
@@ -56,7 +60,7 @@ function initMap() {
   var button_addOverlay = document.getElementById("show_overlay");
   button_addOverlay.addEventListener("click", showOverlay);
 
-
+  // Function to remove the overlay from the map
   function removeOverlay(){
     overlay.setMap(null);
   }
@@ -68,6 +72,7 @@ function initMap() {
     addMarker(event.latLng);
   });
 
+  // Keeps track of the coordinates of the current viewport
   google.maps.event.addListener(map, 'bounds_changed', function(){
     coords_bound = map.getBounds();
   });

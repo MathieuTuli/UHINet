@@ -65,9 +65,14 @@ def main(args: APNamespace):
                           orientation=Orientation.CW)
         # Orientation to be specified later
 
-        print('\n')
-        print(polygon)
-        print('\n')
+        '''
+        Training and making predictions happen here
+        '''
+
+        '''
+        GISlayer
+        image_name = ... # image_name is the name of the predicted image under /static/ folder
+        '''
 
         image_name = str('image.png')
         return jsonify(image_name)
