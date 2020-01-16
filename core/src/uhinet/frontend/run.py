@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request
 from argparse import _SubParsersAction, Namespace as APNamespace
 
 from pathlib import Path
+from components import *
 
 import logging
 import jinja2
@@ -42,14 +43,17 @@ def main(args: APNamespace):
             f"key={settings['google_maps_key']}" + \
             "&libraries=drawing&callback=initMap"
         logging.debug(f"Frontend: url specified: {url}")
-        index = Path('index.html')
+        index = Path('map_io.html')
         return render_template(str(index), key=url)
 
     @app.route("/send_coordinates")
     def add_numbers():
         a = request.args.get('a')
+        b = request.args.get('b')
         print('\n')
         print(a)
+        print('\n')
+        print(b)
         print('\n')
         image_name = str('image.png')
         return jsonify(image_name)
