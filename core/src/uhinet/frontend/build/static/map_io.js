@@ -3,10 +3,12 @@ var polygon;
 var infoWindow;
 var markers = [];
 var coords = [];  // coordinates of the created polygon
-var coords_bound; // coordinates of the current viewport
+var coords_bound = null; // coordinates of the current viewport
 var coords_overlay; //coordinates of the current overlay
+var overlay = null;
+var image_path;
 
-
+// and get an image from the backend
 $(function() {
   $('input#send_coords_button').bind('click', function() {
     if (coords.length < 1){
@@ -18,7 +20,7 @@ $(function() {
       coords_polygon: JSON.stringify(coords),
       coords_bound: JSON.stringify(coords_bound),
     }, function(image_name) {
-      document.getElementById('test_image').src='/static/' + image_name;
+      image_path = '/static/' + image_name;
     });
     return false;
   });
@@ -32,6 +34,35 @@ function initMap() {
   });
 
   infoWindow = new google.maps.InfoWindow;
+
+  function createOverlay(){
+    if(coords_overlay == null){
+      window.alert("Please send coordinates first to get the overlay")
+      return
+    }
+    overlay = new google.maps.GroundOverlay(image_path, coords_overlay);
+    showOverlay();
+  }
+  var button_createOverlay = document.getElementById("create_overlay");
+  button_createOverlay.addEventListener("click", createOverlay);
+
+  function showOverlay(){
+    if(overlay == null){
+      window.alert("Please create a overlay first");
+      return;
+    }
+    overlay.setMap(map);
+  }
+  var button_addOverlay = document.getElementById("show_overlay");
+  button_addOverlay.addEventListener("click", showOverlay);
+
+
+  function removeOverlay(){
+    overlay.setMap(null);
+  }
+  var button_removeOverlay = document.getElementById("remove_overlay");
+  button_removeOverlay.addEventListener("click", removeOverlay);
+
 
   google.maps.event.addListener(map, 'click', function(event){
     addMarker(event.latLng);

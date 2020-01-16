@@ -5,6 +5,11 @@
     <meta charset="utf-8">
     <title>Simple Map</title>
     <script type=text/javascript src="{{ url_for('static', filename='jquery.js') }}"></script>
+
+    <script type="text/javascript">
+        var image = '{{ url_for('static', filename='image.png') }}';
+    </script>
+
     <script type=text/javascript>
       $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     </script>
@@ -20,7 +25,10 @@
       <input onclick="clearMarkers();" type=button value="Hide All Markers"> 
       <input onclick="showMarkers();" type=button value="Show All Markers"> 
       <input onclick="deleteMarkers();" type=button value="Delete markers"> 
+      <input id=remove_overlay type="button" value="Remove overlay">
+      <input id=show_overlay type="button" value="Show overlay">
       <input id=send_coords_button type=button value="Send coordinates">
+      <input id=create_overlay type=button value="Create overlay">
     </div>
     <div id="map"></div>
   </body>
