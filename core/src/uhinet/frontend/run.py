@@ -47,13 +47,13 @@ def main(args: APNamespace):
         return render_template(str(index), key=url)
 
     @app.route("/send_coordinates")
-    def add_numbers():
-        a = request.args.get('a')
-        b = request.args.get('b')
+    def send_coordinates():
+        coords_polygon = request.args.get('coords_polygon')
+        coords_bound = request.args.get('coords_bound')
         print('\n')
-        print(a)
+        print(coords_polygon)
         print('\n')
-        print(b)
+        print(coords_bound)
         print('\n')
         image_name = str('image.png')
         return jsonify(image_name)

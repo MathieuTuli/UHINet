@@ -3,7 +3,7 @@ var polygon;
 var infoWindow;
 var markers = [];
 var coords = [];  // coordinates of the created polygon
-var coords_bound; // latLng coordinates of the northeast and southwest points of the viewport
+var coords_bound; // coordinates of the viewport
 
 
 $(function() {
@@ -13,8 +13,8 @@ $(function() {
       return;
     }
     $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
-      a: JSON.stringify(coords),
-      b: JSON.stringify(coords_bound),
+      coords_polygon: JSON.stringify(coords),
+      coords_bound: JSON.stringify(coords_bound),
     }, function(image_name) {
       document.getElementById('test_image').src='/static/' + image_name;
     });
