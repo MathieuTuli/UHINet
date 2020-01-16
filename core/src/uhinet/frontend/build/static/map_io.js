@@ -3,7 +3,8 @@ var polygon;
 var infoWindow;
 var markers = [];
 var coords = [];  // coordinates of the created polygon
-var coords_bound; // coordinates of the viewport
+var coords_bound; // coordinates of the current viewport
+var coords_overlay; //coordinates of the current overlay
 
 
 $(function() {
@@ -12,6 +13,7 @@ $(function() {
       window.alert('Please create a polygon first.');
       return;
     }
+    coords_overlay = coords_bound;
     $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
       coords_polygon: JSON.stringify(coords),
       coords_bound: JSON.stringify(coords_bound),
