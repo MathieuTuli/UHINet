@@ -27,7 +27,7 @@ class Requests():
                 flask_static_dir: Path) -> Tuple[GISLayer, GISLayer, GISLayer]:
         vw = polygon.viewing_window
         before_rgb = self.accessor.get_landsat_image(
-                layer='SENTINEL',
+                layer='LST',
                 date='latest',
                 image_size=ImageSize(width=1920, height=1920),
                 cloud_cov_perc=0.1,
