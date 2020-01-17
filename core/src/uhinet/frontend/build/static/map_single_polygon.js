@@ -94,8 +94,11 @@ function initMap () {
         drawingManager.setDrawingMode(null);
         google.maps.event.addListener(newShape, 'click', function (shp) {
             setSelection(newShape);
-            coords = newShape.getPath();
-            console.log(coords);
+            array = newShape.getPath();
+            coords = [];
+            for(var i = 0; i < array.length; i++)
+            	coords.push(array.getAt(i));
+            window.alert(coords);
         });
         setSelection(newShape);
     });
