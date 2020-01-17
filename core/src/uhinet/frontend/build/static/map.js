@@ -1,26 +1,32 @@
+var map;
+var polygon;
+var markers = [];
 var drawingManager;
 var selectedShape;
-var colors = ['#1E90FF', '#FF1493', '#32CD32', '#FF8C00', '#4B0082'];
-var selectedColor;
-var colorButtons = {};
+var coords = [];  // coordinates of the created polygon
+var coords_bound; // coordinates of the current viewport
+var coords_overlay; //coordinates of the current overlay
+var overlay = null;
+var image_path;
+
+
+// Drawing manager operations
 
 function clearSelection () {
     if (selectedShape) {
         if (selectedShape.type !== 'marker') {
             selectedShape.setEditable(false);
         }
-        
         selectedShape = null;
     }
 }
 
 function setSelection (shape) {
+
     if (shape.type !== 'marker') {
         clearSelection();
         shape.setEditable(true);
-        selectColor(shape.get('fillColor') || shape.get('strokeColor'));
     }
-    
     selectedShape = shape;
 }
 
@@ -30,152 +36,128 @@ function deleteSelectedShape () {
     }
 }
 
-function selectColor (color) {
-    selectedColor = color;
-    for (var i = 0; i < colors.length; ++i) {
-        var currColor = colors[i];
-        colorButtons[currColor].style.border = currColor == color ? '2px solid #789' : '2px solid #fff';
+// Send coordinates of the polygon and the viewport to the backend
+// and get an image from the backend
+$(function() {
+  $('input#send_coords_button').bind('click', function() {
+    if (coords.length < 1){
+      window.alert('Please select a polygon first.');
+      return;
     }
-
-    // Retrieves the current options from the drawing manager and replaces the
-    // stroke or fill color as appropriate.
-    var polylineOptions = drawingManager.get('polylineOptions');
-    polylineOptions.strokeColor = color;
-    drawingManager.set('polylineOptions', polylineOptions);
-
-    var rectangleOptions = drawingManager.get('rectangleOptions');
-    rectangleOptions.fillColor = color;
-    drawingManager.set('rectangleOptions', rectangleOptions);
-
-    var circleOptions = drawingManager.get('circleOptions');
-    circleOptions.fillColor = color;
-    drawingManager.set('circleOptions', circleOptions);
-
-    var polygonOptions = drawingManager.get('polygonOptions');
-    polygonOptions.fillColor = color;
-    drawingManager.set('polygonOptions', polygonOptions);
-}
-
-function setSelectedShapeColor (color) {
-    if (selectedShape) {
-        if (selectedShape.type == google.maps.drawing.OverlayType.POLYLINE) {
-            selectedShape.set('strokeColor', color);
-        } else {
-            selectedShape.set('fillColor', color);
-        }
-    }
-}
-
-function makeColorButton (color) {
-    var button = document.createElement('span');
-    button.className = 'color-button';
-    button.style.backgroundColor = color;
-    google.maps.event.addDomListener(button, 'click', function () {
-        selectColor(color);
-        setSelectedShapeColor(color);
+    coords_overlay = coords_bound;
+    $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
+      coords_polygon: JSON.stringify(coords),
+      coords_bound: JSON.stringify(coords_bound),
+    }, function(image_name) {
+      image_path = '/static/' + image_name;
+      coords = [];
     });
+    return false;
+  });
+});
 
-    return button;
-}
 
-function buildColorPalette () {
-    var colorPalette = document.getElementById('color-palette');
-    for (var i = 0; i < colors.length; ++i) {
-        var currColor = colors[i];
-        var colorButton = makeColorButton(currColor);
-        colorPalette.appendChild(colorButton);
-        colorButtons[currColor] = colorButton;
-    }
-    selectColor(colors[0]);
-}
+// Main function the google map
+function initMap () {
 
-function initialize () {
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: new google.maps.LatLng(52.25097, 20.97114),
-        mapTypeId: google.maps.MapTypeId.SATELLITE,
-        disableDefaultUI: true,
+    map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 14.1,
+        center: new google.maps.LatLng(43.65, -79.4),
         zoomControl: true
     });
 
-    var polyOptions = {
+    // Function to create an overlay
+    function createOverlay(){
+      if(coords_overlay == null){
+        window.alert("Please send coordinates first to get the overlay")
+        return
+      }
+      overlay = new google.maps.GroundOverlay(image_path, coords_overlay);
+      showOverlay();
+    }
+    var button_createOverlay = document.getElementById("create_overlay");
+    button_createOverlay.addEventListener("click", createOverlay);
+
+    // Function to show the created overlay
+    function showOverlay(){
+      if(overlay == null){
+        window.alert("Please create a overlay first");
+        return;
+      }
+      overlay.setMap(map);
+    }
+    var button_addOverlay = document.getElementById("show_overlay");
+    button_addOverlay.addEventListener("click", showOverlay);
+
+    // Function to remove the overlay from the map
+    function removeOverlay(){
+      overlay.setMap(null);
+    }
+    var button_removeOverlay = document.getElementById("remove_overlay");
+    button_removeOverlay.addEventListener("click", removeOverlay);
+
+    var Options = {
         strokeWeight: 0,
         fillOpacity: 0.45,
         editable: true,
         draggable: true
     };
-    // Creates a drawing manager attached to the map that allows the user to draw
-    // markers, lines, and shapes.
+
+    // Keeps track of the coordinates of the current viewport
+    google.maps.event.addListener(map, 'bounds_changed', function(){
+        coords_bound = map.getBounds();
+    });
+
     drawingManager = new google.maps.drawing.DrawingManager({
-        drawingMode: google.maps.drawing.OverlayType.POLYGON,
-        markerOptions: {
-            draggable: true
+        drawingControl: true,
+        drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: ['polygon','rectangle']
         },
-        polylineOptions: {
-            editable: true,
-            draggable: true
-        },
-        rectangleOptions: polyOptions,
-        circleOptions: polyOptions,
-        polygonOptions: polyOptions,
+        rectangleOptions: Options,
+        polygonOptions: Options,
         map: map
     });
 
-    google.maps.event.addListener(drawingManager, 'overlaycomplete', function (e) {
-        var newShape = e.overlay;
-        
-        newShape.type = e.type;
-        
-        if (e.type !== google.maps.drawing.OverlayType.MARKER) {
-            // Switch back to non-drawing mode after drawing a shape.
-            drawingManager.setDrawingMode(null);
-
-            // Add an event listener that selects the newly-drawn shape when the user
-            // mouses down on it.
-            google.maps.event.addListener(newShape, 'click', function (e) {
-                if (e.vertex !== undefined) {
-                    if (newShape.type === google.maps.drawing.OverlayType.POLYGON) {
-                        var path = newShape.getPaths().getAt(e.path);
-                        path.removeAt(e.vertex);
-                        if (path.length < 3) {
-                            newShape.setMap(null);
-                        }
-                    }
-                    if (newShape.type === google.maps.drawing.OverlayType.POLYLINE) {
-                        var path = newShape.getPath();
-                        path.removeAt(e.vertex);
-                        if (path.length < 2) {
-                            newShape.setMap(null);
-                        }
-                    }
-                }
-                setSelection(newShape);
-            });
+    // Google maps drawing manager
+    google.maps.event.addListener(drawingManager, 'overlaycomplete', function (shp) {
+        var newShape = shp.overlay;
+        drawingManager.setDrawingMode(null);
+        google.maps.event.addListener(newShape, 'click', function (shp) {
             setSelection(newShape);
-        }
-        else {
-            google.maps.event.addListener(newShape, 'click', function (e) {
-                setSelection(newShape);
-            });
-            setSelection(newShape);
-        }
+            array = newShape.getPath();
+            coords = [];
+            for(var i = 0; i < array.length; i++)
+            	coords.push(array.getAt(i));
+            window.alert(coords);
+        });
+        setSelection(newShape);
     });
 
-    // Clear the current selection when the drawing mode is changed, or when the
-    // map is clicked.
     google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
     google.maps.event.addListener(map, 'click', clearSelection);
-    google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
     google.maps.event.addDomListener(document, 'keydown', function (e) {
         if (e.key ==="Backspace" || e.key === "Delete") {
             deleteSelectedShape();
         }
      });
-
-    var imageBounds = {
-        north:43.71928751019047, west:-79.47656815720673, south:43.58076648980952, east:-79.2858718427933
-    };
-
-    buildColorPalette();
 }
-google.maps.event.addDomListener(window, 'load', initialize);
+
+function clearSelection () {
+    if (selectedShape) {
+        selectedShape.setEditable(false);
+        selectedShape = null;
+    }
+}
+
+function setSelection (shape) {
+    clearSelection();
+    shape.setEditable(true);
+    selectedShape = shape;
+}
+
+function deleteSelectedShape () {
+    if (selectedShape) {
+        selectedShape.setMap(null);
+    }
+}

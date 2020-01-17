@@ -55,7 +55,7 @@ def main(args: APNamespace):
         backend = Requests(instance_id=str(settings['sentinel_hub_key']),
                            weights_file=None,)
         logging.debug(f"Frontend: url specified: {url}")
-        index = Path('index.html')
+        index = Path('map.html')
         return render_template(str(index), key=url)
 
     @app.route("/send_coordinates")
