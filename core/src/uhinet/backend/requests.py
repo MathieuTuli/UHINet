@@ -27,10 +27,10 @@ class Requests():
                 flask_static_dir: Path) -> Tuple[GISLayer, GISLayer, GISLayer]:
         vw = polygon.viewing_window
         before_rgb = self.accessor.get_landsat_image(
-            layer='RGB',
-            date='latest',
+            layer='LST',
+            date=('2019-05-01', '2019-08-01'),
             image_size=ImageSize(width=1920, height=1920),
-            cloud_cov_perc=0.1,
+            cloud_cov_perc=0.05,
             bbox=BBox(top_left=LatLon(lat=vw.top_left.lat,
                                       lon=vw.top_left.lon),
                       bottom_right=LatLon(lat=vw.bottom_right.lat,
