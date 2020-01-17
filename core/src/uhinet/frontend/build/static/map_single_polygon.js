@@ -41,7 +41,7 @@ function deleteSelectedShape () {
 $(function() {
   $('input#send_coords_button').bind('click', function() {
     if (coords.length < 1){
-      window.alert('Please create a polygon first.');
+      window.alert('Please select a polygon first.');
       return;
     }
     coords_overlay = coords_bound;
@@ -50,6 +50,7 @@ $(function() {
       coords_bound: JSON.stringify(coords_bound),
     }, function(image_name) {
       image_path = '/static/' + image_name;
+      coords = [];
     });
     return false;
   });
