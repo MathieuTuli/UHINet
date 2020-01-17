@@ -92,6 +92,7 @@ function initMap () {
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function (shp) {
         var newShape = shp.overlay;
         drawingManager.setDrawingMode(null);
+        coords = newShape.getPath();
         google.maps.event.addListener(newShape, 'click', function (shp) {
             setSelection(newShape);
             coords = newShape.getPath();
