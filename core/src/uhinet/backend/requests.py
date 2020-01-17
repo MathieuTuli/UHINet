@@ -24,7 +24,7 @@ class Requests():
     def predict(self,
                 polygon: Polygon,
                 season: Season,
-                directory: Path) -> Tuple[GISLayer, GISLayer, GISLayer]:
+                flask_static_dir: Path) -> Tuple[GISLayer, GISLayer, GISLayer]:
         vw = polygon.viewing_window
         before_rgb = self.accessor.get_landsat_image(
                 layer='SENTINEL',
@@ -48,9 +48,9 @@ class Requests():
 
         diff = diff_images(first=before_lst, second=after_lst)
 
-        save_pyplot_image(str(directory / 'before.png'), before_lst)
-        save_pyplot_image(str(directory / 'after.png'), after_lst)
-        save_pyplot_image(str(directory / 'diff.png'), diff)
+        save_pyplot_image(str(flask_static_dir / 'before.png'), before_lst)
+        save_pyplot_image(str(flask_static_dir / 'after.png'), after_lst)
+        save_pyplot_image(str(flask_static_dir / 'diff.png'), diff)
         before_lst = GISLayer(image=Path('before.png'),
                               coordinates=polygon.viewing_window)
         after_lst = GISLayer(image=Path('after.png'),

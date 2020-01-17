@@ -97,7 +97,7 @@ def main(args: APNamespace):
         layers = backend.predict(
                 polygon=polygon,
                 season=Season.WINTER,
-                directory=directory)
+                flask_static_dir=directory)
         image_name = layers[0].image
         coords_bound['north'] = layers[0].coordinates.top_left.lat
         coords_bound['west'] = layers[0].coordinates.top_left.lon
