@@ -99,6 +99,10 @@ def main(args: APNamespace):
                 season=Season.WINTER,
                 directory=directory)
         image_name = layers[0].image
+        coords_bound['north'] = layers[0].coordinates.top_left.lat
+        coords_bound['west'] = layers[0].coordinates.top_left.lon
+        coords_bound['south'] = layers[0].coordinates.bottom_right.lat
+        coords_bound['east'] = layers[0].coordinates.bottom_right.lon
         assert((directory / image_name).exists())
         image_name = str(image_name)
 

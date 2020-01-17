@@ -29,7 +29,7 @@ class Requests():
         before_rgb = self.accessor.get_landsat_image(
                 layer='SENTINEL',
                 date='latest',
-                image_size=ImageSize(width=1000, height=None),
+                image_size=ImageSize(width=1920, height=1920),
                 cloud_cov_perc=0.1,
                 bbox=BBox(top_left=LatLon(lat=vw.top_left.lat,
                                           lon=vw.top_left.lon),
