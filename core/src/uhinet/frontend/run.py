@@ -2,11 +2,12 @@ from flask import Flask, render_template, jsonify, request
 from argparse import _SubParsersAction, Namespace as APNamespace
 
 from pathlib import Path
-from components import *
+from .components import *
 
 import logging
 import jinja2
 import yaml
+import ast
 
 
 def main(args: APNamespace):
@@ -48,13 +49,36 @@ def main(args: APNamespace):
 
     @app.route("/send_coordinates")
     def send_coordinates():
-        coords_polygon = request.args.get('coords_polygon')
-        coords_bound = request.args.get('coords_bound')
-        print('\n')
+        coords_polygon = ast.literal_eval(request.args.get('coords_polygon'))
+        coords_bound = ast.literal_eval(request.args.get('coords_bound'))
+
+        lst_coords = []
+        for coord in coords_polygon:
+            lst_coords.append(LatLon(lat=coord['lat'], lon=coord['lng']))
+
+        # Polygon to use in the backend
+        polygon = Polygon(coordinates=lst_coords, 
+                          viewing_window=BBox(top_left=LatLon(lat=coords_bound['north'],
+                                                              lon=coords_bound['west']),
+                                              bottom_right=LatLon(lat=coords_bound['south'],
+                                                                  lon=coords_bound['east'])),
+                          orientation=Orientation.CW)
+        # Orientation to be specified later
+
+        '''
+        Training and making predictions happen here
+        '''
+
         print(coords_polygon)
         print('\n')
-        print(coords_bound)
+        print(polygon)
         print('\n')
+
+        '''
+        GISlayer
+        image_name = ... # image_name is the name of the predicted image under /static/ folder
+        '''
+
         image_name = str('image.png')
         return jsonify(image_name)
     app.run(debug=args.verbose or args.very_verbose, host='127.0.0.1')

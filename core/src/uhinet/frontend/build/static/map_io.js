@@ -3,10 +3,13 @@ var polygon;
 var infoWindow;
 var markers = [];
 var coords = [];  // coordinates of the created polygon
-var coords_bound; // coordinates of the current viewport
+var coords_bound = null; // coordinates of the current viewport
 var coords_overlay; //coordinates of the current overlay
+var overlay = null;
+var image_path;
 
-
+// Send coordinates of the polygon and the viewport to the backend
+// and get an image from the backend
 $(function() {
   $('input#send_coords_button').bind('click', function() {
     if (coords.length < 1){
@@ -18,13 +21,14 @@ $(function() {
       coords_polygon: JSON.stringify(coords),
       coords_bound: JSON.stringify(coords_bound),
     }, function(image_name) {
-      document.getElementById('test_image').src='/static/' + image_name;
+      image_path = '/static/' + image_name;
     });
     return false;
   });
 });
 
 
+// Main function the google map
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 43.65, lng: -79.4},
@@ -33,10 +37,42 @@ function initMap() {
 
   infoWindow = new google.maps.InfoWindow;
 
+  // Function to create an overlay
+  function createOverlay(){
+    if(coords_overlay == null){
+      window.alert("Please send coordinates first to get the overlay")
+      return
+    }
+    overlay = new google.maps.GroundOverlay(image_path, coords_overlay);
+    showOverlay();
+  }
+  var button_createOverlay = document.getElementById("create_overlay");
+  button_createOverlay.addEventListener("click", createOverlay);
+
+  // Function to show the created overlay
+  function showOverlay(){
+    if(overlay == null){
+      window.alert("Please create a overlay first");
+      return;
+    }
+    overlay.setMap(map);
+  }
+  var button_addOverlay = document.getElementById("show_overlay");
+  button_addOverlay.addEventListener("click", showOverlay);
+
+  // Function to remove the overlay from the map
+  function removeOverlay(){
+    overlay.setMap(null);
+  }
+  var button_removeOverlay = document.getElementById("remove_overlay");
+  button_removeOverlay.addEventListener("click", removeOverlay);
+
+
   google.maps.event.addListener(map, 'click', function(event){
     addMarker(event.latLng);
   });
 
+  // Keeps track of the coordinates of the current viewport
   google.maps.event.addListener(map, 'bounds_changed', function(){
     coords_bound = map.getBounds();
   });
