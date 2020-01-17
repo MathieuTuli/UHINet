@@ -44,7 +44,7 @@ def main(args: APNamespace):
             f"key={settings['google_maps_key']}" + \
             "&libraries=drawing&callback=initMap"
         logging.debug(f"Frontend: url specified: {url}")
-        index = Path('index.html')
+        index = Path('map.html')
         return render_template(str(index), key=url)
 
     @app.route("/send_coordinates")
