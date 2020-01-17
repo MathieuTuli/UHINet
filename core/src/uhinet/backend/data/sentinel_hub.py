@@ -1,13 +1,12 @@
 from sentinelhub import WmsRequest, DataSource, CustomUrlParam, CRS, \
     BBox as SentinelBBox
-from typing import List, Optional
+from typing import List
 
 import numpy as np
 import traceback
 import logging
 
 from .components import BBox, ImageSize
-from .image_formatting import stitch
 
 
 class SentinelHubAccessor:
@@ -22,32 +21,35 @@ class SentinelHubAccessor:
                           image_size: ImageSize,
                           bbox: BBox,
                           cloud_cov_perc: float,
-                          date: str) -> Optional[np.ndarray]:
+                          date: str) -> List[np.ndarray]:
         '''
         date: 'latest' for latest image
               (str, str) for range
         '''
-        if layer not in ['RGB', 'LST']:
-            logging.warning("SentinelHubAccessor: " +
-                            "@param layer should be one of RGB of LST")
+        if layer not in ['RGB', 'LST', 'SENTINEL']:
+            logging.warning(
+                "SentinelHubAccessor: " +
+                "@param layer should be one of RGB, LST, SENTINEL")
         if not isinstance(image_size, ImageSize):
             logging.error("SentinelHubAccessor: " +
                           "@param image_size must be of type ImageSize")
-            return None
+            return []
         if not isinstance(bbox, BBox):
             logging.error("SentinelHubAccessor: " +
                           "@param bbox must be of type BBox")
-            return None
+            return []
         if cloud_cov_perc < 0.0 or cloud_cov_perc > 1.0:
             logging.error("SentinelHubAccessor: " +
                           "@param cloud_cov_perc must be in the range [0, 1]")
-            return None
+            return []
         try:
             coords = [bbox.top_left.lon, bbox.top_left.lat,
                       bbox.bottom_right.lon, bbox.bottom_right.lat]
             geometry = SentinelBBox(bbox=coords, crs=CRS.WGS84)
+            data_source = DataSource.SENTINEL2_L1C if \
+                layer == 'SENTINEL' else DataSource.LANDSAT8
             request = WmsRequest(
-                data_source=DataSource.LANDSAT8,
+                data_source=data_source,
                 layer=layer,
                 bbox=geometry,
                 time=date,
@@ -62,8 +64,8 @@ class SentinelHubAccessor:
                 f"SentinelHubAccessor: URLs: {request.get_url_list()}")
             data = request.get_data()
             if len(data):
-                return stitch(data)
-            return None
+                return data
+            return []
         except Exception:
             traceback.print_exc()
-            return None
+            return []
