@@ -9,6 +9,9 @@ var coords_overlay; //coordinates of the current overlay
 var overlay = null;
 var image_path;
 
+
+// Drawing manager operations
+
 function clearSelection () {
     if (selectedShape) {
         if (selectedShape.type !== 'marker') {
@@ -33,6 +36,8 @@ function deleteSelectedShape () {
     }
 }
 
+// Send coordinates of the polygon and the viewport to the backend
+// and get an image from the backend
 $(function() {
   $('input#send_coords_button').bind('click', function() {
     if (coords.length < 1){
@@ -51,6 +56,7 @@ $(function() {
 });
 
 
+// Main function the google map
 function initMap () {
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -59,7 +65,7 @@ function initMap () {
         zoomControl: true
     });
 
-  // Function to create an overlay
+    // Function to create an overlay
     function createOverlay(){
       if(coords_overlay == null){
         window.alert("Please send coordinates first to get the overlay")
@@ -96,6 +102,7 @@ function initMap () {
         draggable: true
     };
 
+    // Keeps track of the coordinates of the current viewport
     google.maps.event.addListener(map, 'bounds_changed', function(){
         coords_bound = map.getBounds();
     });
@@ -111,6 +118,7 @@ function initMap () {
         map: map
     });
 
+    // Google maps drawing manager
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function (shp) {
         var newShape = shp.overlay;
         drawingManager.setDrawingMode(null);
@@ -151,12 +159,4 @@ function deleteSelectedShape () {
     if (selectedShape) {
         selectedShape.setMap(null);
     }
-}
-
-function addOverlay(){
-  overlay.setMap(map);
-}
-
-function removeOverlay(){
-  overlay.setMap(null);
 }
