@@ -69,6 +69,10 @@ def main(args: APNamespace):
         Training and making predictions happen here
         '''
 
+        print('\n')
+        print(polygon)
+        print('\n')
+
         '''
         GISlayer
         image_name = ... # image_name is the name of the predicted image under /static/ folder
