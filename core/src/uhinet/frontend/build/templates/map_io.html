@@ -15,10 +15,69 @@
     </script>
     <script src="{{ url_for('static', filename='map_io.js') }}"></script>
     <script type="text/javascript" src="{{ key }}" async defer></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='map_io.css') }}">
   </head>
   <body>
-    <div id='floating-panel'>
+    <div>
+  <hr>
+  <div class="row">
+      <div class="col-md-2" id = "selection">
+        <div id='UHI Setting'>
+            <strong><big>UHI Setting</strong></big>
+          <div id='Temporal Resolution'>
+          <strong>Temporay Resolution</strong>
+          <br>
+          <input type="radio" name = "Temporal Resolution" value = "Mar. - May" Checked> Mar. - May
+          <br>
+          <input type="radio" name = "Temporal Resolution" value = "Jun. - Aug."> Jun. - Aug.
+          <br>
+          <input type="radio" name = "Temporal Resolution" value = "Sep. - Nov."> Sep. - Nov.
+          <br>
+          <input type="radio" name = "Temporal Resolution" value = "Dec. - Feb."> Dec. - Feb.
+          </div id='Temporal Resolution'>
+          <div id='UHI Indicator'>
+          <strong>UHI Indicator</strong>
+          <br>
+          <input type="radio" name = "UHI Indicator" value = "Daytime Temperature" Checked> Daytime Temperature
+          <br>
+          <input type="radio" name = "UHI Indicator" value = "Nighttime Temperature"> Nighttime Temperature
+          <br>
+          <input type="radio" name = "UHI Indicator" value = "Diurnal Temperature"> Diurnal Temperature
+        </div id='UHI Indicator'>
+      </div id='UHI Setting'>
+          <br>
+      <div id='Map Setting'>
+            <strong><big>Map Setting</strong></big>
+          <div id='UHI Comparison'>   
+          <strong>UHI Comparison</strong>
+          <br>
+          <input type="radio" name = "UHI Comparison" value = "Default" Checked> Default
+          <br>
+          <input type="radio" name = "UHI Comparison" value = "Prediction"> Prediction
+          <br>
+          <input type="radio" name = "UHI Comparison" value = "Difference"> Difference
+          </div id='UHI Comparison'>  
+      </div id='Map Setting'>
+      <br>
+      <nav id="navigation">
+        <div id='Generate Result'>
+          <strong><big>Generate Result</strong></big>
+          <br>
+        <input type="submit" value="Generate!">
+      </div id='Generate Result'>
+      <br>
+      </nav>
+    </div>
+    <div class="col-md-9" id="cmap">
+      <div id="floating-panel">
+        <input id="Remove" type="button" value="Remove overlay">
+        <input id="Add" type="button" value="Show overlay">
+      </div>
+      <div id="map"></div>
+    </div>
+  </div>
+    <!-- <div id='floating-panel'>
       <img id=test_image>
       <input onclick="removePolygon();" type=button value="Delete Polygon"> 
       <input onclick="addPolygon();" type=button value="Create Polygon"> 
@@ -30,6 +89,6 @@
       <input id=send_coords_button type=button value="Send coordinates">
       <input id=create_overlay type=button value="Create overlay">
     </div>
-    <div id="map"></div>
+    <div id="map"></div> -->
   </body>
 </html>
