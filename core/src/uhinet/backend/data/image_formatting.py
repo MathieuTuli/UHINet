@@ -55,11 +55,11 @@ def pad(width: int, height: int, channels: int, pad_value: float):
 def alter_area(image: np.ndarray,
                polygon: Polygon,
                season: Season) -> np.ndarray:
-    ...
+    return image
 
 
 def diff_images(first: np.ndarray, second: np.ndarray) -> np.ndarray:
-    ...
+    return first
 
 
 def stitch(images: List[np.ndarray]) -> np.ndarray:

@@ -11,7 +11,7 @@ from .components import BBox, ImageSize
 
 class SentinelHubAccessor:
     def __init__(self,
-                 instance_id: str = ''):
+                 instance_id: str):
         self.instance_id = instance_id
 
     # TODO try data_folder and save_data=True

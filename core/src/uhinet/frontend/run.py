@@ -1,13 +1,20 @@
-from flask import Flask, render_template, jsonify, request
 from argparse import _SubParsersAction, Namespace as APNamespace
-
 from pathlib import Path
-from .components import *
 
 import logging
 import jinja2
 import yaml
 import ast
+
+from flask import Flask, render_template, jsonify, request
+
+
+from .components import Season, Orientation, GISLayer, Polygon
+from ..backend.data.components import LatLon, BBox
+from ..backend.requests import Requests
+
+
+backend = None
 
 
 def main(args: APNamespace):
@@ -22,6 +29,7 @@ def main(args: APNamespace):
     assert(static_dir.exists())
     app = Flask(__name__, template_folder=str(
         template_dir), static_folder=str(static_dir))
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     # loader = jinja2.ChoiceLoader([
     #     # app.jinja_loader,
     #     jinja2.FileSystemLoader(str(build_dir)),
@@ -43,6 +51,9 @@ def main(args: APNamespace):
         url = "https://maps.googleapis.com/maps/api/js?" + \
             f"key={settings['google_maps_key']}" + \
             "&libraries=drawing&callback=initMap"
+        global backend
+        backend = Requests(instance_id=str(settings['sentinel_hub_key']),
+                           weights_file=None,)
         logging.debug(f"Frontend: url specified: {url}")
         index = Path('index.html')
         return render_template(str(index), key=url)
@@ -57,11 +68,13 @@ def main(args: APNamespace):
             lst_coords.append(LatLon(lat=coord['lat'], lon=coord['lng']))
 
         # Polygon to use in the backend
-        polygon = Polygon(coordinates=lst_coords, 
-                          viewing_window=BBox(top_left=LatLon(lat=coords_bound['north'],
-                                                              lon=coords_bound['west']),
-                                              bottom_right=LatLon(lat=coords_bound['south'],
-                                                                  lon=coords_bound['east'])),
+        polygon = Polygon(coordinates=lst_coords,
+                          viewing_window=BBox(top_left=LatLon(
+                                                  lat=coords_bound['north'],
+                                                  lon=coords_bound['west']),
+                                              bottom_right=LatLon(
+                                                  lat=coords_bound['south'],
+                                                  lon=coords_bound['east'])),
                           orientation=Orientation.CW)
         # Orientation to be specified later
 
@@ -76,10 +89,20 @@ def main(args: APNamespace):
 
         '''
         GISlayer
-        image_name = ... # image_name is the name of the predicted image under /static/ folder
+        image_name = ... # image_name is the name of the predicted image
+                     under /static/ folder
         '''
+        global backend
+        directory = Path('frontend/build/static').absolute()
+        layers = backend.predict(
+                polygon=polygon,
+                season=Season.WINTER,
+                directory=directory)
+        image_name = layers[0].image
+        assert((directory / image_name).exists())
+        image_name = str(image_name)
 
-        image_name = str('image.png')
+        # image_name = str('image.png')
         return jsonify(image_name)
     app.run(debug=args.verbose or args.very_verbose, host='127.0.0.1')
 
