@@ -60,6 +60,7 @@ def main(args: APNamespace):
 
     @app.route("/send_coordinates")
     def send_coordinates():
+        logging.info("UHINET Frontend: Send Coordinates.")
         coords_polygon = ast.literal_eval(request.args.get('coords_polygon'))
         coords_bound = ast.literal_eval(request.args.get('coords_bound'))
 
@@ -70,11 +71,11 @@ def main(args: APNamespace):
         # Polygon to use in the backend
         polygon = Polygon(coordinates=lst_coords,
                           viewing_window=BBox(top_left=LatLon(
-                                                  lat=coords_bound['north'],
-                                                  lon=coords_bound['west']),
-                                              bottom_right=LatLon(
-                                                  lat=coords_bound['south'],
-                                                  lon=coords_bound['east'])),
+                              lat=coords_bound['north'],
+                              lon=coords_bound['west']),
+                              bottom_right=LatLon(
+                              lat=coords_bound['south'],
+                              lon=coords_bound['east'])),
                           orientation=Orientation.CW)
         # Orientation to be specified later
 
@@ -82,10 +83,10 @@ def main(args: APNamespace):
         Training and making predictions happen here
         '''
 
-        print(coords_polygon)
-        print('\n')
-        print(polygon)
-        print('\n')
+        # print(coords_polygon)
+        # print('\n')
+        # print(polygon)
+        # print('\n')
 
         '''
         GISlayer
@@ -95,9 +96,9 @@ def main(args: APNamespace):
         global backend
         directory = Path('frontend/build/static').absolute()
         layers = backend.predict(
-                polygon=polygon,
-                season=Season.WINTER,
-                flask_static_dir=directory)
+            polygon=polygon,
+            season=Season.WINTER,
+            flask_static_dir=directory)
         image_name = layers[0].image
         coords_bound['north'] = layers[0].coordinates.top_left.lat
         coords_bound['west'] = layers[0].coordinates.top_left.lon
@@ -105,6 +106,7 @@ def main(args: APNamespace):
         coords_bound['east'] = layers[0].coordinates.bottom_right.lon
         assert((directory / image_name).exists())
         image_name = str(image_name)
+        logging.info("UHINET Frontend: Backend returned.")
 
         # image_name = str('image.png')
         return jsonify(image_name)
