@@ -13,14 +13,20 @@ import geopandas
 
 if __name__ == "__main__":
     path = Path('/home/mat/work/U-of-T/capstone/uhinet/data/toronto-height/Boundaries/3DMassingShapefile_2019_WGS84/3DMassing_2019_WGS84.shp')
-    # Get the shape-file for NYC
+    # pat1 = Path('/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2016_WGS84.shp')
+
+    # boros1 = GeoDataFrame.from_file(str(pat1))
     boros = GeoDataFrame.from_file(str(path))
+    print(boros.head())
+    boros = boros.sort_values(by='MAX_HEIGHT', ascending=True)
+    # boros1 = boros.sort_values(by='Z', ascending=True)
     # boros = boros.set_index('MAX_HEIGHT')
     # boros = boros.sort_index()
 
     # Plot and color by borough
     fig, ax = plt.subplots(1, 1)
-    boros.plot(column='MAX_HEIGHT', ax=ax, legend=True, cmap='tab20c')
+    # boros1.plot(column='EleZ', ax=ax, legend=True, cmap='tab20')
+    boros.plot(column='AVG_HEIGHT', ax=ax, legend=True, cmap='tab20')
     plt.show()
     # Get rid of are that you aren't interested in (too far away)
     # plt.gca().set_xlim([-74.05, -73.85])
