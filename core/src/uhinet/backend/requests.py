@@ -2,6 +2,7 @@ from typing import Tuple
 from pathlib import Path
 
 import logging
+import matplotlib
 
 # from TFPix2Pix import Predictor
 from ..frontend.components import GISLayer, Polygon, Orientation, Season
@@ -35,6 +36,7 @@ class Requests():
                                       lon=vw.top_left.lon),
                       bottom_right=LatLon(lat=vw.bottom_right.lat,
                                           lon=vw.bottom_right.lon)))
+        matplotlib.use('agg')
         if len(before_rgb) == 0:
             logging.critical(
                 'Requests: no RGB image found for those coordinates')

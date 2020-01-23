@@ -60,7 +60,13 @@
           <strong><big>Generate Result</strong></big>
           <br>
         <input type="submit" value="Generate!">
+
       </div id='Generate Result'>
+      <div id="slider">
+        <input class="bar" type="range" id="rangeinput" min="1" max="25" value="1" onchange="rangevalue.value=value"/>
+        <span class="highlight"></span>
+        <output id="rangevalue">1</output>
+      </div>
       <br>
       </nav>
     </div>
@@ -68,6 +74,7 @@
     <div class="col-md-9" id="cmap">
       <div id="floating-panel">
       <input class="col-md-2" onclick="deleteSelectedShape();" type=button value="Delete polygon">
+      <input class="bar" type="range" id="rangeinput" min="1" max="25" value="1" onchange="go()"/>
       <input class="col-md-2" id=remove_overlay type="button" value="Remove overlay">
       <input class="col-md-2" id=show_overlay type="button" value="Show overlay">
       <input class="col-md-2" id=create_overlay type=button value="Create overlay">
