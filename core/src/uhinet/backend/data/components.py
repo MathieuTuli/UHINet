@@ -30,6 +30,8 @@ class Column(Enum):
     HEIGHT = 0
     ELEV = 1
     HEIGHT_ELEV = 2
+    geometry = 3
+    POLY_AREA = 4
 
     def __str__(self):
         return self.name

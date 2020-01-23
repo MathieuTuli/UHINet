@@ -8,15 +8,18 @@ import logging
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .components import Column
+from .components import Column, BBox
 
 
 def map_from_shp(path: Path,
+                 bbox: BBox = None,
                  column: Column = Column.HEIGHT,
                  sort_by: Column = Column.HEIGHT,
                  ascending: bool = True,
                  legend: bool = False,
                  cmap: str = 'tab20') -> Optional[np.ndarray]:
+    '''
+    '''
     if not path.exists():
         logging.critical(f"Map from Geopands: Path {path} does not exist")
         return None
