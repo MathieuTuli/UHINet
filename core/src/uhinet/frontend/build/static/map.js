@@ -10,6 +10,8 @@ var overlay = null;
 var image_path;
 
 
+
+
 // Drawing manager operations
 
 function clearSelection () {
@@ -36,6 +38,11 @@ function deleteSelectedShape () {
     }
 }
 
+$(function() {
+  $('input#rangeinput').bind('click', function() {
+    console.log('uhuh')
+    });
+});
 // Send coordinates of the polygon and the viewport to the backend
 // and get an image from the backend
 $(function() {
@@ -65,6 +72,10 @@ function initMap () {
         center: new google.maps.LatLng(43.65, -79.4),
         zoomControl: true
     });
+
+    function go () {
+        console.log('bitch');
+    }
 
     // Function to create an overlay
     function createOverlay(){
@@ -161,3 +172,4 @@ function deleteSelectedShape () {
         selectedShape.setMap(null);
     }
 }
+
