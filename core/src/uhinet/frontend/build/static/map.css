@@ -18,3 +18,24 @@ html, body {
 #selection {
   margin-left: 20px;
 }
+
+#panel {
+    width: 200px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    float: right;
+    margin: 10px;
+}
+
+#color-palette {
+    clear: both;
+}
+
+.color-button {
+    width: 14px;
+    height: 14px;
+    font-size: 0;
+    margin: 2px;
+    float: left;
+    cursor: pointer;
+}

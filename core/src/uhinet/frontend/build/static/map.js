@@ -8,10 +8,59 @@ var coords_bound; // coordinates of the current viewport
 var coords_overlay; //coordinates of the current overlay
 var overlay = null;
 var image_path;
+var colors = ['#919191', '#404040', '#32CD32', '#174F03'];
+var selectedColor;
+var colorButtons = {};
 
 
+function selectColor (color) {
+    selectedColor = color;
+    for (var i = 0; i < colors.length; ++i) {
+        var currColor = colors[i];
+        colorButtons[currColor].style.border = currColor == color ? '2px solid #789' : '2px solid #fff';
+    }
 
+    var rectangleOptions = drawingManager.get('rectangleOptions');
+    rectangleOptions.fillColor = color;
+    drawingManager.set('rectangleOptions', rectangleOptions);
 
+    var polygonOptions = drawingManager.get('polygonOptions');
+    polygonOptions.fillColor = color;
+    drawingManager.set('polygonOptions', polygonOptions);
+}
+
+function setSelectedShapeColor (color) {
+    if (selectedShape) {
+        if (selectedShape.type == google.maps.drawing.OverlayType.POLYLINE) {
+            selectedShape.set('strokeColor', color);
+        } else {
+            selectedShape.set('fillColor', color);
+        }
+    }
+}
+
+function makeColorButton (color) {
+    var button = document.createElement('span');
+    button.className = 'color-button';
+    button.style.backgroundColor = color;
+    google.maps.event.addDomListener(button, 'click', function () {
+        selectColor(color);
+        setSelectedShapeColor(color);
+    });
+
+    return button;
+}
+
+function buildColorPalette () {
+    var colorPalette = document.getElementById('color-palette');
+    for (var i = 0; i < colors.length; ++i) {
+        var currColor = colors[i];
+        var colorButton = makeColorButton(currColor);
+        colorPalette.appendChild(colorButton);
+        colorButtons[currColor] = colorButton;
+    }
+    selectColor(colors[0]);
+}
 // Drawing manager operations
 
 function clearSelection () {
@@ -28,7 +77,7 @@ function setSelection (shape) {
     if (shape.type !== 'marker') {
         clearSelection();
         shape.setEditable(true);
-    }
+        selectColor(shape.get('fillColor') || shape.get('strokeColor'));    }
     selectedShape = shape;
 }
 
@@ -40,7 +89,7 @@ function deleteSelectedShape () {
 
 $(function() {
   $('input#rangeinput').bind('click', function() {
-    console.log('uhuh')
+    console.log('valuehere');
     });
 });
 // Send coordinates of the polygon and the viewport to the backend
@@ -152,6 +201,7 @@ function initMap () {
             deleteSelectedShape();
         }
      });
+    buildColorPalette();
 }
 
 function clearSelection () {
