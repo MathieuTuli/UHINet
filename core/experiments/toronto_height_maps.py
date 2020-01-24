@@ -14,8 +14,11 @@ import geopandas
 
 if __name__ == "__main__":
     path = Path('/home/mat/work/U-of-T/capstone/uhinet/data/toronto-height/Boundaries/3DMassingShapefile_2019_WGS84/3DMassing_2019_WGS84.shp')
-    df_2019 = GeoDataFrame.from_file(str(path))
-    df_2019.rename(
+    path = Path(
+        '/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2016_WGS84.shp')
+    df = GeoDataFrame.from_file(str(path))
+    print(df.keys())
+    df.rename(
         columns={
             'MIN_HEIGHT': 'MIN_HEIGHT',
             'MAX_HEIGHT': 'MAX_HEIGHT',
@@ -30,28 +33,63 @@ if __name__ == "__main__":
             'PERIMETER': 'PERIMETER',
             'geometry': 'geometry'},
         inplace=True)
-    df_2019.drop(['MIN_HEIGHT', 'MAX_HEIGHT', 'HEIGHT_SRC',
-                  'BLDG_SRC', 'LONGITUDE', 'LATITUDE', 'PERIMETER'], axis=1,
-                 inplace=True)
-    print(df_2019.head())
-    df_2019.to_crs({'init': 'epsg:4326'}, inplace=True)
-    # in_proj = Proj(init='epsg:3857')
-    # out_proj = Proj(init='epsg:4326')
+    df.drop(['MIN_HEIGHT', 'MAX_HEIGHT', 'HEIGHT_SRC',
+             'BLDG_SRC', 'LONGITUDE', 'LATITUDE', 'PERIMETER'], axis=1,
+            inplace=True)
+    print(df.head())
+    df.to_crs({'init': 'epsg:4326'}, inplace=True)
+    print(df.head())
+    df.to_file(
+        '/home/mat/work/U-of-T/capstone/uhinet/data/toronto-height/Boundaries/2019_formatted.shp', driver='ESRI Shapefile')
 
-    # for indx, row in df_2019.iterrows():
-    #     items = row['GEOMETRY']
-    #     new_list = list()
-    #     for item in items:
-    #         x, y, z = item.split(' ')
-    #         lon, lat = transform(in_proj, out_proj, x, y)
-    #         new_list.append(f'{lon} {lat}')
-    #     row['GEOMETRY'] = new_list
-    print(df_2019.head())
-    df_2019.to_file('2019.shp', driver='ESRI Shapefile')
-    df_2019 = GeoDataFrame.from_file('2019.shp')
-    fig, ax = plt.subplots(1, 1)
-    df_2019.plot(column='HEIGHT', ax=ax, legend=True, cmap='tab20')
-    plt.show()
+    path = Path(
+        '/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2017_WGS84.shp')
+    df = GeoDataFrame.from_file(str(path))
+    print(df.keys())
+    path = Path(
+        '/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2018_WGS84.shp')
+    df = GeoDataFrame.from_file(str(path))
+    print(df.keys())
+    path = Path(
+        '/home/mat/Downloads/test/toronto_massing_wayback/SHAPEFILES/ContextMassing2013_mtm3degree_v2.shp')
+    df = GeoDataFrame.from_file(str(path))
+    print(df.keys())
+    path = Path(
+        '/home/mat/Downloads/test/toronto_massing_wayback/SHAPEFILES/ContextMassing2013_wgs84_v2.shp')
+    df = GeoDataFrame.from_file(str(path))
+    print(df.keys())
+    path = Path(
+        '/home/mat/Downloads/test/toronto_massing_wayback/ODMassing_2014_wgs.shp')
+    df = GeoDataFrame.from_file(str(path))
+    print(df.keys())
+    #                     df_2019 = GeoDataFrame.from_file(str(path))
+    #                     df_2019.rename(
+    #                         columns={
+    #                             'MIN_HEIGHT': 'MIN_HEIGHT',
+    #                             'MAX_HEIGHT': 'MAX_HEIGHT',
+    #                             'AVG_HEIGHT': 'HEIGHT',
+    #                             'HEIGHT_MSL': 'HEIGHT_ELEV',
+    #                             'SURF_ELEV': 'ELEV',
+    #                             'HEIGHT_SRC': 'HEIGHT_SRC',
+    #                             'BLDG_SRC': 'BLDG_SRC',
+    #                             'LONGITUDE': 'LONGITUDE',
+    #                             'LATITUDE': 'LATITUDE',
+    #                             'POLY_AREA': 'POLY_AREA',
+    #                             'PERIMETER': 'PERIMETER',
+    #                             'geometry': 'geometry'},
+    #                         inplace=True)
+    #                     df_2019.drop(['MIN_HEIGHT', 'MAX_HEIGHT', 'HEIGHT_SRC',
+    #                                   'BLDG_SRC', 'LONGITUDE', 'LATITUDE', 'PERIMETER'], axis=1,
+    #                                  inplace=True)
+    #                     print(df_2019.head())
+    #                     df_2019.to_crs({'init': 'epsg:4326'}, inplace=True)
+    #                     print(df_2019.head())
+    #                     df_2019.to_file(
+    #                         '/home/mat/work/U-of-T/capstone/uhinet/data/toronto-height/Boundaries/2019_formatted.shp', driver='ESRI Shapefile')
+    #      df_2019 = GeoDataFrame.from_file('2019.shp')
+    #      fig, ax = plt.subplots(1, 1)
+    #      df_2019.plot(column='HEIGHT', ax=ax, legend=True, cmap='tab20')
+    #      plt.show()
     # import fiona
     # print(fiona.supported_drivers)
     # df_2019.to_file("2019.shp")
