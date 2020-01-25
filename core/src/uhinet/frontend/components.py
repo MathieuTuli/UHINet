@@ -5,6 +5,20 @@ import numpy as np
 
 from ..backend.data.components import BBox, LatLon
 
+class BuildingType(Enum):
+    '''
+    Names can be changed
+    Caution: If you change names here, you also need to change
+             frontend/run.py where the names are called
+    '''
+    Concrete = 0
+    ParkingLot = 1
+    Park = 2
+    Forest = 3
+
+    def __str__(self):
+        return self.name
+
 
 class Season(Enum):
     FALL = 0
@@ -79,3 +93,4 @@ class Polygon(NamedTuple):
     coordinates: List[LatLon]
     viewing_window: BBox
     orientation: Orientation
+    buildingtype: BuildingType
