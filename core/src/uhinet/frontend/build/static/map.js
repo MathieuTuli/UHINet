@@ -190,7 +190,7 @@ function initMap () {
             coords = [];
             for(var i = 0; i < array.length; i++)
             	coords.push(array.getAt(i));
-            window.alert(coords);
+            // window.alert(coords);
         });
         setSelection(newShape);
     });

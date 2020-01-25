@@ -63,7 +63,7 @@ def main(args: APNamespace):
         logging.info("UHINET Frontend: Send Coordinates.")
         coords_polygon = ast.literal_eval(request.args.get('coords_polygon'))
         coords_bound = ast.literal_eval(request.args.get('coords_bound'))
-        color = ast.literal_eval(request.args.get('color'))
+        color = request.args.get('color')
 
         lst_coords = []
         for coord in coords_polygon:
@@ -85,9 +85,9 @@ def main(args: APNamespace):
         '''
 
         # print(coords_polygon)
-        print('\n')
-        print(color)
-        print('\n')
+        # print('\n')
+        # print(type(color))
+        # print('\n')
 
         '''
         GISlayer
