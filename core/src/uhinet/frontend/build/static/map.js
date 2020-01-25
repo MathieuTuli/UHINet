@@ -104,6 +104,7 @@ $(function() {
     $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
       coords_polygon: JSON.stringify(coords),
       coords_bound: JSON.stringify(coords_bound),
+      color: JSON.stringify(selectedColor),
     }, function(image_name) {
       image_path = '/static/' + image_name;
       coords = [];
