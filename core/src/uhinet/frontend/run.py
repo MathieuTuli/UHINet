@@ -5,6 +5,7 @@ import logging
 import jinja2
 import yaml
 import ast
+import json
 
 from flask import Flask, render_template, jsonify, request
 
@@ -124,7 +125,8 @@ def main(args: APNamespace):
         logging.info("UHINET Frontend: Backend returned.")
 
         # image_name = str('image.png')
-        return jsonify(image_name)
+        # return jsonify(image_name)
+        return jsonify(image_name=image_name, coords_bound=coords_bound)
     app.run(debug=args.verbose or args.very_verbose, host='127.0.0.1')
 
 
