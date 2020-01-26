@@ -9,7 +9,7 @@ import ast
 from flask import Flask, render_template, jsonify, request
 
 
-from .components import Season, Orientation, GISLayer, Polygon
+from .components import Season, Orientation, GISLayer, Polygon, BuildingType
 from ..backend.data.components import LatLon, BBox
 from ..backend.requests import Requests
 
@@ -63,11 +63,23 @@ def main(args: APNamespace):
         logging.info("UHINET Frontend: Send Coordinates.")
         coords_polygon = ast.literal_eval(request.args.get('coords_polygon'))
         coords_bound = ast.literal_eval(request.args.get('coords_bound'))
-        color = request.args.get('color')
+        colors = ast.literal_eval(request.args.get('colors'))
+        polygon_color = ast.literal_eval(request.args.get('polygon_color'))
 
         lst_coords = []
         for coord in coords_polygon:
             lst_coords.append(LatLon(lat=coord['lat'], lon=coord['lng']))
+
+        ''' Get Corresponding Building Type '''
+        def getBuildingType(polygon_color, colors):
+            if polygon_color == colors[0]:
+                return BuildingType.Concrete
+            elif polygon_color == colors[1]:
+                return BuildingType.ParkingLot
+            elif polygon_color == colors[2]:
+                return BuildingType.Park
+            else:
+                return BuildingType.Forest
 
         # Polygon to use in the backend
         polygon = Polygon(coordinates=lst_coords,
@@ -77,17 +89,19 @@ def main(args: APNamespace):
                               bottom_right=LatLon(
                               lat=coords_bound['south'],
                               lon=coords_bound['east'])),
-                          orientation=Orientation.CW)
+                          orientation=Orientation.CW,
+                          buildingtype = getBuildingType(polygon_color, colors))
         # Orientation to be specified later
 
         '''
         Training and making predictions happen here
         '''
 
-        # print(coords_polygon)
+        # print(str(colors[0]))
         # print('\n')
-        # print(type(color))
+        # print(type(colors[0]))
         # print('\n')
+        # print(polygon_color in colors)
 
         '''
         GISlayer
