@@ -128,6 +128,7 @@ function initMap () {
         console.log('bitch');
     }
 
+
     // Function to create an overlay
     function createOverlay(){
       if(coords_overlay == null){
@@ -140,6 +141,7 @@ function initMap () {
     var button_createOverlay = document.getElementById("create_overlay");
     button_createOverlay.addEventListener("click", createOverlay);
 
+
     // Function to show the created overlay
     function showOverlay(){
       if(overlay == null){
@@ -150,6 +152,7 @@ function initMap () {
     }
     var button_addOverlay = document.getElementById("show_overlay");
     button_addOverlay.addEventListener("click", showOverlay);
+
 
     // Function to remove the overlay from the map
     function removeOverlay(){
@@ -164,6 +167,19 @@ function initMap () {
         editable: true,
         draggable: true
     };
+
+
+    // Change opacity of the overlay
+    function changeOpacity(){
+      if(overlay != null){
+        var opacity = (document.getElementById("rangeinput").value) / 100.0;
+        overlay.setOpacity(opacity);
+        showOverlay();
+      }
+    }
+    var button_changeOverlay = document.getElementById("rangeinput")
+    button_changeOverlay.addEventListener("click", changeOpacity);
+
 
     // Keeps track of the coordinates of the current viewport
     google.maps.event.addListener(map, 'bounds_changed', function(){
