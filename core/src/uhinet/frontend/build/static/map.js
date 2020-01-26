@@ -97,7 +97,7 @@ $(function() {
 $(function() {
   $('input#send_coords_button').bind('click', function() {
     if (coords.length < 1){
-      window.alert('Please select a polygon first.');
+      window.alert('Please creat a polygon first.');
       return;
     }
     coords_overlay = coords_bound;
@@ -136,6 +136,8 @@ function initMap () {
         return
       }
       overlay = new google.maps.GroundOverlay(image_path, coords_overlay);
+      var opacity = (document.getElementById("rangeinput").value) / 100.0;
+      overlay.setOpacity(opacity);
       showOverlay();
     }
     var button_createOverlay = document.getElementById("create_overlay");
@@ -201,6 +203,11 @@ function initMap () {
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function (shp) {
         var newShape = shp.overlay;
         drawingManager.setDrawingMode(null);
+        array = newShape.getPath();
+        coords = [];
+        for(var i = 0; i < array.length; i++)
+            coords.push(array.getAt(i));
+        // window.alert(coords);
         google.maps.event.addListener(newShape, 'click', function (shp) {
             setSelection(newShape);
             array = newShape.getPath();
