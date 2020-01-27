@@ -74,13 +74,13 @@ def main(args: APNamespace):
         ''' Get Corresponding Building Type '''
         def getBuildingType(polygon_color, colors):
             if polygon_color == colors[0]:
-                return BuildingType.Concrete
+                return BuildingType.CONCRETE
             elif polygon_color == colors[1]:
-                return BuildingType.ParkingLot
+                return BuildingType.PARKINGLOT
             elif polygon_color == colors[2]:
-                return BuildingType.Park
+                return BuildingType.PARK
             else:
-                return BuildingType.Forest
+                return BuildingType.FOREST
 
         # Polygon to use in the backend
         polygon = Polygon(coordinates=lst_coords,
@@ -91,7 +91,7 @@ def main(args: APNamespace):
                               lat=coords_bound['south'],
                               lon=coords_bound['east'])),
                           orientation=Orientation.CW,
-                          buildingtype = getBuildingType(polygon_color, colors))
+                          buildingtype=getBuildingType(polygon_color, colors))
         # Orientation to be specified later
 
         '''
