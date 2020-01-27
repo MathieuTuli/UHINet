@@ -42,6 +42,7 @@ function setSelectedShapeColor (color) {
 function makeColorButton (color) {
     var button = document.createElement('span');
     button.className = 'color-button';
+    button.value = color;
     button.style.backgroundColor = color;
     google.maps.event.addDomListener(button, 'click', function () {
         selectColor(color);
@@ -55,7 +56,7 @@ function buildColorPalette () {
     var colorPalette = document.getElementById('color-palette');
     for (var i = 0; i < colors.length; ++i) {
         var currColor = colors[i];
-        var colorButton = makeColorButton(currColor);
+        var colorButton= makeColorButton(currColor);
         colorPalette.appendChild(colorButton);
         colorButtons[currColor] = colorButton;
     }
