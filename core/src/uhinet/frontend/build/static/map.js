@@ -77,7 +77,8 @@ function setSelection (shape) {
     if (shape.type !== 'marker') {
         clearSelection();
         shape.setEditable(true);
-        selectColor(shape.get('fillColor') || shape.get('strokeColor'));    }
+        selectColor(shape.get('fillColor') || shape.get('strokeColor'));
+    }
     selectedShape = shape;
 }
 
@@ -86,12 +87,6 @@ function deleteSelectedShape () {
         selectedShape.setMap(null);
     }
 }
-
-$(function() {
-  $('input#rangeinput').bind('click', function() {
-    console.log('valuehere');
-    });
-});
 // Send coordinates of the polygon and the viewport to the backend
 // and get an image from the backend
 $(function() {
@@ -107,6 +102,7 @@ $(function() {
       coords_bound: JSON.stringify(coords_bound),
       polygon_color: JSON.stringify(selectedColor),
       colors: JSON.stringify(colors),
+      height: JSON.stringify(selectedShape.height),
     }, function(data) {
       image_path = '/static/' + data.image_name;
       coords = [];
@@ -126,11 +122,6 @@ function initMap () {
         center: new google.maps.LatLng(43.65, -79.4),
         zoomControl: true
     });
-
-    function go () {
-        console.log('bitch');
-    }
-
 
     // Function to create an overlay
     function createOverlay(){
@@ -182,8 +173,25 @@ function initMap () {
         showOverlay();
       }
     }
+
+    function setHeight(){
+        selectedShape.height = document.getElementById("height").value;
+    }
+
+    function setEnergy(){
+        selectedShape.energy = document.getElementById("energy").value;
+    }
+
+
     var button_changeOverlay = document.getElementById("rangeinput")
     button_changeOverlay.addEventListener("click", changeOpacity);
+
+    var height_input = document.getElementById("height")
+    height_input.addEventListener("blur", setHeight);
+
+    var energy_input = document.getElementById("height")
+    energy_input.addEventListener("blur", setEnergy);
+
 
 
     // Keeps track of the coordinates of the current viewport
@@ -208,6 +216,8 @@ function initMap () {
         drawingManager.setDrawingMode(null);
         array = newShape.getPath();
         coords = [];
+        newShape.height = document.getElementById("height").value;
+        newShape.energy = document.getElementById("energy").value;
         for(var i = 0; i < array.length; i++)
             coords.push(array.getAt(i));
         // window.alert(coords);
@@ -215,8 +225,10 @@ function initMap () {
             setSelection(newShape);
             array = newShape.getPath();
             coords = [];
+            document.getElementById("height").value = newShape.height;
+            document.getElementById("energy").value = newShape.energy;
             for(var i = 0; i < array.length; i++)
-            	coords.push(array.getAt(i));
+                coords.push(array.getAt(i));
             // window.alert(coords);
         });
         setSelection(newShape);
@@ -250,4 +262,3 @@ function deleteSelectedShape () {
         selectedShape.setMap(null);
     }
 }
-
