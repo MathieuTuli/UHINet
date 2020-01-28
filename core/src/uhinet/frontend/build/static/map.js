@@ -176,13 +176,18 @@ function initMap () {
     }
 
     function setHeight(){
-        selectedShape.height = document.getElementById("height").value;
+        if (selectedShape){
+            selectedShape.height = document.getElementById("height").value;
+             console.log(selectedShape.height);
+        }
     }
 
     function setEnergy(){
-        selectedShape.energy = document.getElementById("energy").value;
+        if (selectedShape){
+            selectedShape.energy = document.getElementById("energy").value;
+            console.log(selectedShape.energy);
+        }
     }
-
 
     var button_changeOverlay = document.getElementById("rangeinput")
     button_changeOverlay.addEventListener("click", changeOpacity);
@@ -237,11 +242,7 @@ function initMap () {
 
     google.maps.event.addListener(drawingManager, 'drawingmode_changed', clearSelection);
     google.maps.event.addListener(map, 'click', clearSelection);
-    google.maps.event.addDomListener(document, 'keydown', function (e) {
-        if (e.key ==="Backspace" || e.key === "Delete") {
-            deleteSelectedShape();
-        }
-     });
+
     buildColorPalette();
 }
 
