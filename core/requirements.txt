@@ -59,7 +59,7 @@ sentinelhub==2.6.1
 Shapely==1.6.4.post2
 six==1.13.0
 tensorboard==2.0.2
-tensorflow==2.0.0
+tensorflow==2.0.1
 tensorflow-estimator==2.0.1
 termcolor==1.1.0
 tifffile==2019.7.26.2
