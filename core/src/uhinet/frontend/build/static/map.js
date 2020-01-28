@@ -123,6 +123,9 @@ $(function() {
     }
     selectedShape.set('strokeColor', '#000000');
     selectedShape.set('strokeWeight', 2);
+    selectedShape.set('editable', false);
+    selectedShape.set('draggable', false);
+
     coords_overlay = coords_bound;
     window.alert(coords_overlay);
     $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
