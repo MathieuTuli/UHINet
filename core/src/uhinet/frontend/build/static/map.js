@@ -8,7 +8,7 @@ var coords_bound; // coordinates of the current viewport
 var coords_overlay; //coordinates of the current overlay
 var overlay = null;
 var image_path;
-var colors = ['#919191', '#404040', '#32CD32', '#174F03'];
+var colors = ['#B0AFAF', '#606060', '#1C1C1C','#32CD32'];
 var selectedColor;
 var colorButtons = {};
 
@@ -53,13 +53,38 @@ function makeColorButton (color) {
 }
 
 function buildColorPalette () {
-    var colorPalette = document.getElementById('color-palette');
-    for (var i = 0; i < colors.length; ++i) {
-        var currColor = colors[i];
-        var colorButton= makeColorButton(currColor);
-        colorPalette.appendChild(colorButton);
-        colorButtons[currColor] = colorButton;
-    }
+    var colorPalette1 = document.getElementById('color-palette1');
+    var currColor = colors[0];
+    var colorButton1= makeColorButton(currColor);
+    var t1 = document.createTextNode("Residential");
+    colorPalette1.appendChild(colorButton1);
+    colorPalette1.appendChild(t1);
+    colorButtons[currColor] = colorButton1;
+
+    var colorPalette2 = document.getElementById('color-palette2');
+    var currColor = colors[1];
+    var colorButton2= makeColorButton(currColor);
+    var t2 = document.createTextNode("Commercial");
+    colorPalette2.appendChild(colorButton2);
+    colorPalette2.appendChild(t2);
+    colorButtons[currColor] = colorButton2;
+
+    var colorPalette3 = document.getElementById('color-palette3');
+    var currColor = colors[2];
+    var colorButton3= makeColorButton(currColor);
+    var t3 = document.createTextNode("Parking Lot");
+    colorPalette3.appendChild(colorButton3);
+    colorPalette3.appendChild(t3);
+    colorButtons[currColor] = colorButton3;
+
+    var colorPalette4 = document.getElementById('color-palette4');
+    var currColor = colors[3];
+    var colorButton4= makeColorButton(currColor);
+    var t4 = document.createTextNode("Green Space");
+    colorPalette4.appendChild(colorButton4);
+    colorPalette4.appendChild(t4);
+    colorButtons[currColor] = colorButton4;
+
     selectColor(colors[0]);
 }
 // Drawing manager operations
