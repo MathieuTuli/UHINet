@@ -121,14 +121,17 @@ $(function() {
       window.alert('Please creat a polygon first.');
       return;
     }
+    selectedShape.set('strokeColor', '#000000');
+    selectedShape.set('strokeWeight', 2);
     coords_overlay = coords_bound;
     window.alert(coords_overlay);
     $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
       coords_polygon: JSON.stringify(coords),
       coords_bound: JSON.stringify(coords_bound),
-      polygon_color: JSON.stringify(selectedColor),
+      polygon_color: JSON.stringify(selectedShape.fillColor),
       colors: JSON.stringify(colors),
       height: JSON.stringify(selectedShape.height),
+        height: JSON.stringify(selectedShape.energy),
     }, function(data) {
       image_path = '/static/' + data.image_name;
       coords = [];
