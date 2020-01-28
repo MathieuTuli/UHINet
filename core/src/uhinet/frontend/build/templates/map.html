@@ -69,21 +69,6 @@
     
     <div class="col-md-9" id="cmap">
       <div id="floating-panel">
-        <div id="panel">
-          <div id="color-palette1"></div>
-          <div id="color-palette2"></div>
-          <div id="color-palette3"></div>
-          <div id="color-palette4"></div>
-          <div class="block">
-              <label>Building height</label>
-              <input class="col-md-9" id="height" value="Height (m)" type=number>
-          </div>
-          <div class="block">
-              <label>Building energy use</label>
-              <input class="col-md-9" id="energy" value="Energy (kWh)" type=number>
-          </div>          
-        </div>
-
         <input class="col-md-2" onclick="deleteSelectedShape();" type=button value="Delete polygon">
         <input class="col-md-2" id=remove_overlay type="button" value="Remove overlay">
         <input class="col-md-2" id=show_overlay type="button" value="Show overlay">
@@ -95,6 +80,26 @@
           <output id="rangevalue"></output>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div id="color-palette1"></div>
+          <div id="color-palette2"></div>
+          <div id="color-palette3"></div>
+          <div id="color-palette4"></div>
+        </div>
+        <div class="col-md-9">
+          <div class="block">
+            <label>Building height</label>
+            <input id="height" value="Height (m)" type=number>
+          </div>
+          <div class="block">
+          <label>Building energy use</label>
+            <input id="energy" value="Energy (kWh)" type=number>
+          </div>          
+        </div>
+      </div>
+
       <div id="map"></div>
     </div>
   </div>
