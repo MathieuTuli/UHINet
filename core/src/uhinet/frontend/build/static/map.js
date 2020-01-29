@@ -1,18 +1,16 @@
 var map;
-var polygon;
-var markers = [];
 var drawingManager;
 var selectedShape;
 var coords = [];  // coordinates of the created polygon
 var coords_bound; // coordinates of the current viewport
 var coords_overlay; //coordinates of the current overlay
 var overlay = [];
+var imageType;
 var image_path = [];
 var colors = ['#B0AFAF', '#606060', '#1C1C1C','#32CD32'];
 var selectedColor;
 var colorButtons = {};
 var season;
-
 
 // Set current season
 function setSeason(){
@@ -219,9 +217,9 @@ function initMap () {
 
     // Change opacity of the overlay
     function changeOpacity(){
-      if(overlay != null){
+      if(overlay.length >= 1){
         var opacity = (document.getElementById("rangeinput").value) / 100.0;
-        overlay.setOpacity(opacity);
+        overlay[0].setOpacity(opacity);
         showOverlay();
       }
     }
