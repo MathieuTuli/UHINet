@@ -4,7 +4,7 @@ from pathlib import Path
 import logging
 import matplotlib
 
-from TFPix2Pix import Predictor
+from TFPix2Pix.predictor import Predictor
 from ..frontend.components import GISLayer, Polygon, Orientation, Season
 from .data.image_formatting import alter_area, diff_images
 from .data.components import BBox, ImageSize, LatLon
