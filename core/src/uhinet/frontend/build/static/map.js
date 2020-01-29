@@ -6,8 +6,8 @@ var selectedShape;
 var coords = [];  // coordinates of the created polygon
 var coords_bound; // coordinates of the current viewport
 var coords_overlay; //coordinates of the current overlay
-var overlay = null;
-var image_path;
+var overlay = [];
+var image_path = [];
 var colors = ['#B0AFAF', '#606060', '#1C1C1C','#32CD32'];
 var selectedColor;
 var colorButtons = {};
@@ -154,7 +154,7 @@ $(function() {
       height: JSON.stringify(selectedShape.height),
       energy: JSON.stringify(selectedShape.energy),
     }, function(data) {
-      image_path = '/static/' + data.image_name;
+      image_path.push(('/static/' + data.image_name));
       coords = [];
       coords_overlay = data.coords_bound;
       console.log(coords_overlay);
@@ -181,9 +181,9 @@ function initMap () {
         window.alert("Please send coordinates first to get the overlay")
         return
       }
-      overlay = new google.maps.GroundOverlay(image_path, coords_overlay);
+      overlay.push(new google.maps.GroundOverlay(image_path[0], coords_overlay));
       var opacity = (document.getElementById("rangeinput").value) / 100.0;
-      overlay.setOpacity(opacity);
+      overlay[0].setOpacity(opacity);
       showOverlay();
     }
     var button_createOverlay = document.getElementById("create_overlay");
@@ -192,11 +192,11 @@ function initMap () {
 
     // Function to show the created overlay
     function showOverlay(){
-      if(overlay == null){
+      if(overlay.length < 1){
         window.alert("Please create a overlay first");
         return;
       }
-      overlay.setMap(map);
+      overlay[0].setMap(map);
     }
     var button_addOverlay = document.getElementById("show_overlay");
     button_addOverlay.addEventListener("click", showOverlay);
@@ -204,7 +204,7 @@ function initMap () {
 
     // Function to remove the overlay from the map
     function removeOverlay(){
-      overlay.setMap(null);
+      overlay[0].setMap(null);
     }
     var button_removeOverlay = document.getElementById("remove_overlay");
     button_removeOverlay.addEventListener("click", removeOverlay);
