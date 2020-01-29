@@ -131,9 +131,9 @@ def main(args: APNamespace):
             polygon=polygon,
             season=getSeason(season),
             flask_static_dir=directory)
-        image_names.append(str(layers[0].image)) # Before image
-        image_names.append(str(layers[1].image)) # After image
-        image_names.append(str(layers[2].image)) # Difference image
+        image_names.append(str(layers[0].image))  # Before image
+        image_names.append(str(layers[1].image))  # After image
+        image_names.append(str(layers[2].image))  # Difference image
         coords_bound['north'] = layers[0].coordinates.top_left.lat
         coords_bound['west'] = layers[0].coordinates.top_left.lon
         coords_bound['south'] = layers[0].coordinates.bottom_right.lat

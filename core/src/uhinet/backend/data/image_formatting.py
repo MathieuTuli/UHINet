@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 
+from ..file_manager import save_pyplot_image
 from ...frontend.components import Polygon, Season
 
 
@@ -68,6 +69,7 @@ def diff_images(reference: np.ndarray,
     # diff = reference - other
     # comp = np.isclose(a=other, b=reference, rtol=0.1, atol=1e-08)
     # return (diff, np.sum(comp))
+    fig, ax = plt.subplots()
     error_r = np.fabs(np.subtract(reference[:, :, 0], other[:, :, 0]))
     error_g = np.fabs(np.subtract(reference[:, :, 1], other[:, :, 1]))
     error_b = np.fabs(np.subtract(reference[:, :, 2], other[:, :, 2]))
@@ -78,15 +80,15 @@ def diff_images(reference: np.ndarray,
     # Uncomment the next line to turn the colors upside-down
     lum_img = np.negative(lum_img)
 
-    imgplot = plt.imshow(lum_img)
+    return lum_img
+    img_plot = plt.imshow(lum_img)
 
     # Choose a color palette
-    imgplot.set_cmap('jet')
+    img_plot.set_cmap('jet')
     # imgplot.set_cmap('Spectral')
 
     plt.colorbar()
     plt.axis('off')
-
     plt.show()
 
 
@@ -103,4 +105,5 @@ if __name__ == "__main__":
     plt.show()
     plt.imshow(other)
     plt.show()
-    diff, val = diff_images(ref, other)
+    diff = diff_images(ref, other)
+    save_pyplot_image('test.png', diff, cmap='jet', colorbar=False)

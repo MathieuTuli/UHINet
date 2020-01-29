@@ -41,7 +41,9 @@ def init_dirs(dir_name: Path):
 
 
 def save_pyplot_image(image_name: Path,
-                      image: np.ndarray):
+                      image: np.ndarray,
+                      cmap: str = None,
+                      colorbar: bool = False):
     """
     """
     # fig = plt.subplots(nrows=1, ncols=1, figsize=(15, 7))
@@ -52,6 +54,10 @@ def save_pyplot_image(image_name: Path,
     ax.set_axis_off()
     fig.add_axes(ax)
     ax.imshow(image)
-    # plt.show()
+    if cmap is not None:
+        mappable = plt.imshow(image)
+        mappable.set_cmap(cmap)
+    if colorbar:
+        plt.colorbar()
     plt.savefig(str(image_name))
     plt.close(fig)

@@ -4,10 +4,11 @@ from pathlib import Path
 import logging
 import matplotlib
 
-# from TFPix2Pix import Predictor
+from TFPix2Pix import Predictor
 from ..frontend.components import GISLayer, Polygon, Orientation, Season
 from .data.image_formatting import alter_area, diff_images
 from .data.components import BBox, ImageSize, LatLon
+from .data.helpers import conform_coordinates_to_spatial_resolution
 from .data.sentinel_hub import SentinelHubAccessor
 from .file_manager import save_pyplot_image
 
@@ -15,8 +16,16 @@ from .file_manager import save_pyplot_image
 class Requests():
     def __init__(self,
                  instance_id: str,
-                 weights_file: Path) -> None:
-        # self.predictor = Predictor()
+                 winter_weights_file: Path,
+                 spring_weights_File: Path,
+                 summer_weights_File: Path,
+                 fall_weights_File: Path) -> None:
+        self.predictors = {
+            Season.WINTER: Predictor(),
+            Season.SPRING: Predictor(),
+            Season.SUMMER: Predictor(),
+            Season.FALL: Predictor()}
+
         self.accessor = SentinelHubAccessor(instance_id=instance_id)
 
     def __str__(self) -> str:
@@ -27,15 +36,21 @@ class Requests():
                 season: Season,
                 flask_static_dir: Path) -> Tuple[GISLayer, GISLayer, GISLayer]:
         vw = polygon.viewing_window
-        before_rgb = self.accessor.get_landsat_image(
-            layer='LST',
-            date=('2019-05-01', '2019-08-01'),
-            image_size=ImageSize(width=1920, height=1920),
-            cloud_cov_perc=0.05,
-            bbox=BBox(top_left=LatLon(lat=vw.top_left.lat,
-                                      lon=vw.top_left.lon),
-                      bottom_right=LatLon(lat=vw.bottom_right.lat,
-                                          lon=vw.bottom_right.lon)))
+        images = []
+        for layer in ['RGB', 'LST']:
+            images.append(self.accessor.get_landsat_image(
+                layer='LST',
+                date='latest',
+                image_size=ImageSize(width=512, height=512),
+                cloud_cov_perc=0.1,
+                bbox=conform_coordinates_to_spatial_resolution(
+                    spatial_resolution=5,
+                    image_size=ImageSize(width=512, height=512),
+                    bbox=BBox(top_left=LatLon(lat=vw.top_left.lat,
+                                              lon=vw.top_left.lon),
+                              bottom_right=LatLon(lat=vw.bottom_right.lat,
+                                                  lon=vw.bottom_right.lon)))))
+        before_rgb, before_lst = images
         matplotlib.use('agg')
         if len(before_rgb) == 0:
             logging.critical(
@@ -45,10 +60,10 @@ class Requests():
         after_rgb = alter_area(image=before_rgb,
                                polygon=polygon,
                                season=season)
-        before_lst = before_rgb  # self.predictor.predict(before_rgb)
-        after_lst = after_rgb  # self.predictor.predict(after_rgb)
+        before_lst = self.predictor.predict(before_rgb)
+        after_lst = self.predictor.predict(after_rgb)
 
-        diff = diff_images(first=before_lst, second=after_lst)
+        diff = diff_images(reference=before_lst, other=after_lst)
 
         save_pyplot_image(str(flask_static_dir / 'before.png'), before_lst)
         save_pyplot_image(str(flask_static_dir / 'after.png'), after_lst)
