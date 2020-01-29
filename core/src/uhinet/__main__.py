@@ -1,4 +1,4 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawTextHelpFormatter
 import logging
 
 from .components import LogLevel
@@ -24,7 +24,8 @@ parser.add_argument('--log-level', type=LogLevel.__getitem__,
                     help="Log level.")
 subparser = parser.add_subparsers(dest='command')
 data_subparser = subparser.add_parser(
-    'data', help='Data commands')
+    'download-data', help='Data commands',
+    formatter_class=RawTextHelpFormatter)
 data_args(data_subparser)
 frontend_subparser = subparser.add_parser(
     'frontend', help='Frontend commands')
@@ -48,7 +49,7 @@ else:
         " to INFO.")
 
 if __name__ == "__main__":
-    if str(args.command) == 'data':
+    if str(args.command) == 'download-data':
         data_main(args)
     elif str(args.command) == 'frontend':
         frontend_main(args)

@@ -6,11 +6,11 @@ var band="B10";
 // 0 - outputs average LST in selected timeline (% of cloud coverage should be low, e.g. < 10%)
 // 1�- outputs maximum LST in selected timeline (% of cloud coverage can be high)
 // 2 - outputs standard deviation LST in selected timeline; minTemp and highTemp are overwritten with values 0 and 10 (% of cloud coverage should be low, e.g. < 5%)
-var option = 1;
+var option = 0;
 
 // minimum and maximum values for output colour chart red to white for temperature in �C. Option 2 overwrites this selection!
-var minC = -50;
-var maxC = 50;
+var minC = -30;
+var maxC = 30;
 
 
 ////INPUT DATA - FOR BETTER RESULTS, THE DATA SHOULD BE ADJUSTED

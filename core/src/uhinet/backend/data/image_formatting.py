@@ -1,5 +1,7 @@
 from typing import List, Tuple
 
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 
@@ -60,10 +62,45 @@ def alter_area(image: np.ndarray,
 
 def diff_images(reference: np.ndarray,
                 other: np.ndarray) -> Tuple[np.ndarray, float]:
-    diff = reference - other
-    comp = np.isclose(a=other, b=reference, rtol=0.1, atol=1e-08)
-    return (diff, np.sum(comp))
+    '''
+    @credit: http://www.pmavridis.com/misc/heatmaps/
+    '''
+    # diff = reference - other
+    # comp = np.isclose(a=other, b=reference, rtol=0.1, atol=1e-08)
+    # return (diff, np.sum(comp))
+    error_r = np.fabs(np.subtract(reference[:, :, 0], other[:, :, 0]))
+    error_g = np.fabs(np.subtract(reference[:, :, 1], other[:, :, 1]))
+    error_b = np.fabs(np.subtract(reference[:, :, 2], other[:, :, 2]))
+
+    # Calculate the maximum error for each pixel
+    lum_img = np.maximum(np.maximum(error_r, error_g), error_b)
+
+    # Uncomment the next line to turn the colors upside-down
+    lum_img = np.negative(lum_img)
+
+    imgplot = plt.imshow(lum_img)
+
+    # Choose a color palette
+    imgplot.set_cmap('jet')
+    # imgplot.set_cmap('Spectral')
+
+    plt.colorbar()
+    plt.axis('off')
+
+    plt.show()
 
 
 def stitch(images: List[np.ndarray]) -> np.ndarray:
     return images
+
+
+if __name__ == "__main__":
+    ref = mpimg.imread(
+        '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/cloud_free_testings/images/102-targets.png')
+    other = mpimg.imread(
+        '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/cloud_free_testings/images/102-outputs.png')
+    plt.imshow(ref)
+    plt.show()
+    plt.imshow(other)
+    plt.show()
+    diff, val = diff_images(ref, other)

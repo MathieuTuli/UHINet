@@ -24,7 +24,7 @@ def download_landsat_from_file(
     with file_name.open() as f:
         content = json.load(f)
 
-    valid_keys = ['geometries', 'date_from', 'date_to',
+    valid_keys = ['centers', 'date_from', 'date_to',
                   'image_size', 'layers', 'cloud_coverage_percentage',
                   'spatial_resolution']
     for key in content.keys():
@@ -33,7 +33,7 @@ def download_landsat_from_file(
                 f"download_landsat: Invalid key \"{key}\". Must be one" +
                 f" of {valid_keys}")
             return False
-    geometries = content['geometries']
+    centers = content['centers']
 
     year_from, month_from, day_from = content['date_from'].split('-')
     year_to, month_to, day_to = content['date_to'].split('-')
@@ -50,30 +50,28 @@ def download_landsat_from_file(
     cloud_cov_perc = float(content['cloud_coverage_percentage'])
     spatial_resolution = int(content['spatial_resolution'])
 
-    for geometry in geometries:
-        bbox = BBox(top_left=LatLon(lat=geometry['tl_lat'],
-                                    lon=geometry['tl_lon']),
-                    bottom_right=LatLon(lat=geometry['br_lat'],
-                                        lon=geometry['br_lon']))
+    for center in centers:
+        location = LatLon(lat=center[0],
+                          lon=center[1])
         year = year_from
-        next_geometry = False
+        next_center = False
         # TODO try the range feature
         while year <= year_to:
-            save_dir = save_to / f"{geometry['name']}/{year}"
+            save_dir = save_to / f"{center['name']}/{year}"
             init_dirs(save_dir)
-            if next_geometry:
+            if next_center:
                 break
             for month in range(1, 13):  # Month is always 1..12
-                if month < month_from :
+                if month < month_from:
                     continue
-                if next_geometry:
+                if next_center:
                     break
                 for day in range(1, monthrange(year, month)[1] + 1):
                     if year == year_from \
                             and day < day_from:
                         continue
                     if year == year_to and month == month_to and day > day_to:
-                        next_geometry = True
+                        next_center = True
                         break
                     skip_rest = False
                     for layer in layers:
@@ -81,7 +79,7 @@ def download_landsat_from_file(
                             continue
                         logging.debug(
                             "download_landsat: Getting for " +
-                            f"{geometry['name']} at " +
+                            f"{center['name']} at " +
                             f"{year}-{str(month).zfill(2)}-" +
                             f"{str(day).zfill(2)} and {layer}")
                         imgs = sentinelhub_accessor.get_landsat_image(
@@ -93,13 +91,13 @@ def download_landsat_from_file(
                             bbox=conform_coordinates_to_spatial_resolution(
                                 spatial_resolution=spatial_resolution,
                                 image_size=image_size,
-                                bbox=bbox))
+                                center=center))
                         if imgs is not None:
                             logging.info(
-                                    "SentinelHubAccessor: URL retrieved " +
-                                    f"for {geometry['name']} at " +
-                                    f"{year}-{str(month).zfill(2)}-" +
-                                    f"{str(day).zfill(2)} and {layer}")
+                                "SentinelHubAccessor: URL retrieved " +
+                                f"for {center['name']} at " +
+                                f"{year}-{str(month).zfill(2)}-" +
+                                f"{str(day).zfill(2)} and {layer}")
                             count = 0
                             for img in imgs:
                                 img = square_resize(img, 512, cv2.INTER_AREA)
@@ -111,10 +109,10 @@ def download_landsat_from_file(
                         else:
                             skip_rest = True
                             logging.info(
-                                    "SentinelHubAccessor: No URL retrieved " +
-                                    f"for {geometry['name']} at " +
-                                    f"{year}-{str(month).zfill(2)}-" +
-                                    f"{str(day).zfill(2)} and {layer}")
+                                "SentinelHubAccessor: No URL retrieved " +
+                                f"for {location['name']} at " +
+                                f"{year}-{str(month).zfill(2)}-" +
+                                f"{str(day).zfill(2)} and {layer}")
             year += 1
     return True
 

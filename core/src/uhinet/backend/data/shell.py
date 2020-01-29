@@ -2,6 +2,7 @@
 UHINet Data Module
 """
 from argparse import _SubParsersAction, Namespace as APNamespace
+
 from pathlib import Path
 
 import logging
@@ -59,18 +60,34 @@ def args(sub_parser: _SubParsersAction) -> None:
         '--instance-id', type=str,
         default='instance_id.txt',
         dest='instance_id',
-        help="File name of instance id for data-set-specific API Accessor")
+        help="Default: instance_id.txt. File name of instance id for \n" +
+        "data-set-specific API Accessor")
     sub_parser.add_argument(
         '--shopping-list', type=str,
         default='shopping_list.json',
         dest='shopping_list',
-        help="File name of settings and API demands for data-set-specific" +
-        " download. See \"shopping_list_example.txt\" for an example.")
+        help="Default: shopping_list.json. File name of settings and \n" +
+        "API demands for data-set-specific download.\n" +
+        "See \"shopping_list_example.txt\" for an example.\n"
+        f"Valid keys are as follows:\n" +
+        "    - centers: a dict of centers coordinates and id. Subkeys are \n" +
+        "            {name, lat, lon}.\n" +
+        "    - data_from: Start date to grab data from. Format is Y-M-D\n" +
+        "    - data_to: Start date to grab data to. Format is Y-M-D\n" +
+        "    - image_size: Tuple of image size in format (height, width)\n" +
+        "    - layers: Layers from Landsat to download. One of [LST, RGB]\n" +
+        "    - cloud_coverage_percentage: Float betwen [0, 1] for \n" +
+        "            cloud coverage percentag\n" +
+        "    - spatial_resolution: Spatial resolution of images. Used in\n" +
+        "            combination with \\centers\\ and \n" +
+        "            \\image_size\\ to generate images. Spatial\n" +
+        "            resolution defines how many metres a pixel\n" +
+        "            represents.")
     sub_parser.add_argument(
         '--save-to', type=str,
-        default='data/images',
+        default='data/',
         dest='save_to',
-        help="Directory to save images to.")
+        help="Default: 'data-download/'. Directory to save images to.")
     # logging.info(
     #     f"Data Shell: Log level set to \"{logging.getLogger()}\"")
     # logging.info(
