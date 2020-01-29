@@ -5,11 +5,12 @@ import logging
 import jinja2
 import yaml
 import ast
+import json
 
 from flask import Flask, render_template, jsonify, request
 
 
-from .components import Season, Orientation, GISLayer, Polygon
+from .components import Season, Orientation, GISLayer, Polygon, BuildingType
 from ..backend.data.components import LatLon, BBox
 from ..backend.requests import Requests
 
@@ -63,10 +64,23 @@ def main(args: APNamespace):
         logging.info("UHINET Frontend: Send Coordinates.")
         coords_polygon = ast.literal_eval(request.args.get('coords_polygon'))
         coords_bound = ast.literal_eval(request.args.get('coords_bound'))
+        colors = ast.literal_eval(request.args.get('colors'))
+        polygon_color = ast.literal_eval(request.args.get('polygon_color'))
 
         lst_coords = []
         for coord in coords_polygon:
             lst_coords.append(LatLon(lat=coord['lat'], lon=coord['lng']))
+
+        ''' Get Corresponding Building Type '''
+        def getBuildingType(polygon_color, colors):
+            if polygon_color == colors[0]:
+                return BuildingType.CONCRETE
+            elif polygon_color == colors[1]:
+                return BuildingType.PARKINGLOT
+            elif polygon_color == colors[2]:
+                return BuildingType.PARK
+            else:
+                return BuildingType.FOREST
 
         # Polygon to use in the backend
         polygon = Polygon(coordinates=lst_coords,
@@ -76,17 +90,19 @@ def main(args: APNamespace):
                               bottom_right=LatLon(
                               lat=coords_bound['south'],
                               lon=coords_bound['east'])),
-                          orientation=Orientation.CW)
+                          orientation=Orientation.CW,
+                          buildingtype=getBuildingType(polygon_color, colors))
         # Orientation to be specified later
 
         '''
         Training and making predictions happen here
         '''
 
-        # print(coords_polygon)
+        # print(str(colors[0]))
         # print('\n')
-        # print(polygon)
+        # print(type(colors[0]))
         # print('\n')
+        # print(polygon_color in colors)
 
         '''
         GISlayer
@@ -109,7 +125,8 @@ def main(args: APNamespace):
         logging.info("UHINET Frontend: Backend returned.")
 
         # image_name = str('image.png')
-        return jsonify(image_name)
+        # return jsonify(image_name)
+        return jsonify(image_name=image_name, coords_bound=coords_bound)
     app.run(debug=args.verbose or args.very_verbose, host='127.0.0.1')
 
 
