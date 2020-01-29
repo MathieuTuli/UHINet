@@ -67,6 +67,8 @@ def main(args: APNamespace):
         colors = ast.literal_eval(request.args.get('colors'))
         polygon_color = ast.literal_eval(request.args.get('polygon_color'))
         season = ast.literal_eval(request.args.get('season'))
+        height = ast.literal_eval(request.args.get('height'))
+        energy = ast. literal_eval(request.args.get('energy'))
 
         lst_coords = []
         for coord in coords_polygon:
@@ -82,8 +84,6 @@ def main(args: APNamespace):
                 return Season.FALL
             if season == 'Winter':
                 return Season.WINTER
-
-        print(getSeason(season))
 
         ''' Get Corresponding Building Type '''
         def getBuildingType(polygon_color, colors):
@@ -123,24 +123,29 @@ def main(args: APNamespace):
         image_name = ... # image_name is the name of the predicted image
                      under /static/ folder
         '''
+        image_names = []
+
         global backend
         directory = Path('frontend/build/static').absolute()
         layers = backend.predict(
             polygon=polygon,
             season=getSeason(season),
             flask_static_dir=directory)
-        image_name = layers[0].image
+        image_names.append(str(layers[0].image)) # Before image
+        image_names.append(str(layers[1].image)) # After image
+        image_names.append(str(layers[2].image)) # Difference image
         coords_bound['north'] = layers[0].coordinates.top_left.lat
         coords_bound['west'] = layers[0].coordinates.top_left.lon
         coords_bound['south'] = layers[0].coordinates.bottom_right.lat
         coords_bound['east'] = layers[0].coordinates.bottom_right.lon
-        assert((directory / image_name).exists())
-        image_name = str(image_name)
+        assert((directory / image_names[0]).exists())
+        assert((directory / image_names[1]).exists())
+        assert((directory / image_names[2]).exists())
         logging.info("UHINET Frontend: Backend returned.")
 
         # image_name = str('image.png')
         # return jsonify(image_name)
-        return jsonify(image_name=image_name, coords_bound=coords_bound)
+        return jsonify(image_names=image_names, coords_bound=coords_bound)
     app.run(debug=args.verbose or args.very_verbose, host='127.0.0.1')
 
 

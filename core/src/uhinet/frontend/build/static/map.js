@@ -5,12 +5,13 @@ var coords = [];  // coordinates of the created polygon
 var coords_bound; // coordinates of the current viewport
 var coords_overlay; //coordinates of the current overlay
 var overlay = [];
-var imageType;
+var overlay_index; // Indicate which overlay to display
 var image_path = [];
 var colors = ['#B0AFAF', '#606060', '#1C1C1C','#32CD32'];
 var selectedColor;
 var colorButtons = {};
 var season;
+
 
 // Set current season
 function setSeason(){
@@ -152,7 +153,9 @@ $(function() {
       height: JSON.stringify(selectedShape.height),
       energy: JSON.stringify(selectedShape.energy),
     }, function(data) {
-      image_path.push(('/static/' + data.image_name));
+      image_path.push(('/static/' + data.image_names[0]));
+      image_path.push(('/static/' + data.image_names[1]));
+      image_path.push(('/static/' + data.image_names[2]));
       coords = [];
       coords_overlay = data.coords_bound;
       console.log(coords_overlay);
@@ -173,15 +176,36 @@ function initMap () {
 
     setSeason();
 
+
+    // Set overlay index
+    function setOverlayIndex(){
+        if(overlay.length >= 1)
+            removeOverlay();
+        if(document.getElementById('Before').checked)
+            overlay_index = 0
+        if(document.getElementById('After').checked)
+            overlay_index = 1
+        if(document.getElementById('Difference').checked)
+            overlay_index = 2
+        if(overlay.length >= 1)
+            showOverlay();
+    }
+    document.getElementById("Before").addEventListener("click", setOverlayIndex);
+    document.getElementById("After").addEventListener("click", setOverlayIndex);
+    document.getElementById("Difference").addEventListener("click", setOverlayIndex);
+    setOverlayIndex();
+
     // Function to create an overlay
     function createOverlay(){
       if(coords_overlay == null){
         window.alert("Please send coordinates first to get the overlay")
         return
       }
-      overlay.push(new google.maps.GroundOverlay(image_path[0], coords_overlay));
-      var opacity = (document.getElementById("rangeinput").value) / 100.0;
-      overlay[0].setOpacity(opacity);
+      for(var i = 0; i < 3; i = i + 1){
+          overlay.push(new google.maps.GroundOverlay(image_path[i], coords_overlay));
+          var opacity = (document.getElementById("rangeinput").value) / 100.0;
+          overlay[i].setOpacity(opacity);
+      }
       showOverlay();
     }
     var button_createOverlay = document.getElementById("create_overlay");
@@ -194,7 +218,7 @@ function initMap () {
         window.alert("Please create a overlay first");
         return;
       }
-      overlay[0].setMap(map);
+      overlay[overlay_index].setMap(map);
     }
     var button_addOverlay = document.getElementById("show_overlay");
     button_addOverlay.addEventListener("click", showOverlay);
@@ -202,7 +226,7 @@ function initMap () {
 
     // Function to remove the overlay from the map
     function removeOverlay(){
-      overlay[0].setMap(null);
+      overlay[overlay_index].setMap(null);
     }
     var button_removeOverlay = document.getElementById("remove_overlay");
     button_removeOverlay.addEventListener("click", removeOverlay);
@@ -219,7 +243,7 @@ function initMap () {
     function changeOpacity(){
       if(overlay.length >= 1){
         var opacity = (document.getElementById("rangeinput").value) / 100.0;
-        overlay[0].setOpacity(opacity);
+        overlay[overlay_index].setOpacity(opacity);
         showOverlay();
       }
     }
