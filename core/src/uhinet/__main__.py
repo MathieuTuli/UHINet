@@ -1,9 +1,12 @@
 from argparse import ArgumentParser, RawTextHelpFormatter
 import logging
+import matplotlib
 
 from .components import LogLevel
 from .backend.data.shell import main as data_main, args as data_args
 from .frontend.run import main as frontend_main, args as frontend_args
+
+matplotlib.use('Agg')
 
 
 parser = ArgumentParser(description=__doc__)

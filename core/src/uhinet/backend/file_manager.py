@@ -54,3 +54,4 @@ def save_pyplot_image(image_name: Path,
     ax.imshow(image)
     # plt.show()
     plt.savefig(str(image_name))
+    plt.close(fig)

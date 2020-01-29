@@ -35,3 +35,20 @@ class Column(Enum):
 
     def __str__(self):
         return self.name
+
+
+class Season(Enum):
+    FALL = 0
+    WINTER = 1
+    SPRING = 2
+    SUMMER = 3
+
+    def __str__(self):
+        return self.name
+
+
+class DateRange(NamedTuple):
+    year: int
+    season: Season
+    date_from: str
+    date_to: str

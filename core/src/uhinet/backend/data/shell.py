@@ -55,7 +55,7 @@ def args(sub_parser: _SubParsersAction) -> None:
                             dest='data_source',
                             choices=['landsat'],
                             required=True,
-                            help="Data source for download.")
+                            help="Required. Data source for download.")
     sub_parser.add_argument(
         '--instance-id', type=str,
         default='instance_id.txt',
@@ -68,14 +68,15 @@ def args(sub_parser: _SubParsersAction) -> None:
         dest='shopping_list',
         help="Default: shopping_list.json. File name of settings and \n" +
         "API demands for data-set-specific download.\n" +
-        "See \"shopping_list_example.txt\" for an example.\n"
+        "See \"core/src/uhinet/backend/data/shopping_list_example.txt\"\n" +
+        "for an example.\n"
         f"Valid keys are as follows:\n" +
         "    - centers: a dict of centers coordinates and id. Subkeys are \n" +
         "            {name, lat, lon}.\n" +
-        "    - data_from: Start date to grab data from. Format is Y-M-D\n" +
-        "    - data_to: Start date to grab data to. Format is Y-M-D\n" +
+        "    - year_from: Start date to grab data from.\n" +
+        "    - year_to: Start date to grab data to.\n" +
         "    - image_size: Tuple of image size in format (height, width)\n" +
-        "    - layers: Layers from Landsat to download. One of [LST, RGB]\n" +
+        "    - layers: List of layers from Landsat. Valid = [LST, RGB]\n" +
         "    - cloud_coverage_percentage: Float betwen [0, 1] for \n" +
         "            cloud coverage percentag\n" +
         "    - spatial_resolution: Spatial resolution of images. Used in\n" +

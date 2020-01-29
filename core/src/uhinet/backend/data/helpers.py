@@ -1,11 +1,14 @@
 '''
 '''
-from typing import Optional
+from typing import Optional, List
 
+import datetime
+import calendar
 import logging
 import math
+import re
 
-from .components import BBox, LatLon, ImageSize
+from .components import BBox, LatLon, ImageSize, DateRange, Season
 
 EARTH_RADIUS = 6378.1 * 1000  # in metres
 
@@ -53,3 +56,31 @@ def conform_coordinates_to_spatial_resolution(
         center,
         dx * spatial_resolution, -dy * spatial_resolution)
     return BBox(top_left=top_left, bottom_right=bottom_right)
+
+
+def get_seasons(year_from: int,
+                year_to: int) -> List[DateRange]:
+    seasons = []
+    for year in range(year_from, year_to + 1):
+        feb_day = calendar.monthrange(year, 2)[1]
+        seasons.append(DateRange(
+            year=year,
+            season=Season.WINTER,
+            date_from=f"{year-1}-12-01",
+            date_to=f"{year}-02-{feb_day}"))
+        seasons.append(DateRange(
+            year=year,
+            season=Season.SPRING,
+            date_from=f"{year}-03-01",
+            date_to=f"{year}-05-31"))
+        seasons.append(DateRange(
+            year=year,
+            season=Season.SUMMER,
+            date_from=f"{year}-06-01",
+            date_to=f"{year}-08-31"))
+        seasons.append(DateRange(
+            year=year,
+            season=Season.FALL,
+            date_from=f"{year}-09-01",
+            date_to=f"{year}-11-30"))
+    return seasons

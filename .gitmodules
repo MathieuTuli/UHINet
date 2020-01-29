@@ -1,0 +1,3 @@
+[submodule "core/tensorflow-pix2pix"]
+	path = core/tensorflow-pix2pix
+	url = https://github.com/MathieuTuli/tensorflow-pix2pix.git
