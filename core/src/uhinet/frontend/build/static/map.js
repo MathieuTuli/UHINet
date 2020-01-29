@@ -11,6 +11,20 @@ var image_path;
 var colors = ['#B0AFAF', '#606060', '#1C1C1C','#32CD32'];
 var selectedColor;
 var colorButtons = {};
+var season;
+
+
+// Set current season
+function setSeason(){
+    if(document.getElementById('Spring').checked)
+        season = document.getElementById('Spring').value;
+    if(document.getElementById('Summer').checked)
+        season = document.getElementById('Summer').value;
+    if(document.getElementById('Autumn').checked)
+        season = document.getElementById('Autumn').value;
+    if(document.getElementById('Winter').checked)
+        season = document.getElementById('Winter').value;
+}
 
 
 function selectColor (color) {
@@ -87,6 +101,8 @@ function buildColorPalette () {
 
     selectColor(colors[0]);
 }
+
+
 // Drawing manager operations
 
 function clearSelection () {
@@ -113,6 +129,8 @@ function deleteSelectedShape () {
         selectedShape.setMap(null);
     }
 }
+
+
 // Send coordinates of the polygon and the viewport to the backend
 // and get an image from the backend
 $(function() {
@@ -127,14 +145,14 @@ $(function() {
     selectedShape.set('draggable', false);
 
     coords_overlay = coords_bound;
-    window.alert(coords_overlay);
     $.getJSON($SCRIPT_ROOT + '/send_coordinates', {
       coords_polygon: JSON.stringify(coords),
       coords_bound: JSON.stringify(coords_bound),
       polygon_color: JSON.stringify(selectedShape.fillColor),
       colors: JSON.stringify(colors),
+      season: JSON.stringify(season),
       height: JSON.stringify(selectedShape.height),
-        height: JSON.stringify(selectedShape.energy),
+      energy: JSON.stringify(selectedShape.energy),
     }, function(data) {
       image_path = '/static/' + data.image_name;
       coords = [];
@@ -154,6 +172,8 @@ function initMap () {
         center: new google.maps.LatLng(43.65, -79.4),
         zoomControl: true
     });
+
+    setSeason();
 
     // Function to create an overlay
     function createOverlay(){

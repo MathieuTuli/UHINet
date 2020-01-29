@@ -66,10 +66,24 @@ def main(args: APNamespace):
         coords_bound = ast.literal_eval(request.args.get('coords_bound'))
         colors = ast.literal_eval(request.args.get('colors'))
         polygon_color = ast.literal_eval(request.args.get('polygon_color'))
+        season = ast.literal_eval(request.args.get('season'))
 
         lst_coords = []
         for coord in coords_polygon:
             lst_coords.append(LatLon(lat=coord['lat'], lon=coord['lng']))
+
+        ''' Get Corresponding season '''
+        def getSeason(season):
+            if season == 'Spring':
+                return Season.SPRING
+            if season == 'Summer':
+                return Season.SUMMER
+            if season == 'Autumn':
+                return Season.FALL
+            if season == 'Winter':
+                return Season.WINTER
+
+        print(getSeason(season))
 
         ''' Get Corresponding Building Type '''
         def getBuildingType(polygon_color, colors):
@@ -113,7 +127,7 @@ def main(args: APNamespace):
         directory = Path('frontend/build/static').absolute()
         layers = backend.predict(
             polygon=polygon,
-            season=Season.WINTER,
+            season=getSeason(season),
             flask_static_dir=directory)
         image_name = layers[0].image
         coords_bound['north'] = layers[0].coordinates.top_left.lat
