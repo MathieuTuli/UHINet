@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import cv2
@@ -58,8 +58,11 @@ def alter_area(image: np.ndarray,
     return image
 
 
-def diff_images(first: np.ndarray, second: np.ndarray) -> np.ndarray:
-    return first
+def diff_images(reference: np.ndarray,
+                other: np.ndarray) -> Tuple[np.ndarray, float]:
+    diff = reference - other
+    comp = np.isclose(a=other, b=reference, rtol=0.1, atol=1e-08)
+    return (diff, np.sum(comp))
 
 
 def stitch(images: List[np.ndarray]) -> np.ndarray:
