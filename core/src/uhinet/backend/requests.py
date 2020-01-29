@@ -17,14 +17,18 @@ class Requests():
     def __init__(self,
                  instance_id: str,
                  winter_weights_file: Path,
-                 spring_weights_File: Path,
-                 summer_weights_File: Path,
-                 fall_weights_File: Path) -> None:
+                 spring_weights_file: Path,
+                 summer_weights_file: Path,
+                 fall_weights_file: Path) -> None:
         self.predictors = {
-            Season.WINTER: Predictor(),
-            Season.SPRING: Predictor(),
-            Season.SUMMER: Predictor(),
-            Season.FALL: Predictor()}
+            Season.WINTER: Predictor(weights=winter_weights_file,
+                                     input_shape=(256, 256, 3)),
+            Season.SPRING: Predictor(weights=spring_weights_file,
+                                     input_shape=(256, 256, 3)),
+            Season.SUMMER: Predictor(weights=summer_weights_file,
+                                     input_shape=(256, 256, 3)),
+            Season.FALL: Predictor(weights=fall_weights_file,
+                                   input_shape=(256, 256, 3))}
 
         self.accessor = SentinelHubAccessor(instance_id=instance_id)
 
@@ -60,8 +64,12 @@ class Requests():
         after_rgb = alter_area(image=before_rgb,
                                polygon=polygon,
                                season=season)
-        before_lst = self.predictor.predict(before_rgb)
-        after_lst = self.predictor.predict(after_rgb)
+        save_to = flask_static_dir / 'before_rgb.png'
+        save_pyplot_image(str(save_to), before_rgb)
+        before_lst = self.predictors[season].predict(save_to)
+        save_to = flask_static_dir / 'after_rgb.png'
+        save_pyplot_image(str(save_to), after_rgb)
+        after_lst = self.predictors[season].predict(save_to)
 
         diff = diff_images(reference=before_lst, other=after_lst)
 
