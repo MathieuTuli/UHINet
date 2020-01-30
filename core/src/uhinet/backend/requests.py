@@ -1,8 +1,8 @@
 from typing import Tuple
 from pathlib import Path
 
-import logging
 import matplotlib
+import logging
 
 from TFPix2Pix.predictor import Predictor
 from ..frontend.components import GISLayer, Polygon, Orientation, Season
@@ -39,7 +39,18 @@ class Requests():
                 polygon: Polygon,
                 season: Season,
                 flask_static_dir: Path) -> Tuple[GISLayer, GISLayer, GISLayer]:
-        vw = polygon.viewing_window
+        lat = 0
+        lon = 0
+        for coord in polygon.coordinates:
+            lat += coord.lat
+            lon += coord.lon
+        lat /= len(polygon.coordinates)
+        lon /= len(polygon.coordinates)
+        new_coords = conform_coordinates_to_spatial_resolution(
+            spatial_resolution=5,
+            image_size=ImageSize(width=512, height=512),
+            center=LatLon(lat=lat,
+                          lon=lon))
         images = []
         for layer in ['RGB', 'LST']:
             images.append(self.accessor.get_landsat_image(
@@ -47,13 +58,7 @@ class Requests():
                 date='latest',
                 image_size=ImageSize(width=512, height=512),
                 cloud_cov_perc=0.1,
-                bbox=conform_coordinates_to_spatial_resolution(
-                    spatial_resolution=5,
-                    image_size=ImageSize(width=512, height=512),
-                    bbox=BBox(top_left=LatLon(lat=vw.top_left.lat,
-                                              lon=vw.top_left.lon),
-                              bottom_right=LatLon(lat=vw.bottom_right.lat,
-                                                  lon=vw.bottom_right.lon)))))
+                bbox=new_coords))
         before_rgb, before_lst = images
         matplotlib.use('agg')
         if len(before_rgb) == 0:
@@ -71,15 +76,16 @@ class Requests():
         save_pyplot_image(str(save_to), after_rgb)
         after_lst = self.predictors[season].predict(save_to)
 
-        diff = diff_images(reference=before_lst, other=after_lst)
+        # TODO dtype from predictor create black images
+        diff, val = diff_images(reference=before_lst, other=after_lst)
 
         save_pyplot_image(str(flask_static_dir / 'before.png'), before_lst)
         save_pyplot_image(str(flask_static_dir / 'after.png'), after_lst)
         save_pyplot_image(str(flask_static_dir / 'diff.png'), diff)
         before_lst = GISLayer(image=Path('before.png'),
-                              coordinates=polygon.viewing_window)
+                              coordinates=new_coords)
         after_lst = GISLayer(image=Path('after.png'),
-                             coordinates=polygon.viewing_window)
+                             coordinates=new_coords)
         diff = GISLayer(image=Path('diff.png'),
-                        coordinates=polygon.viewing_window)
+                        coordinates=new_coords)
         return (before_lst, after_lst, diff)

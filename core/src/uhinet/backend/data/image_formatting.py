@@ -90,7 +90,7 @@ def diff_images(reference: np.ndarray,
     shape = error.shape
     error /= (shape[0] * shape[1])
     error = np.sum(error)
-    return (lum_img, error / 255 / 3)
+    return (lum_img.astype(np.uint8), error / 255 / 3)
     # img_plot = plt.imshow(lum_img)
 
     # # Choose a color palette
