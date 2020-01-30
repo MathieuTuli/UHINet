@@ -43,7 +43,7 @@ class Requests():
         images = []
         for layer in ['RGB', 'LST']:
             images.append(self.accessor.get_landsat_image(
-                layer='LST',
+                layer=layer,
                 date='latest',
                 image_size=ImageSize(width=512, height=512),
                 cloud_cov_perc=0.1,
