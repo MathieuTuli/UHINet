@@ -9,7 +9,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     url='https://github.com/mathieutuli/uhinet/backend',
-    python_requires='~=3.7',
+    python_requires='>=3.6',
     install_requires=[
     ],
     extras_require={
