@@ -70,9 +70,15 @@ def diff_images(reference: np.ndarray,
     # comp = np.isclose(a=other, b=reference, rtol=0.1, atol=1e-08)
     # return (diff, np.sum(comp))
     fig, ax = plt.subplots()
-    error_r = np.fabs(np.subtract(reference[:, :, 0], other[:, :, 0]))
-    error_g = np.fabs(np.subtract(reference[:, :, 1], other[:, :, 1]))
-    error_b = np.fabs(np.subtract(reference[:, :, 2], other[:, :, 2]))
+    error_r = np.fabs(np.subtract(
+        reference[:, :, 0].astype(np.int16),
+        other[:, :, 0].astype(np.int16))).astype(np.float16)
+    error_g = np.fabs(np.subtract(
+        reference[:, :, 1].astype(np.int16),
+        other[:, :, 1].astype(np.int16))).astype(np.float16)
+    error_b = np.fabs(np.subtract(
+        reference[:, :, 2].astype(np.int16),
+        other[:, :, 2].astype(np.int16))).astype(np.float16)
 
     # Calculate the maximum error for each pixel
     lum_img = np.maximum(np.maximum(error_r, error_g), error_b)
@@ -80,16 +86,20 @@ def diff_images(reference: np.ndarray,
     # Uncomment the next line to turn the colors upside-down
     lum_img = np.negative(lum_img)
 
-    return lum_img
-    img_plot = plt.imshow(lum_img)
+    error = error_r + error_b + error_b
+    shape = error.shape
+    error /= (shape[0] * shape[1])
+    error = np.sum(error)
+    return (lum_img, error / 255 / 3)
+    # img_plot = plt.imshow(lum_img)
 
-    # Choose a color palette
-    img_plot.set_cmap('jet')
-    # imgplot.set_cmap('Spectral')
+    # # Choose a color palette
+    # img_plot.set_cmap('jet')
+    # # imgplot.set_cmap('Spectral')
 
-    plt.colorbar()
-    plt.axis('off')
-    plt.show()
+    # plt.colorbar()
+    # plt.axis('off')
+    # plt.show()
 
 
 def stitch(images: List[np.ndarray]) -> np.ndarray:
