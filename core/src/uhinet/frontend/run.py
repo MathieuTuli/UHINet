@@ -56,17 +56,17 @@ def main(args: APNamespace):
         backend = Requests(
             instance_id=str(settings['sentinel_hub_key']),
             winter_weights_file=Path(
-                '/home/mat/work/U-of-T/capstone/uhinet/' +
-                'training/january-28/checkpoints'),
+                '/home/mat/work/U-of-T/capstone/uhinet/data/january-29/' +
+                'images-new/pix2pix-training/summer/checkpoints'),
             spring_weights_file=Path(
-                '/home/mat/work/U-of-T/capstone/uhinet/' +
-                'training/january-28/checkpoints'),
+                '/home/mat/work/U-of-T/capstone/uhinet/data/january-29/' +
+                'images-new/pix2pix-training/summer/checkpoints'),
             summer_weights_file=Path(
-                '/home/mat/work/U-of-T/capstone/uhinet/' +
-                'training/january-28/checkpoints'),
+                '/home/mat/work/U-of-T/capstone/uhinet/data/january-29/' +
+                'images-new/pix2pix-training/summer/checkpoints'),
             fall_weights_file=Path(
-                '/home/mat/work/U-of-T/capstone/uhinet/' +
-                'training/january-28/checkpoints',))
+                '/home/mat/work/U-of-T/capstone/uhinet/data/january-29/' +
+                'images-new/pix2pix-training/summer/checkpoints'))
         logging.debug(f"Frontend: url specified: {url}")
         index = Path('map.html')
         return render_template(str(index), key=url)
