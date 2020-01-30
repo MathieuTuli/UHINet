@@ -39,18 +39,18 @@ class Requests():
                 polygon: Polygon,
                 season: Season,
                 flask_static_dir: Path) -> Tuple[GISLayer, GISLayer, GISLayer]:
-        lat = 0
-        lon = 0
+        ceter_lat = 0
+        ceter_lon = 0
         for coord in polygon.coordinates:
-            lat += coord.lat
-            lon += coord.lon
-        lat /= len(polygon.coordinates)
-        lon /= len(polygon.coordinates)
+            ceter_lat += coord.lat
+            ceter_lon += coord.lon
+        ceter_lat /= len(polygon.coordinates)
+        ceter_lon /= len(polygon.coordinates)
         new_coords = conform_coordinates_to_spatial_resolution(
             spatial_resolution=5,
             image_size=ImageSize(width=512, height=512),
-            center=LatLon(lat=lat,
-                          lon=lon))
+            center=LatLon(lat=ceter_lat,
+                          lon=ceter_lon))
         images = []
         for layer in ['RGB', 'LST']:
             images.append(self.accessor.get_landsat_image(
