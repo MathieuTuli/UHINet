@@ -31,15 +31,6 @@
           <br>
           <input type="radio" name="Temporal Resolution" value="Winter" id="Winter" onclick="setSeason();"> Dec. - Feb.
           </div id='Temporal Resolution'>
-          <div id='UHI Indicator'>
-          <strong>UHI Indicator</strong>
-          <br>
-          <input type="radio" name = "UHI Indicator" value = "Daytime Temperature" Checked> Daytime Temperature
-          <br>
-          <input type="radio" name = "UHI Indicator" value = "Nighttime Temperature"> Nighttime Temperature
-          <br>
-          <input type="radio" name = "UHI Indicator" value = "Diurnal Temperature"> Diurnal Temperature
-        </div id='UHI Indicator'>
       </div id='UHI Setting'>
           <br>
       <div id='Map Setting'>
@@ -55,32 +46,24 @@
           </div id='UHI Comparison'>  
       </div id='Map Setting'>
       <br>
-      <nav id="navigation">
-        <div id='Generate Result'>
-          <strong><big>Generate Result</strong></big>
-          <br>
-        <input type="submit" value="Generate!">
-
-      </div id='Generate Result'>
-
+      <input class="buttons" id=send_coords_button type=button value="Send coordinates">
       <br>
-      </nav>
+      <br>
+      <input class="buttons" id=create_overlay type=button value="Create overlay">
+      <br>
+      <br>
+      <input class="buttons" onclick="deleteSelectedShape();" type=button value="Delete polygon">
+      <br>
+      <br>
+      <strong>Layer Opacity</strong>
+      <div id="slider">
+        <input class="bar" type="range" id="rangeinput" min="1" max="100" value="100" onchange="rangevalue.value=value"/>
+        <span class="highlight"></span>
+        <output id="rangevalue"></output>
+      </div>
     </div>
     
     <div class="col-md-9" id="cmap">
-      <div id="floating-panel">
-        <input class="col-md-2" onclick="deleteSelectedShape();" type=button value="Delete polygon">
-        <input class="col-md-2" id=remove_overlay type="button" value="Remove overlay">
-        <input class="col-md-2" id=show_overlay type="button" value="Show overlay">
-        <input class="col-md-2" id=create_overlay type=button value="Create overlay">
-        <input class="col-md-2" id=send_coords_button type=button value="Send coordinates">
-        <div id="slider">
-          <input class="bar" type="range" id="rangeinput" min="1" max="100" value="50" onchange="rangevalue.value=value"/>
-          <span class="highlight"></span>
-          <output id="rangevalue"></output>
-        </div>
-      </div>
-
       <div class="row">
         <div class="col-md-3">
           <div id="color-palette1"></div>
@@ -90,11 +73,11 @@
         </div>
         <div class="col-md-9">
           <div class="block">
-            <label>Building height</label>
+            <label>Height</label>
             <input id="height" value="Height (m)" type=number>
           </div>
           <div class="block">
-          <label>Building energy use</label>
+          <label>Energy use</label>
             <input id="energy" value="Energy (kWh)" type=number>
           </div>          
         </div>

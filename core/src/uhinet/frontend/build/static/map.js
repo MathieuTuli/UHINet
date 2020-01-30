@@ -33,10 +33,6 @@ function selectColor (color) {
         colorButtons[currColor].style.border = currColor == color ? '2px solid #789' : '2px solid #fff';
     }
 
-    var rectangleOptions = drawingManager.get('rectangleOptions');
-    rectangleOptions.fillColor = color;
-    drawingManager.set('rectangleOptions', rectangleOptions);
-
     var polygonOptions = drawingManager.get('polygonOptions');
     polygonOptions.fillColor = color;
     drawingManager.set('polygonOptions', polygonOptions);
@@ -151,7 +147,7 @@ $(function() {
       colors: JSON.stringify(colors),
       season: JSON.stringify(season),
       height: JSON.stringify(selectedShape.height),
-      energy: JSON.stringify(selectedShape.energy),
+      energy: JSON.stringify(selectedShape.width),
     }, function(data) {
       image_path.push(('/static/' + data.image_names[0]));
       image_path.push(('/static/' + data.image_names[1]));
@@ -211,8 +207,6 @@ function initMap () {
     var button_createOverlay = document.getElementById("create_overlay");
     button_createOverlay.addEventListener("click", createOverlay);
 
-
-    // Function to show the created overlay
     function showOverlay(){
       if(overlay.length < 1){
         window.alert("Please create a overlay first");
@@ -220,16 +214,6 @@ function initMap () {
       }
       overlay[overlay_index].setMap(map);
     }
-    var button_addOverlay = document.getElementById("show_overlay");
-    button_addOverlay.addEventListener("click", showOverlay);
-
-
-    // Function to remove the overlay from the map
-    function removeOverlay(){
-      overlay[overlay_index].setMap(null);
-    }
-    var button_removeOverlay = document.getElementById("remove_overlay");
-    button_removeOverlay.addEventListener("click", removeOverlay);
 
     var Options = {
         strokeWeight: 0,
@@ -257,8 +241,8 @@ function initMap () {
 
     function setEnergy(){
         if (selectedShape){
-            selectedShape.energy = document.getElementById("energy").value;
-            console.log(selectedShape.energy);
+            selectedShape.width = document.getElementById("energy").value;
+            console.log(selectedShape.width);
         }
     }
 
@@ -282,9 +266,8 @@ function initMap () {
         drawingControl: true,
         drawingControlOptions: {
             position: google.maps.ControlPosition.TOP_CENTER,
-            drawingModes: ['polygon','rectangle']
+            drawingModes: ['polygon']
         },
-        rectangleOptions: Options,
         polygonOptions: Options,
         map: map
     });
@@ -296,7 +279,7 @@ function initMap () {
         array = newShape.getPath();
         coords = [];
         newShape.height = document.getElementById("height").value;
-        newShape.energy = document.getElementById("energy").value;
+        newShape.width = document.getElementById("energy").value;
         for(var i = 0; i < array.length; i++)
             coords.push(array.getAt(i));
         // window.alert(coords);
@@ -305,7 +288,7 @@ function initMap () {
             array = newShape.getPath();
             coords = [];
             document.getElementById("height").value = newShape.height;
-            document.getElementById("energy").value = newShape.energy;
+            document.getElementById("energy").value = newShape.width;
             for(var i = 0; i < array.length; i++)
                 coords.push(array.getAt(i));
             // window.alert(coords);

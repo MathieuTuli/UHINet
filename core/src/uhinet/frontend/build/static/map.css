@@ -45,3 +45,8 @@ label {
     float: left;
     cursor: pointer;
 }
+
+.buttons{
+    height:50px;
+    width:150px;
+}
