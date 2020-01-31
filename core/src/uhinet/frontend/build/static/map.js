@@ -152,11 +152,12 @@ $(function() {
       height: JSON.stringify(selectedShape.height),
       energy: JSON.stringify(selectedShape.width),
     }, function(data) {
+      image_path = [];
       image_path.push(('/static/' + data.image_names[0]));
       image_path.push(('/static/' + data.image_names[1]));
       image_path.push(('/static/' + data.image_names[2]));
       coords = [];
-      coords_overlay = data.coords_bound;
+      // coords_overlay = data.coords_bound;
       console.log(coords_overlay);
       document.getElementById("loading_icon").style.display="none";
     });
@@ -202,6 +203,11 @@ function initMap () {
         window.alert("Please send coordinates first to get the overlay")
         return
       }
+      if(overlay.length >= 1){
+        for(var i = 0; i < 3; i = i + 1)
+          overlay[i].setMap(null);
+      }
+      overlay = [];
       for(var i = 0; i < 3; i = i + 1){
           overlay.push(new google.maps.GroundOverlay(image_path[i], coords_overlay));
           var opacity = (document.getElementById("rangeinput").value) / 100.0;
