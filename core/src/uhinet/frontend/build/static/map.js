@@ -134,6 +134,9 @@ $(function() {
       window.alert('Please creat a polygon first.');
       return;
     }
+
+    document.getElementById("loading_icon").style.display="block";
+
     selectedShape.set('strokeColor', '#000000');
     selectedShape.set('strokeWeight', 2);
     selectedShape.set('editable', false);
@@ -155,6 +158,7 @@ $(function() {
       coords = [];
       coords_overlay = data.coords_bound;
       console.log(coords_overlay);
+      document.getElementById("loading_icon").style.display="none";
     });
     return false;
   });
@@ -171,6 +175,7 @@ function initMap () {
     });
 
     setSeason();
+    document.getElementById("loading_icon").style.display="none";
 
 
     // Set overlay index

@@ -10,7 +10,7 @@
     </script>
     <script src="{{ url_for('static', filename='map.js') }}"></script>
     <script type="text/javascript" src="{{ key }}" async defer></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='map.css') }}">
   </head>
   <body>
@@ -71,7 +71,7 @@
           <div id="color-palette3"></div>
           <div id="color-palette4"></div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-6">
           <div class="block">
             <label>Height</label>
             <input id="height" value="Height (m)" type=number>
@@ -80,6 +80,9 @@
           <label>Energy use</label>
             <input id="energy" value="Energy (kWh)" type=number>
           </div>          
+        </div>
+        <div id="loading_icon" class="col-md-3">
+          <div class="spinner-border"></div>
         </div>
       </div>
 
