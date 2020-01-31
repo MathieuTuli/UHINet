@@ -79,9 +79,9 @@ class Requests():
         # TODO dtype from predictor create black images
         diff, val = diff_images(reference=before_lst, other=after_lst)
 
-        save_pyplot_image(str(flask_static_dir / 'before.png'), before_lst)
-        save_pyplot_image(str(flask_static_dir / 'after.png'), after_lst)
-        save_pyplot_image(str(flask_static_dir / 'diff.png'), diff)
+        # save_pyplot_image(str(flask_static_dir / 'before.png'), before_lst)
+        # save_pyplot_image(str(flask_static_dir / 'after.png'), after_lst)
+        # save_pyplot_image(str(flask_static_dir / 'diff.png'), diff)
         before_lst = GISLayer(image=Path('before.png'),
                               coordinates=new_coords)
         after_lst = GISLayer(image=Path('after.png'),
