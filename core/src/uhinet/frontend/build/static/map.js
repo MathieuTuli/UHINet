@@ -157,7 +157,7 @@ $(function() {
       image_path.push(('/static/' + data.image_names[1]));
       image_path.push(('/static/' + data.image_names[2]));
       coords = [];
-      // coords_overlay = data.coords_bound;
+      coords_overlay = data.coords_bound;
       console.log(coords_overlay);
       document.getElementById("loading_icon").style.display="none";
     });
