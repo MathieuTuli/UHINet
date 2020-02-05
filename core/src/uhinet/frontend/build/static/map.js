@@ -157,7 +157,7 @@ $(function() {
       image_path.push(('/static/' + data.image_names[1]));
       image_path.push(('/static/' + data.image_names[2]));
       coords = [];
-      // coords_overlay = data.coords_bound;
+      coords_overlay = data.coords_bound;
       console.log(coords_overlay);
       document.getElementById("loading_icon").style.display="none";
     });
@@ -181,7 +181,6 @@ function initMap () {
 
     // Set overlay index
     function setOverlayIndex(){
-        console.log('uhuh');
         if(overlay.length >= 1)
             removeOverlay();
         if(document.getElementById('Before').checked)
@@ -216,12 +215,6 @@ function initMap () {
       }
       showOverlay();
     }
-
-    function removeOverlay(){    
-        overlay[overlay_index].setMap(null);
-    }
-
-
     var button_createOverlay = document.getElementById("create_overlay");
     button_createOverlay.addEventListener("click", createOverlay);
 
