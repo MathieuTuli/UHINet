@@ -160,6 +160,25 @@ $(function() {
       coords_overlay = data.coords_bound;
       console.log(coords_overlay);
       document.getElementById("loading_icon").style.display="none";
+      if(coords_overlay == null){
+        window.alert("Please send coordinates first to get the overlay")
+        return
+      }
+      if(overlay.length >= 1){
+        for(var i = 0; i < 3; i = i + 1)
+          overlay[i].setMap(null);
+      }
+      overlay = [];
+      for(var i = 0; i < 3; i = i + 1){
+          overlay.push(new google.maps.GroundOverlay(image_path[i], coords_overlay));
+          var opacity = (document.getElementById("rangeinput").value) / 100.0;
+          overlay[i].setOpacity(opacity);
+      }
+      if(overlay.length < 1){
+        window.alert("Please create a overlay first");
+        return;
+      }
+      overlay[overlay_index].setMap(map);      
     });
     return false;
   });
@@ -197,26 +216,9 @@ function initMap () {
     document.getElementById("Difference").addEventListener("click", setOverlayIndex);
     setOverlayIndex();
 
-    // Function to create an overlay
-    function createOverlay(){
-      if(coords_overlay == null){
-        window.alert("Please send coordinates first to get the overlay")
-        return
-      }
-      if(overlay.length >= 1){
-        for(var i = 0; i < 3; i = i + 1)
-          overlay[i].setMap(null);
-      }
-      overlay = [];
-      for(var i = 0; i < 3; i = i + 1){
-          overlay.push(new google.maps.GroundOverlay(image_path[i], coords_overlay));
-          var opacity = (document.getElementById("rangeinput").value) / 100.0;
-          overlay[i].setOpacity(opacity);
-      }
-      showOverlay();
+    function removeOverlay(){
+      overlay[overlay_index].setMap(null);
     }
-    var button_createOverlay = document.getElementById("create_overlay");
-    button_createOverlay.addEventListener("click", createOverlay);
 
     function showOverlay(){
       if(overlay.length < 1){
