@@ -53,20 +53,14 @@ def main(args: APNamespace):
             f"key={settings['google_maps_key']}" + \
             "&libraries=drawing&callback=initMap"
         global backend
+        weights_path = Path(
+            '/home/mat/work/U-of-T/capstone/uhinet/data/feb-12/5-metres-v2/pix2pix-training/summer/checkpoint/')
         backend = Requests(
             instance_id=str(settings['sentinel_hub_key']),
-            winter_weights_file=Path(
-                '/home/mat/work/U-of-T/capstone/uhinet/data/january-29/' +
-                'images-new/pix2pix-training/summer/checkpoints'),
-            spring_weights_file=Path(
-                '/home/mat/work/U-of-T/capstone/uhinet/data/january-29/' +
-                'images-new/pix2pix-training/summer/checkpoints'),
-            summer_weights_file=Path(
-                '/home/mat/work/U-of-T/capstone/uhinet/data/january-29/' +
-                'images-new/pix2pix-training/summer/checkpoints'),
-            fall_weights_file=Path(
-                '/home/mat/work/U-of-T/capstone/uhinet/data/january-29/' +
-                'images-new/pix2pix-training/summer/checkpoints'))
+            winter_weights_file=weights_path,
+            spring_weights_file=weights_path,
+            summer_weights_file=weights_path,
+            fall_weights_file=weights_path)
         logging.debug(f"Frontend: url specified: {url}")
         index = Path('map.html')
         return render_template(str(index), key=url)
