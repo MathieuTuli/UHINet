@@ -49,15 +49,12 @@
       <input class="buttons" id=send_coords_button type=button value="Send coordinates">
       <br>
       <br>
-      <input class="buttons" id=create_overlay type=button value="Create overlay">
-      <br>
-      <br>
       <input class="buttons" onclick="deleteSelectedShape();" type=button value="Delete polygon">
       <br>
       <br>
       <strong>Layer Opacity</strong>
       <div id="slider">
-        <input class="bar" type="range" id="rangeinput" min="1" max="100" value="100" onchange="rangevalue.value=value"/>
+        <input class="bar" type="range" id="rangeinput" min="0" max="100" value="100" onchange="rangevalue.value=value"/>
         <span class="highlight"></span>
         <output id="rangevalue"></output>
       </div>
@@ -73,12 +70,12 @@
         </div>
         <div class="col-md-6">
           <div class="block">
-            <label>Height</label>
-            <input id="height" value="Height (m)" type=number>
+            <label>Height (m)</label>
+            <input id="height" value="Height (m)" type=number value="0">
           </div>
           <div class="block">
-          <label>Energy use</label>
-            <input id="energy" value="Energy (kWh)" type=number>
+          <label>Energy use (kJ/m^2)</label>
+            <input id="energy" value="Energy (kWh)" type=number value="0">
           </div>          
         </div>
         <div id="loading_icon" class="col-md-3">
