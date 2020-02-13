@@ -17,7 +17,7 @@ if (option==2) {
 let viz = ColorGradientVisualizer.createRedTemperature(minC, maxC);
 function setup (dss) {
 	setInputComponents([dss.B03,dss.B04,dss.B05,dss.B10,dss.B11]);
-	setOutputComponentCount(3);
+	setOutputComponentCount(3);// 1
 }
 function LSEcalc(NDVI,Pv) {
 	var LSE;
@@ -68,5 +68,6 @@ function evaluatePixel(samples) {
 		: (option==1)
 			? LSTmax
 			: LSTstd;
+        return [(outLST - minC) / (maxC - minC), 0, 0];
 	return viz.process(outLST);
 }

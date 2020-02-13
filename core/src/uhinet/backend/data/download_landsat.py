@@ -87,71 +87,12 @@ def download_landsat_from_file(
                         f" {layer}. Got {len(imgs)} images")
                     count = 0
                     for img in imgs:
-                        img = square_resize(img, 512, cv2.INTER_AREA)
+                        img = square_resize(img, image_size[0], cv2.INTER_AREA)
                         save_pyplot_image(
                             save_dir /
                             f"{count}_{layer}.png",
-                            img)
+                            img, cmap='Greys')
                         count += 1
-        # TODO try the range feature
-        # while year <= year_to:
-        #     save_dir = save_to / f"{center['name']}/{year}"
-        #     init_dirs(save_dir)
-        #     if next_center:
-        #         break
-        #     for month in range(1, 13):  # Month is always 1..12
-        #         if month < month_from:
-        #             continue
-        #         if next_center:
-        #             break
-        #         for day in range(1, monthrange(year, month)[1] + 1):
-        #             if year == year_from \
-        #                     and day < day_from:
-        #                 continue
-        #             if year == year_to and month == month_to and day > day_to:
-        #                 next_center = True
-        #                 break
-        #             skip_rest = False
-        #             for layer in layers:
-        #                 if skip_rest:
-        #                     continue
-        #                 logging.debug(
-        #                     "download_landsat: Getting for " +
-        #                     f"{center['name']} at " +
-        #                     f"{year}-{str(month).zfill(2)}-" +
-        #                     f"{str(day).zfill(2)} and {layer}")
-        #                 imgs = sentinelhub_accessor.get_landsat_image(
-        #                     layer=layer,
-        #                     date=f"{year}-{str(month).zfill(2)}-" +
-        #                     f"{str(day).zfill(2)}",
-        #                     image_size=image_size,
-        #                     cloud_cov_perc=cloud_cov_perc,
-        #                     bbox=conform_coordinates_to_spatial_resolution(
-        #                         spatial_resolution=spatial_resolution,
-        #                         image_size=image_size,
-        #                         center=location))
-        #                 if imgs is not None:
-        #                     logging.info(
-        #                         "SentinelHubAccessor: URL retrieved " +
-        #                         f"for {center['name']} at " +
-        #                         f"{year}-{str(month).zfill(2)}-" +
-        #                         f"{str(day).zfill(2)} and {layer}")
-        #                     count = 0
-        #                     for img in imgs:
-        #                         img = square_resize(img, 512, cv2.INTER_AREA)
-        #                         save_pyplot_image(
-        #                             save_dir /
-        #                             f"{month}_{day}_{layer}_img_{count}.png",
-        #                             img)
-        #                         count += 1
-        #                 else:
-        #                     skip_rest = True
-        #                     logging.info(
-        #                         "SentinelHubAccessor: No URL retrieved " +
-        #                         f"for {location['name']} at " +
-        #                         f"{year}-{str(month).zfill(2)}-" +
-        #                         f"{str(day).zfill(2)} and {layer}")
-        #    year += 1
     return True
 
 
