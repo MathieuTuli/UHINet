@@ -267,7 +267,9 @@ function initMap () {
 
     var energy_input = document.getElementById("height")
     energy_input.addEventListener("blur", setEnergy);
-
+            
+    document.getElementById("height").value = 0;
+    document.getElementById("energy").value = 0;
 
 
     // Keeps track of the coordinates of the current viewport
