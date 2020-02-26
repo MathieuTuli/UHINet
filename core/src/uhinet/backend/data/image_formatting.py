@@ -93,7 +93,7 @@ def diff_images(reference: np.ndarray,
     lum_img = np.maximum(np.maximum(int_error_r, int_error_g), int_error_b)
 
     # Uncomment the next line to turn the colors upside-down
-    lum_img = np.negative(lum_img)
+    # lum_img = np.negative(lum_img)
 
     error = error_r + error_g + error_b
     shape = error.shape
