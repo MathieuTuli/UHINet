@@ -3,12 +3,13 @@ from pathlib import Path
 
 import matplotlib
 import logging
+import cv2
 
 from TFPix2Pix.predictor import Predictor
 from ..frontend.components import GISLayer, Polygon, Orientation, Season
 from .data.helpers import conform_coordinates_to_spatial_resolution
 from .data.image_formatting import alter_area, diff_images, \
-    concatenate_horizontal
+    concatenate_horizontal, square_resize
 from .data.components import BBox, ImageSize, LatLon
 from .data.sentinel_hub import SentinelHubAccessor
 from .file_manager import save_pyplot_image
@@ -62,27 +63,32 @@ class Requests():
                 bbox=new_coords))
         before_rgb, before_lst = images
         matplotlib.use('agg')
+        # TODO fix this
         if len(before_rgb) == 0:
             logging.critical(
                 'Requests: no RGB image found for those coordinates')
             raise
-        before_rgb = before_rgb[0]
+        before_rgb = square_resize(before_rgb[0], 512, cv2.INTER_AREA)
+        before_lst = square_resize(before_lst[0], 512, cv2.INTER_AREA)
         after_rgb = alter_area(image=before_rgb,
                                polygon=polygon,
                                season=season)
-        before_rgb = concatenate_horizontal([before_rgb, before_rgb])
-        save_to = flask_static_dir / 'before_rgb.png'
-        save_pyplot_image(str(save_to), before_rgb)
-        before_lst = self.predictors[season].predict(save_to)
+        test_image = concatenate_horizontal([before_rgb, before_lst])
+        save_to = flask_static_dir / 'test_image.png'
+        save_pyplot_image(str(save_to), test_image)
+        before_predicted_lst = self.predictors[season].predict(save_to)
         save_to = flask_static_dir / 'after_rgb.png'
         save_pyplot_image(str(save_to), after_rgb)
-        after_lst = self.predictors[season].predict(save_to)
+        after_predicted_lst = self.predictors[season].predict(save_to)
 
         # TODO dtype from predictor create black images
-        diff, val = diff_images(reference=before_lst, other=after_lst)
+        diff, val = diff_images(
+            reference=before_predicted_lst, other=after_predicted_lst)
 
-        save_pyplot_image(str(flask_static_dir / 'before.png'), before_lst)
-        save_pyplot_image(str(flask_static_dir / 'after.png'), after_lst)
+        save_pyplot_image(str(flask_static_dir / 'before.png'),
+                          before_predicted_lst)
+        save_pyplot_image(str(flask_static_dir / 'after.png'),
+                          after_predicted_lst)
         save_pyplot_image(str(flask_static_dir / 'diff.png'), diff,
                           cmap='coolwarm')
         before_lst = GISLayer(image=Path('before.png'),

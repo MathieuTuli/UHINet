@@ -54,7 +54,10 @@ def main(args: APNamespace):
             "&libraries=drawing&callback=initMap"
         global backend
         weights_path = Path(
-            '/home/mat/work/U-of-T/capstone/uhinet/data/feb-12/5-metres-v2/pix2pix-training/summer/checkpoint/')
+            '/home/mat/work/U-of-T/capstone/uhinet/data/feb-12/' +
+            '5-metres-80-range/pix2pix-training/summer/checkpoint')
+        # weights_path = Path(
+        #     '/home/mat/work/U-of-T/capstone/uhinet/data/feb-12/5-metres-v2/pix2pix-training/summer/checkpoint/')
         backend = Requests(
             instance_id=str(settings['sentinel_hub_key']),
             winter_weights_file=weights_path,
