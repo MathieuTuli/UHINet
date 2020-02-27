@@ -14,78 +14,124 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='map.css') }}">
   </head>
   <body>
-  <div>
-  <hr>
-  <div class="row">
-      <div class="col-md-2" id = "selection">
-        <div id='UHI Setting'>
-            <strong><big>UHI Setting</strong></big>
-          <div id='Temporal Resolution'>
-          <strong>Temporay Resolution</strong>
-          <br>
-          <input type="radio" name="Temporal Resolution" value="Spring" id="Spring" Checked onclick="setSeason();"> Mar. - May
-          <br>
-          <input type="radio" name="Temporal Resolution" value="Summer" id="Summer" onclick="setSeason();"> Jun. - Aug.
-          <br>
-          <input type="radio" name="Temporal Resolution" value="Autumn" id="Autumn" onclick="setSeason();"> Sep. - Nov.
-          <br>
-          <input type="radio" name="Temporal Resolution" value="Winter" id="Winter" onclick="setSeason();"> Dec. - Feb.
-          </div id='Temporal Resolution'>
-      </div id='UHI Setting'>
-          <br>
-      <div id='Map Setting'>
-            <strong><big>Map Setting</strong></big>
-          <div id='UHI Comparison'>   
-          <strong>UHI Comparison</strong>
-          <br>
-          <input type="radio" name="UHI Comparison" value="Default" id="Before" Checked> Default
-          <br>
-          <input type="radio" name="UHI Comparison" value="Prediction" id="After"> Prediction
-          <br>
-          <input type="radio" name="UHI Comparison" value="Difference" id="Difference"> Difference
-          </div id='UHI Comparison'>  
-      </div id='Map Setting'>
-      <br>
-      <input class="buttons" id=send_coords_button type=button value="Generate Prediction">
-      <br>
-      <br>
-      <input class="buttons" onclick="deleteSelectedShape();" type=button value="Delete polygon">
-      <br>
-      <br>
-      <strong>Layer Opacity</strong>
-      <div id="slider">
-        <input class="bar" type="range" id="rangeinput" min="0" max="100" value="100" onchange="rangevalue.value=value"/>
-        <span class="highlight"></span>
-        <output id="rangevalue"></output>
-      </div>
-    </div>
-    
-    <div class="col-md-9" id="cmap">
-      <div class="row">
-        <div class="col-md-3">
-          <div id="color-palette1"></div>
-          <div id="color-palette2"></div>
-          <div id="color-palette3"></div>
-          <div id="color-palette4"></div>
-        </div>
-        <div class="col-md-6">
-          <div class="block">
-            <label>Height (m)</label>
-            <input id="height" value="Height (m)" type=number value="0">
-          </div>
-          <div class="block">
-          <label>Energy use (kJ/m^2)</label>
-            <input id="energy" value="Energy (kWh)" type=number value="0">
-          </div>          
-        </div>
-        <div id="loading_icon" class="col-md-3">
-          <div class="spinner-border"></div>
-          <div>Loading...</div>
-        </div>
-      </div>
 
-      <div id="map"></div>
+    <header>
+        <nav id="header-nav" class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                        <h1>UHINet</h1>
+                        <p>
+                            <span class="glyphicon glyphicon-tree-deciduous"></span>
+                            <span>MMCanada Certificated</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <div id="main-content" class="container col-md-12">
+        
+          <br>
+          <div class="row">
+              <div class="col-md-2" id = "selection">
+                <div id='UHI Setting'>
+                    <strong><big>Season Setting</strong></big>
+                    <div id='Temporal Resolution'>
+                    <input type="radio" name="Temporal Resolution" value="Spring" id="Spring" Checked onclick="setSeason();"> Mar. - May
+                    <br>
+                    <input type="radio" name="Temporal Resolution" value="Summer" id="Summer" onclick="setSeason();"> Jun. - Aug.
+                    <br>
+                    <input type="radio" name="Temporal Resolution" value="Autumn" id="Autumn" onclick="setSeason();"> Sep. - Nov.
+                    <br>
+                    <input type="radio" name="Temporal Resolution" value="Winter" id="Winter" onclick="setSeason();"> Dec. - Feb.
+                    </div id='Temporal Resolution'>
+                </div id='UHI Setting'>
+                <hr>
+                <div id='Map Setting'>
+                    <strong><big>Overlay Setting</strong></big>
+                    <div id='UHI Comparison'>   
+                    <input type="radio" name="UHI Comparison" value="Default" id="Before" Checked> Before Change
+                    <br>
+                    <input type="radio" name="UHI Comparison" value="Prediction" id="After"> After Change
+                    <br>
+                    <input type="radio" name="UHI Comparison" value="Difference" id="Difference"> Difference
+                    </div id='UHI Comparison'>  
+                </div id='Map Setting'>
+                <hr>
+                <input class="buttons" id=send_coords_button type=button value="Generate Prediction">
+                <hr>
+                <input class="buttons" onclick="deleteSelectedShape();" type=button value="Delete polygon">
+                <hr>
+                <strong>Layer Opacity</strong>
+                <div id="slider">
+                  <input class="bar" type="range" id="rangeinput" min="0" max="100" value="100" onchange="rangevalue.value=value"/>
+                  <span class="highlight"></span>
+                  <output id="rangevalue"></output>
+                </div>
+              </div>
+
+              <div class="col-md-9" id="cmap">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div id="color-palette1"></div>
+                      <div id="color-palette2"></div>
+                    </div>
+                    <div class="col-md-2">
+                      <div id="color-palette3"></div>
+                      <div id="color-palette4"></div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="block">
+                        <div>Height (m)</div>
+                        <input id="height" value="Height (m)" type=number value="0">
+                      </div>         
+                    </div>
+                    <div class="col-md-2">
+                      <div class="block">
+                        <div>Energy use (kJ/m^2)</div>
+                        <input id="energy" value="Energy (kWh)" type=number value="0">
+                      </div>          
+                    </div>
+                    <div id="loading_icon" class="col-md-1">
+                      <div class="spinner-border"></div>
+                      <div>Loading...</div>
+                    </div>
+                  </div>
+                  <br>
+                  <div id="map"></div>
+              </div>
+          </div>
+
+
     </div>
-  </div>
+
+
+    <footer class="panel-footer">
+        <div class="container">
+            <div class="row">
+                <section id="contacts" class="col-sm-4">
+                    <span>Contacts:</span><br>
+                    Mott MacDonald Canada: ..<br>
+                    University of Toronto: ..
+                    <hr class="visible-xs">
+                </section>
+                <section id="address" class="col-sm-4">
+                    <span>Address:</span><br>
+                    Toronto, ON
+                    <hr class="visible-xs">
+                </section>
+                <section id="instructions" class="col-sm-4">
+                    <span>Instructions:</span><br>
+                    <hr class="visible-xs">
+                </section>
+            </div>
+            <div class="text-center">&copy; Copyright ... 2020</div>
+        </div>
+    </footer>
+
+
   </body>
 </html>

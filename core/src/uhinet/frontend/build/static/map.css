@@ -48,5 +48,131 @@ label {
 
 .buttons{
     height:50px;
-    width:165px;
+    width:175px;
 }
+
+
+body {
+  font-size: 16px;
+  color: #3A3A3A;
+  background: linear-gradient(to right bottom, #DADADA, #F0F8FF);
+  font-family: Verdana, sans-serif;
+}
+
+/** HEADER **/
+#header-nav {
+  background-color: #669999;
+  border-radius: 0;
+  border: 0;
+}
+.navbar-brand {
+  padding-top: 25px;
+}
+
+.navbar-brand  h1 {
+  color: #ccffff;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.navbar-brand a:hover, .navbar-brand a:focus {
+  text-decoration: none;
+}
+
+.navbar-brand p {
+  color : #ccffff;
+  font-size: .8em;
+  margin-top: 15px;
+}
+
+.navbar-brand p span {
+  vertical-align: middle;
+}
+
+.navbar-header button.navbar-toggle, .navbar-header .icon-bar {
+  border: 1px solid #6F6F6F;
+}
+.navbar-header button.navbar-toggle {
+  clear: both;
+}
+/** End Header **/
+
+
+/** Footer **/
+.panel-footer {
+  margin-top: 30px;
+  padding-top: 35px;
+  padding-bottom: 30px;
+  background-color: #333;
+  border-top: 0;
+}
+.panel-footer div.row {
+  margin-bottom: 35px;
+  color: #CCC;
+  line-height: 1.5
+}
+.panel-footer div.text-center {
+  color: #CCC;
+}
+#contacts > span, #address > span, #instructions > span {
+  font-size: 1.3em;
+}
+#address p {
+  color: #DCDD8F;
+  font-size: .8em;
+  line-height: 1.8;
+}
+#testimonials {
+  font-family: Verdana, sans-serif;
+}
+#testimonials p:nth-child(2) {
+  margin-top: 25px;
+}
+/** End Footer **/
+
+
+/** Staff **/
+#main-content > div {
+  padding-top: 10px;
+  margin-bottom: 80px;
+  line-height: 1.8em;
+  height: 700px
+}
+.menu-item-tile {
+  margin-bottom: 35px;
+  font-size: 1.1em;
+}
+.menu-item-tile hr {
+  width: 80%;
+}
+.menu-item-photo {
+  position: relative;
+  border: 2px solid #555;
+  overflow: hidden;
+  padding: 0;
+  margin-right: -15px;
+  margin-left: auto;
+  margin-bottom: 20px;
+  max-width: 250px;
+}
+.menu-item-photo div {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 80px;
+  background-color: #000;
+  text-align: center;
+}
+.menu-item-descreption {
+  padding-right: 30px;
+}
+h3.menu-item-title {
+  margin: 0 0 30px;
+}
+.menu-item-details {
+  font-style: italic;
+}
+/** End Staff **/
