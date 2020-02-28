@@ -1,6 +1,7 @@
 from typing import Tuple
 from pathlib import Path
 
+import tensorflow as tf
 import matplotlib
 import logging
 import cv2
@@ -68,18 +69,30 @@ class Requests():
             logging.critical(
                 'Requests: no RGB image found for those coordinates')
             raise
-        before_rgb = square_resize(before_rgb[0], 512, cv2.INTER_AREA)
-        before_lst = square_resize(before_lst[0], 512, cv2.INTER_AREA)
+        before_rgb = tf.expand_dims((tf.image.resize(
+            images=tf.convert_to_tensor(
+                value=square_resize(before_rgb[0], 512, cv2.INTER_AREA),
+                dtype=tf.float32),
+            size=[256, 256],
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
+            axis=0)
+        before_lst = tf.expand_dims((tf.image.resize(
+            images=tf.convert_to_tensor(
+                value=square_resize(before_lst[0], 512, cv2.INTER_AREA),
+                dtype=tf.float32),
+            size=[256, 256],
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
+            axis=0)
         after_rgb = alter_area(image=before_rgb,
                                polygon=polygon,
                                season=season)
-        test_image = concatenate_horizontal([before_rgb, before_lst])
-        save_to = flask_static_dir / 'test_image.png'
-        save_pyplot_image(str(save_to), test_image)
-        before_predicted_lst = self.predictors[season].predict(save_to)
-        save_to = flask_static_dir / 'after_rgb.png'
-        save_pyplot_image(str(save_to), after_rgb)
-        after_predicted_lst = self.predictors[season].predict(save_to)
+        # test_image = concatenate_horizontal([before_rgb, before_lst])
+        # save_to = flask_static_dir / 'test_image.png'
+        # save_pyplot_image(str(save_to), test_image)
+        before_predicted_lst = self.predictors[season].predict(before_rgb)
+        # save_to = flask_static_dir / 'after_rgb.png'
+        # save_pyplot_image(str(save_to), after_rgb)
+        after_predicted_lst = self.predictors[season].predict(after_rgb)
 
         # TODO dtype from predictor create black images
         diff, val = diff_images(
