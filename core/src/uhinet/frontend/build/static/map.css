@@ -77,7 +77,7 @@ label {
 body {
   font-size: 16px;
   color: #3A3A3A;
-  background: linear-gradient(to right bottom, #DADADA, #F0F8FF);
+  background: linear-gradient(to bottom, #DADADA, #6699cc);
   font-family: Verdana, sans-serif;
 }
 
@@ -274,4 +274,5 @@ h3.menu-item-title {
 .option-input.radio::after {
   border-radius: 50%;
 }
+
 
