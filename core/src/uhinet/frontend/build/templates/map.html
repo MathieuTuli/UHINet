@@ -83,17 +83,21 @@
                       <div id="color-palette3"></div>
                       <div id="color-palette4"></div>
                     </div>
-                    <div class="col-md-2">
-                      <div class="block">
-                        <div>Height (m)</div>
-                        <input id="height" value="Height (m)" type=number value="0">
-                      </div>         
+                    <div class="col-md-3">
+                      <div class="block input-group flex-nowrap">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="addon-wrapping">Height (m)</span>
+                        </div>
+                        <input id="height" type="number" class="form-control" placeholder="0" value="0" aria-describedby="addon-wrapping">
+                      </div>       
                     </div>
-                    <div class="col-md-2">
-                      <div class="block">
-                        <div>Energy use (kJ/m^2)</div>
-                        <input id="energy" value="Energy (kWh)" type=number value="0">
-                      </div>          
+                    <div class="col-md-3">
+                      <div class="block input-group flex-nowrap">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="addon-wrapping">Energy use (kJ/m^2)</span>
+                        </div>
+                        <input id="energy" type="number" class="form-control" placeholder="0" value="0" aria-describedby="addon-wrapping">
+                      </div>       
                     </div>
                     <div id="loading_icon" class="col-md-1">
                       <div class="spinner-border"></div>
