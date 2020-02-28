@@ -46,7 +46,233 @@ label {
     cursor: pointer;
 }
 
-.buttons{
-    height:50px;
-    width:165px;
+.myButton {
+  box-shadow:inset 0px 1px 3px 0px #91b8b3;
+  background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+  background-color:#768d87;
+  border-radius:5px;
+  border:1px solid #566963;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family:Arial;
+  font-size:15px;
+  font-weight:bold;
+  padding:10px 20px;
+  text-decoration:none;
+  text-shadow:0px -1px 0px #2b665e;
+  width: 185px
 }
+.myButton:hover {
+  background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+  background-color:#6c7c7c;
+}
+.myButton:active {
+  position:relative;
+  top:1px;
+}
+
+
+
+body {
+  font-size: 16px;
+  color: #3A3A3A;
+  background: linear-gradient(to bottom, #DADADA, #6699cc);
+  font-family: Verdana, sans-serif;
+}
+
+/** HEADER **/
+#header-nav {
+  background-color: #669999;
+  border-radius: 0;
+  border: 0;
+}
+.navbar-brand {
+  padding-top: 25px;
+}
+
+.navbar-brand  h1 {
+  color: #ccffff;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.navbar-brand a:hover, .navbar-brand a:focus {
+  text-decoration: none;
+}
+
+.navbar-brand p {
+  color : #ccffff;
+  font-size: .8em;
+  margin-top: 15px;
+}
+
+.navbar-brand p span {
+  vertical-align: middle;
+}
+
+.navbar-header button.navbar-toggle, .navbar-header .icon-bar {
+  border: 1px solid #6F6F6F;
+}
+.navbar-header button.navbar-toggle {
+  clear: both;
+}
+/** End Header **/
+
+
+/** Footer **/
+.panel-footer {
+  margin-top: 30px;
+  padding-top: 35px;
+  padding-bottom: 30px;
+  background-color: #333;
+  border-top: 0;
+}
+.panel-footer div.row {
+  margin-bottom: 35px;
+  color: #CCC;
+  line-height: 1.5
+}
+.panel-footer div.text-center {
+  color: #CCC;
+}
+#contacts > span, #address > span, #instructions > span {
+  font-size: 1.3em;
+}
+#address p {
+  color: #DCDD8F;
+  font-size: .8em;
+  line-height: 1.8;
+}
+#testimonials {
+  font-family: Verdana, sans-serif;
+}
+#testimonials p:nth-child(2) {
+  margin-top: 25px;
+}
+/** End Footer **/
+
+
+/** Staff **/
+#main-content > div {
+  padding-top: 10px;
+  margin-bottom: 80px;
+  line-height: 1.8em;
+  height: 700px
+}
+.menu-item-tile {
+  margin-bottom: 35px;
+  font-size: 1.1em;
+}
+.menu-item-tile hr {
+  width: 80%;
+}
+.menu-item-photo {
+  position: relative;
+  border: 2px solid #555;
+  overflow: hidden;
+  padding: 0;
+  margin-right: -15px;
+  margin-left: auto;
+  margin-bottom: 20px;
+  max-width: 250px;
+}
+.menu-item-photo div {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 80px;
+  background-color: #000;
+  text-align: center;
+}
+.menu-item-descreption {
+  padding-right: 30px;
+}
+h3.menu-item-title {
+  margin: 0 0 30px;
+}
+.menu-item-details {
+  font-style: italic;
+}
+/** End Staff **/
+
+
+
+*{font-family: 'Roboto', sans-serif;}
+
+@keyframes click-wave {
+  0% {
+    height: 20px;
+    width: 20px;
+    opacity: 0.35;
+    position: relative;
+  }
+  100% {
+    height: 100px;
+    width: 100px;
+    margin-left: -40px;
+    margin-top: -40px;
+    opacity: 0;
+  }
+}
+
+.option-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  position: relative;
+  top: 5px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  transition: all 0.15s ease-out 0s;
+  background: #cbd1d8;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 0.5rem;
+  outline: none;
+  position: relative;
+  z-index: 1000;
+}
+.option-input:hover {
+  background: #9faab7;
+}
+.option-input:checked {
+  background: #339966;
+}
+.option-input:checked::before {
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  display: inline-block;
+  font-size: 26.66667px;
+  text-align: center;
+  line-height: 40px;
+}
+.option-input:checked::after {
+  -webkit-animation: click-wave 0.65s;
+  -moz-animation: click-wave 0.65s;
+  animation: click-wave 0.65s;
+  background: #40e0d0;
+  content: '';
+  display: block;
+  position: relative;
+  z-index: 100;
+}
+.option-input.radio {
+  border-radius: 50%;
+}
+.option-input.radio::after {
+  border-radius: 50%;
+}
+
+
