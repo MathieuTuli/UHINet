@@ -40,13 +40,13 @@
                 <div id='UHI Setting'>
                     <strong><big>Season Setting</strong></big>
                     <div id='Temporal Resolution'>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Spring" id="Spring" Checked onclick="setSeason();"> Mar. - May
+                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Spring" id="Spring" Checked onclick="setSeason();"> Spring
                     <br>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Summer" id="Summer" onclick="setSeason();"> Jun. - Aug.
+                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Summer" id="Summer" onclick="setSeason();"> Summer
                     <br>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Autumn" id="Autumn" onclick="setSeason();"> Sep. - Nov.
+                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Autumn" id="Autumn" onclick="setSeason();"> Fall
                     <br>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Winter" id="Winter" onclick="setSeason();"> Dec. - Feb.
+                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Winter" id="Winter" onclick="setSeason();"> Winter
                     </div id='Temporal Resolution'>
                 </div id='UHI Setting'>
                 <hr>
@@ -63,7 +63,11 @@
                 <hr>
                 <input class="myButton" id=send_coords_button type=button value="Generate Prediction">
                 <hr>
-                <input class="myButton" onclick="deleteSelectedShape();" type=button value="Delete polygon">
+                <input class="myButton" onclick="deleteSelectedShape();" type=button value="Delete Polygon">
+                <hr>
+                <input class="myButton" onclick="showHidePolygon();" type=button value="Show/Hide Polygon">
+                <hr>
+                <input class="myButton" onclick="showHideLayer();" type=button value="Show/Hide Layer">
                 <hr>
                 <strong>Layer Opacity</strong>
                 <div id="slider">
@@ -94,7 +98,7 @@
                     <div class="col-md-3">
                       <div class="block input-group flex-nowrap">
                         <div class="input-group-prepend">
-                          <span class="input-group-text" id="addon-wrapping">Energy use (kJ/m^2)</span>
+                          <span class="input-group-text" id="addon-wrapping">Energy use (kJ/m<sup>2</sup>)</span>
                         </div>
                         <input id="energy" type="number" class="form-control" placeholder="0" value="0" aria-describedby="addon-wrapping">
                       </div>       
