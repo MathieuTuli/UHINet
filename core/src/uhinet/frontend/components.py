@@ -94,4 +94,4 @@ class Polygon(NamedTuple):
     coordinates: List[LatLon]
     viewing_window: BBox
     orientation: Orientation
-    buildingtype: BuildingType
+    building_type: BuildingType

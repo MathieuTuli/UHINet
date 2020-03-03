@@ -114,7 +114,7 @@ def main(args: APNamespace):
                               lat=coords_bound['south'],
                               lon=coords_bound['east'])),
                           orientation=Orientation.CW,
-                          buildingtype=getBuildingType(polygon_color, colors))
+                          building_type=getBuildingType(polygon_color, colors))
         # Orientation to be specified later
 
         '''

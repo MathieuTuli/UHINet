@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 
+from .components import BBox, LatLon
 from ..file_manager import save_pyplot_image
 from ...frontend.components import Polygon, Season
 
@@ -59,7 +60,35 @@ def alter_area(image: np.ndarray,
                polygon: Polygon,
                season: Season) -> np.ndarray:
     window = polygon.viewing_window
-    area = polygon.coordinates
+    shape = image.shape
+    lat_ratio = (window.bottom_right.lat - window.top_left.lat) / shape[0]  # h
+    lon_ratio = (window.bottom_right.lon - window.top_left.lon) / shape[1]  # w
+    new_polygon = np.array([[int(coord.lon * lon_ratio),
+                             int(coord.lat * lat_ratio)]
+                            for coord in polygon.coordinates])
+    replace_with = cv2.imread(
+        f"data/alter-images/{str(season)}_{str(polygon.building_type)}")
+
+    # create mask
+    # width = np.max(new_polygon[:, 0]) - np.min(new_polygon[:, 0])
+    # height = np.max(new_polygon[:, 1]) - np.min(new_polygon[:, 1])
+    # import math
+    # num_concat_w = math.ceil(width / replace_with.shape[1])
+    # num_concat_h = math.ceil(height / replace_with.shape[0])
+    num_concat_w = math.ceil(image.shape[1] / replace_with.shape[1])
+    num_concat_h = math.ceil(image.shape[0] / replace_with.shape[0])
+    replace_with = cv2.hconcat([replace_with] * num_concat_w)
+    replace_with = cv2.resize(cv2.vconcat(
+        [replace_with] * num_concat_h), image.shape)
+    mask = np.zeros(replace_with.shape[:2], np.uint8)
+    cv2.fillPoly(mask, new_polygon, (255, 255, 255))
+    replace_with = cv2.bitwise_and(replace_with, replace_with, mask=mask)
+    for row in image.shape[0]:
+        for col in image.shape[1]:
+            for channel in image.shape[2]:
+                if replace_with[row, col, channel] != 0:
+                    image[row, col, channel] = replace_with[row, col, channel]
+    return image
 
 
 def diff_images(reference: np.ndarray,
