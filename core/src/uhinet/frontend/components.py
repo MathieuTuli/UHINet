@@ -12,10 +12,10 @@ class BuildingType(Enum):
     Caution: If you change names here, you also need to change
              frontend/run.py where the names are called
     '''
-    CONCRETE = 0
-    PARKINGLOT = 1
-    PARK = 2
-    FOREST = 3
+    RESIDENTIAL = 0
+    COMMERCIAL = 1
+    GREEN_SPACE = 2
+    PARKING_LOT = 3
 
     def __str__(self):
         return self.name

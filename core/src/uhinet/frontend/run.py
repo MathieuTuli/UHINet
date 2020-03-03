@@ -15,7 +15,8 @@ from ..backend.data.components import LatLon, BBox
 from ..backend.requests import Requests
 
 
-backend = None
+BACKEND = None
+STATIC_DIR = Path('frontend/build/static').absolute()
 
 
 def main(args: APNamespace):
@@ -52,18 +53,19 @@ def main(args: APNamespace):
         url = "https://maps.googleapis.com/maps/api/js?" + \
             f"key={settings['google_maps_key']}" + \
             "&libraries=drawing&callback=initMap"
-        global backend
+        global BACKEND
         weights_path = Path(
             '/home/mat/work/U-of-T/capstone/uhinet/data/feb-12/' +
             '5-metres-80-range/pix2pix-training/summer/checkpoint')
         # weights_path = Path(
         #     '/home/mat/work/U-of-T/capstone/uhinet/data/feb-12/5-metres-v2/pix2pix-training/summer/checkpoint/')
-        backend = Requests(
+        BACKEND = Requests(
             instance_id=str(settings['sentinel_hub_key']),
             winter_weights_file=weights_path,
             spring_weights_file=weights_path,
             summer_weights_file=weights_path,
-            fall_weights_file=weights_path)
+            fall_weights_file=weights_path,
+            flask_static_dir=STATIC_DIR)
         logging.debug(f"Frontend: url specified: {url}")
         index = Path('map.html')
         return render_template(str(index), key=url)
@@ -95,15 +97,16 @@ def main(args: APNamespace):
                 return Season.WINTER
 
         ''' Get Corresponding Building Type '''
+        # TODO confirm this
         def getBuildingType(polygon_color, colors):
             if polygon_color == colors[0]:
-                return BuildingType.CONCRETE
+                return BuildingType.RESIDENTIAL
             elif polygon_color == colors[1]:
-                return BuildingType.PARKINGLOT
+                return BuildingType.COMMERCIAL
             elif polygon_color == colors[2]:
-                return BuildingType.PARK
+                return BuildingType.PARKING_LOT
             else:
-                return BuildingType.FOREST
+                return BuildingType.GREEN_SPACE
 
         # Polygon to use in the backend
         polygon = Polygon(coordinates=lst_coords,
@@ -132,24 +135,20 @@ def main(args: APNamespace):
         image_name = ... # image_name is the name of the predicted image
                      under /static/ folder
         '''
-        image_names = []
-
-        global backend
-        directory = Path('frontend/build/static').absolute()
-        layers = backend.predict(
+        global BACKEND
+        layers = BACKEND.predict(
             polygon=polygon,
-            season=getSeason(season),
-            flask_static_dir=directory)
-        image_names.append(str(layers[0].image))  # Before image
-        image_names.append(str(layers[1].image))  # After image
-        image_names.append(str(layers[2].image))  # Difference image
+            season=getSeason(season))
+        image_names = [str(layers[0].image),  # Before image
+                       str(layers[1].image),  # After image
+                       str(layers[2].image)]  # Difference image
         coords_bound['north'] = layers[0].coordinates.top_left.lat
         coords_bound['west'] = layers[0].coordinates.top_left.lon
         coords_bound['south'] = layers[0].coordinates.bottom_right.lat
         coords_bound['east'] = layers[0].coordinates.bottom_right.lon
-        assert((directory / image_names[0]).exists())
-        assert((directory / image_names[1]).exists())
-        assert((directory / image_names[2]).exists())
+        assert((STATIC_DIR / image_names[0]).exists())
+        assert((STATIC_DIR / image_names[1]).exists())
+        assert((STATIC_DIR / image_names[2]).exists())
         logging.info("UHINET Frontend: Backend returned.")
 
         # image_name = str('image.png')

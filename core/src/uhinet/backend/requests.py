@@ -8,11 +8,11 @@ import logging
 import cv2
 
 from TFPix2Pix.predictor import Predictor
-from ..frontend.components import GISLayer, Polygon, Orientation, Season
+from ..frontend.components import GISLayer, Polygon, Season
 from .data.helpers import conform_coordinates_to_spatial_resolution
 from .data.image_formatting import alter_area, diff_images, \
-    concatenate_horizontal, square_resize
-from .data.components import BBox, ImageSize, LatLon
+    square_resize
+from .data.components import ImageSize, LatLon
 from .data.sentinel_hub import SentinelHubAccessor
 from .file_manager import save_pyplot_image
 
@@ -80,6 +80,7 @@ class Requests():
             size=[256, 256],
             method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
             axis=0)
+        before_rgb = (before_rgb[0] * 0.5 + 0.5).numpy()
         after_rgb = alter_area(image=before_rgb,
                                polygon=polygon,
                                season=season)
@@ -95,15 +96,25 @@ class Requests():
         diff, val = diff_images(
             reference=before_predicted_lst, other=after_predicted_lst)
 
-        save_pyplot_image(str(self.flask_static_dir / 'before.png'),
-                          before_predicted_lst)
-        save_pyplot_image(str(self.flask_static_dir / 'after.png'),
-                          after_predicted_lst)
-        save_pyplot_image(str(self.flask_static_dir / 'diff.png'), diff,
-                          cmap='coolwarm')
-        before_lst = GISLayer(image=Path('before.png'),
+        save_pyplot_image(
+            image_name=str(self.flask_static_dir / 'before_lst.png'),
+            image=before_predicted_lst)
+        save_pyplot_image(
+            str(self.flask_static_dir / 'after_lst.png'),
+            image=after_predicted_lst)
+        save_pyplot_image(
+            image_name=str(self.flask_static_dir / 'diff.png'),
+            image=diff,
+            cmap='coolwarm')
+        save_pyplot_image(
+            image_name=str(self.flask_static_dir / 'before_rgb.png'),
+            image=before_rgb)
+        save_pyplot_image(
+            image_name=str(self.flask_static_dir / 'after_rgb.png'),
+            image=after_rgb)
+        before_lst = GISLayer(image=Path('before_lst.png'),
                               coordinates=new_coords)
-        after_lst = GISLayer(image=Path('after.png'),
+        after_lst = GISLayer(image=Path('after_lst.png'),
                              coordinates=new_coords)
         diff = GISLayer(image=Path('diff.png'),
                         coordinates=new_coords)

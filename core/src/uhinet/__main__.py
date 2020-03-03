@@ -47,9 +47,11 @@ elif str(args.log_level) == 'CRITICAL':
     logging.root.setLevel(logging.CRITICAL)
 else:
     logging.root.setLevel(logging.INFO)
+    args.log_level = 'INFO'
     logging.warning(
         f"Frontend: Log level \"{args.log_level}\" unknown, defaulting" +
         " to INFO.")
+logging.info(f"UHINET: Log Level set to {str(args.log_level)}")
 
 if __name__ == "__main__":
     if str(args.command) == 'download-data':

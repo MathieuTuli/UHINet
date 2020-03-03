@@ -1,7 +1,10 @@
 from pathlib import Path
 
+from PIL import Image
+
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib
 import inspect
 import logging
 import re
@@ -45,18 +48,22 @@ def save_pyplot_image(image_name: Path,
                       cmap: str = None,
                       colorbar: bool = False):
     """
+    image: expecting value between [0, 1]
     """
     # fig = plt.subplots(nrows=1, ncols=1, figsize=(15, 7))
     fig = plt.figure(frameon=False)
     # plt.imshow(image)
     ax = plt.Axes(fig, [0., 0., 1., 1.])
     ax.set_axis_off()
+    ax.set_aspect('equal')
+    fig.canvas.draw()
     fig.add_axes(ax)
-    ax.imshow(image)
+    logging.debug(f"save_pyplot_image: {image_name} is of shape {image.shape}")
+    ax.imshow(image, aspect='equal')
     if cmap is not None:
         mappable = plt.imshow(image)
         mappable.set_cmap(cmap)
     if colorbar:
         plt.colorbar()
-    plt.savefig(str(image_name))
+    plt.savefig(str(image_name), bbox_inches='tight')
     plt.close(fig)
