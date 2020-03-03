@@ -91,6 +91,7 @@ def alter_area(image: np.ndarray,
     mask = np.zeros(replace_with.shape[:2], np.uint8)
     cv2.fillPoly(mask, np.int32([new_polygon]), (255, 255, 255))
     replace_with = cv2.bitwise_and(replace_with, replace_with, mask=mask)
+    replace_with = np.flip(replace_with, axis=-1)
     for row in range(image.shape[0]):
         for col in range(image.shape[1]):
             if shapely_poly.contains(Point(col, row)):
