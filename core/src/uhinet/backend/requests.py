@@ -60,37 +60,48 @@ class Requests():
                 cloud_cov_perc=0.1,
                 bbox=new_coords))
         before_rgb, before_lst = images
+        before_rgb = before_rgb[0]
+        before_lst = before_lst[0]
         matplotlib.use('agg')
         # TODO fix this
         if len(before_rgb) == 0:
             logging.critical(
                 'Requests: no RGB image found for those coordinates')
             raise
-        before_rgb = tf.expand_dims((tf.image.resize(
-            images=tf.convert_to_tensor(
-                value=square_resize(before_rgb[0], 512, cv2.INTER_AREA),
-                dtype=tf.float32),
-            size=[256, 256],
-            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
-            axis=0)
-        before_lst = tf.expand_dims((tf.image.resize(
-            images=tf.convert_to_tensor(
-                value=square_resize(before_lst[0], 512, cv2.INTER_AREA),
-                dtype=tf.float32),
-            size=[256, 256],
-            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
-            axis=0)
-        before_rgb = (before_rgb[0] * 0.5 + 0.5).numpy()
         after_rgb = alter_area(image=before_rgb,
-                               polygon=polygon,
+                               polygon=polygon.coordinates,
+                               window=new_coords,
+                               building_type=polygon.building_type,
                                season=season)
+        before_rgb_tensor = tf.expand_dims((tf.image.resize(
+            images=tf.convert_to_tensor(
+                value=square_resize(before_rgb, 512, cv2.INTER_AREA),
+                dtype=tf.float32),
+            size=[256, 256],
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
+            axis=0)
+        before_lst_tensor = tf.expand_dims((tf.image.resize(
+            images=tf.convert_to_tensor(
+                value=square_resize(before_lst, 512, cv2.INTER_AREA),
+                dtype=tf.float32),
+            size=[256, 256],
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
+            axis=0)
+        after_rgb_tensor = tf.expand_dims((tf.image.resize(
+            images=tf.convert_to_tensor(
+                value=square_resize(after_rgb, 512, cv2.INTER_AREA),
+                dtype=tf.float32),
+            size=[256, 256],
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
+            axis=0)
         # test_image = concatenate_horizontal([before_rgb, before_lst])
         # save_to = flask_static_dir / 'test_image.png'
         # save_pyplot_image(str(save_to), test_image)
-        before_predicted_lst = self.predictors[season].predict(before_rgb)
+        before_predicted_lst = self.predictors[season].predict(
+            before_rgb_tensor)
         # save_to = flask_static_dir / 'after_rgb.png'
         # save_pyplot_image(str(save_to), after_rgb)
-        after_predicted_lst = self.predictors[season].predict(after_rgb)
+        after_predicted_lst = self.predictors[season].predict(after_rgb_tensor)
 
         # TODO dtype from predictor create black images
         diff, val = diff_images(
