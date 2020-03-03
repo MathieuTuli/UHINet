@@ -58,7 +58,8 @@ def pad(width: int, height: int, channels: int, pad_value: float):
 def alter_area(image: np.ndarray,
                polygon: Polygon,
                season: Season) -> np.ndarray:
-    return image
+    window = polygon.viewing_window
+    area = polygon.coordinates
 
 
 def diff_images(reference: np.ndarray,
