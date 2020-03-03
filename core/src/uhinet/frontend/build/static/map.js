@@ -125,7 +125,33 @@ function deleteSelectedShape () {
     }
 }
 
+function showHideLayer(){
+    if(overlay.length >= 1){
+        if(opacity==0){
+            var opacity = (document.getElementById("rangeinput").value) / 100.0;
+            overlay[overlay_index].setOpacity(opacity);
+            showOverlay();
+        }
+        else{
+            var opacity = 0;
+            overlay[overlay_index].setOpacity(opacity);
+            showOverlay();
+        }
 
+    }
+}
+
+function showHidePolygon(){
+    if (selectedShape) {
+        if (selectedShape.opacity==0){
+            selectedShape.set('opacity', 0.45)
+        }
+        else{
+            selectedShape.set('strokeColor', 0)
+        }
+        
+    }
+}
 // Send coordinates of the polygon and the viewport to the backend
 // and get an image from the backend
 $(function() {
@@ -244,6 +270,7 @@ function initMap () {
         showOverlay();
       }
     }
+
 
     function setHeight(){
         if (selectedShape){
