@@ -51,7 +51,12 @@ class Requests():
             frame=self.height_frame,
             size=ImageSize(width=512, height=512),
             column=HeightColumn.HEIGHT,
-            sort_by=HeightColumn.HEIGHT)
+            sort_by=HeightColumn.HEIGHT,
+            cmap='Greens')
+        self.height_norm = matplotlib.colors.Normalize(
+            vmin=self.height_frame['HEIGHT'].min(),
+            vmax=self.height_frame['HEIGHT'].max())
+        self.height_color = matplotlib.cm.get_cmap('Greens')
         # self.energy_frame = GeoDataFrame.from_file(str(height_shp_file))
         # self.energy_frame = self.energy_frame.sort_values(by=str('ENERGY'))
 
@@ -60,7 +65,9 @@ class Requests():
 
     def predict(self,
                 polygon: Polygon,
-                season: Season) -> Tuple[GISLayer, GISLayer, GISLayer]:
+                season: Season,
+                height: float,
+                energy: float) -> Tuple[GISLayer, GISLayer, GISLayer]:
         center_lat = np.mean([coord.lat for coord in polygon.coordinates])
         center_lon = np.mean([coord.lon for coord in polygon.coordinates])
         new_coords = conform_coordinates_to_spatial_resolution(
@@ -113,6 +120,13 @@ class Requests():
             axis=0)
         before_height = array_from_ax(self.height_fig, self.height_ax,
                                       new_coords)
+        self.height_ax.add_patch(
+            matplotlib.pyplot.Polygon(
+                [(c.lon, c.lat) for c in polygon.coordinates],
+                fill=True, edgecolor=None,
+                color=self.height_color(self.height_norm(height))))
+        after_height = array_from_ax(self.height_fig, self.height_ax,
+                                     new_coords)
         # before_energy = self.generate_energy_map(bbox=new_coords)
         before_predicted_lst = self.predictors[season].predict(
             before_rgb_tensor)
@@ -140,6 +154,9 @@ class Requests():
         save_pyplot_image(
             image_name=str(self.flask_static_dir / 'before_height.png'),
             image=before_height)
+        save_pyplot_image(
+            image_name=str(self.flask_static_dir / 'after_height.png'),
+            image=after_height)
         # save_pyplot_image(
         #     image_name=str(self.flask_static_dir / 'before_energy.png'),
         #     image=before_energy)

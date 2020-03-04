@@ -53,10 +53,13 @@ def map_from_frame(frame: GeoDataFrame,
     ax.set_axis_off()
     fig.canvas.draw()
     fig.add_axes(ax)
+    _max = frame[str(column)].max()
+    _min = frame[str(column)].min()
     if legend:
-        frame.plot(column=str(column), ax=ax, legend=True, cmap=cmap)
+        frame.plot(column=str(column), ax=ax, vmin=_min, vmax=_max,
+                   legend=True, cmap=cmap)
     else:
-        frame.plot(column=str(column), ax=ax, cmap=cmap)
+        frame.plot(column=str(column), ax=ax, vmin=_min, vmax=_max, cmap=cmap)
     plt.gca().set_xlim([bbox.top_left.lon, bbox.bottom_right.lon])
     plt.gca().set_ylim([bbox.top_left.lat, bbox.bottom_right.lat])
     plt.gca().invert_yaxis()
@@ -104,10 +107,13 @@ def ax_from_frame(frame: GeoDataFrame,
     ax.set_axis_off()
     fig.canvas.draw()
     fig.add_axes(ax)
+    _max = frame[str(column)].max()
+    _min = frame[str(column)].min()
     if legend:
-        frame.plot(column=str(column), ax=ax, legend=True, cmap=cmap)
+        frame.plot(column=str(column), ax=ax, vmin=_min, vmax=_max,
+                   legend=True, cmap=cmap)
     else:
-        frame.plot(column=str(column), ax=ax, cmap=cmap)
+        frame.plot(column=str(column), ax=ax, vmin=_min, vmax=_max, cmap=cmap)
     return fig, ax
 
 
