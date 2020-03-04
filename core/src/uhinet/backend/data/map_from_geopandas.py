@@ -12,8 +12,6 @@ from .components import Column, BBox
 
 
 def map_from_shp(path: Path,
-                 x_lim: Tuple[float, float],
-                 y_lim: Tuple[float, float],
                  bbox: BBox = None,
                  column: Column = Column.HEIGHT,
                  sort_by: Column = Column.HEIGHT,
@@ -26,25 +24,26 @@ def map_from_shp(path: Path,
         logging.critical(f"Map from Geopands: Path {path} does not exist")
         return None
     frame = GeoDataFrame.from_file(str(path))
-    valid = [item for item in Column.__members__.values()]
-    keys = [item for item in frame.keys()]
-    if valid.sort() != keys.sort():
-        logging.critical(f"Map from Geopands: Shapefile does not contain " +
-                         "required keys. Keys must be {valid}")
+    valid = [str(item) for item in Column.__members__.values()]
+    keys = [str(item) for item in frame.keys()]
+    if set(valid) != set(keys):
+        logging.critical(f"Map from Geopandas: Shapefile does not contain " +
+                         f"required keys. Keys must be {valid}")
         return None
     if str(column) not in keys:
-        logging.critical(f"Map from Geopands: *column* param" +
-                         " not valid. Must be one of{valid}")
+        logging.critical(f"Map from Geopandas: *column* param {str(column)}" +
+                         f" not valid. Must be one of {valid}")
         return None
     if str(sort_by) not in keys:
-        logging.critical(f"Map from Geopands: *sort_by* param" +
-                         " not valid. Must be one of{valid}")
+        logging.critical(
+            f"Map from Geopandas: *sort_by* param {str(sort_by)}" +
+            f" not valid. Must be one of {valid}")
         return None
     frame = frame.sort_values(by=str(sort_by))
     fig = plt.figure()
     fig, ax = plt.subplots(1, 1)
-    plt.gca().set_xlim(x_lim)
-    plt.gca().set_ylim(y_lim)
+    plt.gca().set_xlim((bbox.top_left.lon, bbox.bottom_right.lon))
+    plt.gca().set_ylim((bbox.top_left.lat, bbox.bottom_right.lat))
     if legend:
         frame.plot(column=str(column), ax=ax, legend=True, cmap=cmap)
     else:
