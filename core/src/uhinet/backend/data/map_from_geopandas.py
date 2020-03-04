@@ -109,3 +109,20 @@ def ax_from_frame(frame: GeoDataFrame,
     else:
         frame.plot(column=str(column), ax=ax, cmap=cmap)
     return fig, ax
+
+
+def array_from_ax(fig, ax, bbox: BBox):
+    ax.set_xlim([bbox.top_left.lon,
+                 bbox.bottom_right.lon])
+    ax.set_ylim([bbox.top_left.lat,
+                 bbox.bottom_right.lat])
+    ax.invert_yaxis()
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png', dpi=200,
+                            bbox_inches='tight', pad_inches=0)
+    buf.seek(0)
+    image = np.frombuffer(buf.getvalue(), dtype=np.uint8)
+    buf.close()
+    image = cv2.imdecode(image, 1)
+    return cv2.resize(cv2.cvtColor(image, cv2.COLOR_BGR2RGB),
+                      (512, 512))

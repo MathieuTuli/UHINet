@@ -16,7 +16,7 @@ from ..frontend.components import GISLayer, Polygon, Season
 from .data.helpers import conform_coordinates_to_spatial_resolution
 from .data.image_formatting import alter_area, diff_images, \
     square_resize
-from .data.map_from_geopandas import map_from_frame, ax_from_frame
+from .data.map_from_geopandas import ax_from_frame, array_from_ax
 from .data.components import ImageSize, LatLon, HeightColumn, \
     EnergyColumn, BBox
 from .data.sentinel_hub import SentinelHubAccessor
@@ -57,23 +57,6 @@ class Requests():
 
     def __str__(self) -> str:
         return 'Requests'
-
-    def generate_height_map(self,
-                            bbox: BBox):
-        self.height_ax.set_xlim([bbox.top_left.lon,
-                                 bbox.bottom_right.lon])
-        self.height_ax.set_ylim([bbox.top_left.lat,
-                                 bbox.bottom_right.lat])
-        self.height_ax.invert_yaxis()
-        buf = io.BytesIO()
-        self.height_fig.savefig(buf, format='png', dpi=200,
-                                bbox_inches='tight', pad_inches=0)
-        buf.seek(0)
-        image = np.frombuffer(buf.getvalue(), dtype=np.uint8)
-        buf.close()
-        image = cv2.imdecode(image, 1)
-        return cv2.resize(cv2.cvtColor(image, cv2.COLOR_BGR2RGB),
-                          (512, 512))
 
     def predict(self,
                 polygon: Polygon,
@@ -128,7 +111,8 @@ class Requests():
             size=[256, 256],
             method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
             axis=0)
-        before_height = self.generate_height_map(bbox=new_coords)
+        before_height = array_from_ax(self.height_fig, self.height_ax,
+                                      new_coords)
         # before_energy = self.generate_energy_map(bbox=new_coords)
         before_predicted_lst = self.predictors[season].predict(
             before_rgb_tensor)
