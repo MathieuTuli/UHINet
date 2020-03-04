@@ -13,9 +13,9 @@ import geopandas
 
 
 if __name__ == "__main__":
-    path = Path('/home/mat/work/U-of-T/capstone/uhinet/data/toronto-height/Boundaries/3DMassingShapefile_2019_WGS84/3DMassing_2019_WGS84.shp')
-    path = Path(
-        '/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2016_WGS84.shp')
+    path = Path('/home/mat/Downloads/files/3DMassing_2019_WGS84.shp')
+    # path = Path(
+    #     '/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2016_WGS84.shp')
     df = GeoDataFrame.from_file(str(path))
     print(df.keys())
     df.rename(
@@ -23,7 +23,7 @@ if __name__ == "__main__":
             'MIN_HEIGHT': 'MIN_HEIGHT',
             'MAX_HEIGHT': 'MAX_HEIGHT',
             'AVG_HEIGHT': 'HEIGHT',
-            'HEIGHT_MSL': 'HEIGHT_ELEV',
+            'HEIGHT_MSL': 'HEIGHT_MSL',
             'SURF_ELEV': 'ELEV',
             'HEIGHT_SRC': 'HEIGHT_SRC',
             'BLDG_SRC': 'BLDG_SRC',
@@ -36,32 +36,30 @@ if __name__ == "__main__":
     df.drop(['MIN_HEIGHT', 'MAX_HEIGHT', 'HEIGHT_SRC',
              'BLDG_SRC', 'LONGITUDE', 'LATITUDE', 'PERIMETER'], axis=1,
             inplace=True)
-    print(df.head())
     df.to_crs({'init': 'epsg:4326'}, inplace=True)
-    print(df.head())
     df.to_file(
-        '/home/mat/work/U-of-T/capstone/uhinet/data/toronto-height/Boundaries/2019_formatted.shp', driver='ESRI Shapefile')
+        '/home/mat/Downloads/files/2019_formatted.shp', driver='ESRI Shapefile')
 
-    path = Path(
-        '/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2017_WGS84.shp')
-    df = GeoDataFrame.from_file(str(path))
-    print(df.keys())
-    path = Path(
-        '/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2018_WGS84.shp')
-    df = GeoDataFrame.from_file(str(path))
-    print(df.keys())
-    path = Path(
-        '/home/mat/Downloads/test/toronto_massing_wayback/SHAPEFILES/ContextMassing2013_mtm3degree_v2.shp')
-    df = GeoDataFrame.from_file(str(path))
-    print(df.keys())
-    path = Path(
-        '/home/mat/Downloads/test/toronto_massing_wayback/SHAPEFILES/ContextMassing2013_wgs84_v2.shp')
-    df = GeoDataFrame.from_file(str(path))
-    print(df.keys())
-    path = Path(
-        '/home/mat/Downloads/test/toronto_massing_wayback/ODMassing_2014_wgs.shp')
-    df = GeoDataFrame.from_file(str(path))
-    print(df.keys())
+    # path = Path(
+    #     '/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2017_WGS84.shp')
+    # df = GeoDataFrame.from_file(str(path))
+    # print(df.keys())
+    # path = Path(
+    #     '/home/mat/Downloads/test/toronto_massing_wayback/3DMassing_2018_WGS84.shp')
+    # df = GeoDataFrame.from_file(str(path))
+    # print(df.keys())
+    # path = Path(
+    #     '/home/mat/Downloads/test/toronto_massing_wayback/SHAPEFILES/ContextMassing2013_mtm3degree_v2.shp')
+    # df = GeoDataFrame.from_file(str(path))
+    # print(df.keys())
+    # path = Path(
+    #     '/home/mat/Downloads/test/toronto_massing_wayback/SHAPEFILES/ContextMassing2013_wgs84_v2.shp')
+    # df = GeoDataFrame.from_file(str(path))
+    # print(df.keys())
+    # path = Path(
+    #     '/home/mat/Downloads/test/toronto_massing_wayback/ODMassing_2014_wgs.shp')
+    # df = GeoDataFrame.from_file(str(path))
+    # print(df.keys())
     #                     df_2019 = GeoDataFrame.from_file(str(path))
     #                     df_2019.rename(
     #                         columns={

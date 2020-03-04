@@ -1,6 +1,8 @@
 from typing import Tuple
 from pathlib import Path
 
+import io
+
 import tensorflow as tf
 import numpy as np
 import matplotlib
@@ -8,11 +10,15 @@ import logging
 import cv2
 
 from TFPix2Pix.predictor import Predictor
+from geopandas import GeoDataFrame
+
 from ..frontend.components import GISLayer, Polygon, Season
 from .data.helpers import conform_coordinates_to_spatial_resolution
 from .data.image_formatting import alter_area, diff_images, \
     square_resize
-from .data.components import ImageSize, LatLon
+from .data.map_from_geopandas import map_from_frame, ax_from_frame
+from .data.components import ImageSize, LatLon, HeightColumn, \
+    EnergyColumn, BBox
 from .data.sentinel_hub import SentinelHubAccessor
 from .file_manager import save_pyplot_image
 
@@ -24,7 +30,9 @@ class Requests():
                  spring_weights_file: Path,
                  summer_weights_file: Path,
                  fall_weights_file: Path,
-                 flask_static_dir: Path) -> None:
+                 flask_static_dir: Path,
+                 height_shp_file: Path,
+                 energy_shp_file: Path) -> None:
         self.predictors = {
             Season.WINTER: Predictor(weights=winter_weights_file,
                                      input_shape=(256, 256, 3)),
@@ -37,9 +45,35 @@ class Requests():
 
         self.accessor = SentinelHubAccessor(instance_id=instance_id)
         self.flask_static_dir = flask_static_dir
+        self.height_frame = GeoDataFrame.from_file(str(height_shp_file))
+        self.height_frame = self.height_frame.sort_values(by=str('HEIGHT'))
+        self.height_fig, self.height_ax = ax_from_frame(
+            frame=self.height_frame,
+            size=ImageSize(width=512, height=512),
+            column=HeightColumn.HEIGHT,
+            sort_by=HeightColumn.HEIGHT)
+        # self.energy_frame = GeoDataFrame.from_file(str(height_shp_file))
+        # self.energy_frame = self.energy_frame.sort_values(by=str('ENERGY'))
 
     def __str__(self) -> str:
         return 'Requests'
+
+    def generate_height_map(self,
+                            bbox: BBox):
+        self.height_ax.set_xlim([bbox.top_left.lon,
+                                 bbox.bottom_right.lon])
+        self.height_ax.set_ylim([bbox.top_left.lat,
+                                 bbox.bottom_right.lat])
+        self.height_ax.invert_yaxis()
+        buf = io.BytesIO()
+        self.height_fig.savefig(buf, format='png', dpi=200,
+                                bbox_inches='tight', pad_inches=0)
+        buf.seek(0)
+        image = np.frombuffer(buf.getvalue(), dtype=np.uint8)
+        buf.close()
+        image = cv2.imdecode(image, 1)
+        return cv2.resize(cv2.cvtColor(image, cv2.COLOR_BGR2RGB),
+                          (512, 512))
 
     def predict(self,
                 polygon: Polygon,
@@ -94,16 +128,12 @@ class Requests():
             size=[256, 256],
             method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
             axis=0)
-        # test_image = concatenate_horizontal([before_rgb, before_lst])
-        # save_to = flask_static_dir / 'test_image.png'
-        # save_pyplot_image(str(save_to), test_image)
+        before_height = self.generate_height_map(bbox=new_coords)
+        # before_energy = self.generate_energy_map(bbox=new_coords)
         before_predicted_lst = self.predictors[season].predict(
             before_rgb_tensor)
-        # save_to = flask_static_dir / 'after_rgb.png'
-        # save_pyplot_image(str(save_to), after_rgb)
         after_predicted_lst = self.predictors[season].predict(after_rgb_tensor)
 
-        # TODO dtype from predictor create black images
         diff, val = diff_images(
             reference=before_predicted_lst, other=after_predicted_lst)
 
@@ -123,6 +153,12 @@ class Requests():
         save_pyplot_image(
             image_name=str(self.flask_static_dir / 'after_rgb.png'),
             image=after_rgb)
+        save_pyplot_image(
+            image_name=str(self.flask_static_dir / 'before_height.png'),
+            image=before_height)
+        # save_pyplot_image(
+        #     image_name=str(self.flask_static_dir / 'before_energy.png'),
+        #     image=before_energy)
         before_lst = GISLayer(image=Path('before_lst.png'),
                               coordinates=new_coords)
         after_lst = GISLayer(image=Path('after_lst.png'),

@@ -23,13 +23,25 @@ class BBox(NamedTuple):
     bottom_right: LatLon
 
 
-class Column(Enum):
+class EnergyColumn(Enum):
+    '''
+    What the stdlib did not provide!
+    '''
+    ENERGY = 0
+    geometry = 3
+    POLY_AREA = 4
+
+    def __str__(self):
+        return self.name
+
+
+class HeightColumn(Enum):
     '''
     What the stdlib did not provide!
     '''
     HEIGHT = 0
     ELEV = 1
-    HEIGHT_ELEV = 2
+    HEIGHT_MSL = 2
     geometry = 3
     POLY_AREA = 4
 
