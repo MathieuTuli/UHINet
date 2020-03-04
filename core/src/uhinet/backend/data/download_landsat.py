@@ -3,11 +3,13 @@ from pathlib import Path
 import logging
 import json
 import cv2
+from geopandas import GeoDataFrame
 
 from ..file_manager import save_pyplot_image, init_dirs, check_suffix, \
     file_exists
+from .components import ImageSize, LatLon, HeightColumn
+from .map_from_geopandas import map_from_frame
 from .sentinel_hub import SentinelHubAccessor
-from .components import ImageSize, LatLon
 from .image_formatting import square_resize
 from .helpers import conform_coordinates_to_spatial_resolution, get_seasons
 
@@ -54,11 +56,27 @@ def download_landsat_from_file(
     spatial_resolution = int(content['spatial_resolution'])
 
     seasons = get_seasons(year_from=year_from, year_to=year_to)
+    shp_path = Path('data/shp/2019_height.shp')
+    if ~shp_path.exists():
+        logging.critical(
+            f"Shape file doesn't exist. Should be found at {shp_path}")
+        return False
+    frame = GeoDataFrame.from_file(str(shp_path))
     for center in centers:
         location = LatLon(lat=center['lat'],
                           lon=center['lon'])
-        # year = year_from
-        # next_center = False
+        new_box = conform_coordinates_to_spatial_resolution(
+            spatial_resolution=spatial_resolution,
+            image_size=image_size,
+            center=location)
+        height_map = map_from_frame(
+            frame=frame,
+            size=ImageSize(width=512, height=512),
+            bbox=new_box,
+            column=HeightColumn.HEIGHT_MSL,
+            sort_by=HeightColumn.HEIGHT_MSL,
+            cmap='Greens')
+        save_pyplot_image(save_to, height_map)
         for season in seasons:
             for layer in layers:
                 imgs = sentinelhub_accessor.get_landsat_image(
@@ -66,10 +84,7 @@ def download_landsat_from_file(
                     date=[season.date_from, season.date_to],
                     image_size=image_size,
                     cloud_cov_perc=cloud_cov_perc,
-                    bbox=conform_coordinates_to_spatial_resolution(
-                        spatial_resolution=spatial_resolution,
-                        image_size=image_size,
-                        center=location))
+                    bbox=new_box)
                 if imgs is None:
                     logging.info(
                         "SentinelHubAccessor: No URL retrieved " +
@@ -92,6 +107,11 @@ def download_landsat_from_file(
                             save_dir /
                             f"{count}_{layer}.png",
                             img, cmap='Greys')
+                        save_pyplot_image(
+                            save_dir /
+                            f"{count}_HEIGHT.png",
+                            height_map)
+
                         count += 1
     return True
 

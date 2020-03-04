@@ -50,12 +50,12 @@ class Requests():
         self.height_fig, self.height_ax = ax_from_frame(
             frame=self.height_frame,
             size=ImageSize(width=512, height=512),
-            column=HeightColumn.HEIGHT,
-            sort_by=HeightColumn.HEIGHT,
+            column=HeightColumn.HEIGHT_MSL,
+            sort_by=HeightColumn.HEIGHT_MSL,
             cmap='Greens')
         self.height_norm = matplotlib.colors.Normalize(
-            vmin=self.height_frame['HEIGHT'].min(),
-            vmax=self.height_frame['HEIGHT'].max())
+            vmin=self.height_frame['HEIGHT_MSL'].min(),
+            vmax=self.height_frame['HEIGHT_MSL'].max())
         self.height_color = matplotlib.cm.get_cmap('Greens')
         # self.energy_frame = GeoDataFrame.from_file(str(height_shp_file))
         # self.energy_frame = self.energy_frame.sort_values(by=str('ENERGY'))

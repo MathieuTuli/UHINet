@@ -1,5 +1,5 @@
 from typing import Optional, Union
-# from pathlib import Path
+from pathlib import Path
 
 from geopandas import GeoDataFrame
 
