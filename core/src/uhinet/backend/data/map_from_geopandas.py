@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Tuple
 from pathlib import Path
 
 from geopandas import GeoDataFrame
@@ -12,6 +12,8 @@ from .components import Column, BBox
 
 
 def map_from_shp(path: Path,
+                 x_lim: Tuple[float, float],
+                 y_lim: Tuple[float, float],
                  bbox: BBox = None,
                  column: Column = Column.HEIGHT,
                  sort_by: Column = Column.HEIGHT,
@@ -41,6 +43,8 @@ def map_from_shp(path: Path,
     frame = frame.sort_values(by=str(sort_by))
     fig = plt.figure()
     fig, ax = plt.subplots(1, 1)
+    plt.gca().set_xlim(x_lim)
+    plt.gca().set_ylim(y_lim)
     if legend:
         frame.plot(column=str(column), ax=ax, legend=True, cmap=cmap)
     else:
