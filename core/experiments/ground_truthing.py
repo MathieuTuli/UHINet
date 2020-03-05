@@ -30,51 +30,69 @@ import numpy as np
 
 vals = list()
 
-_2015_path_lst = (
-    '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/5-metres-80-range/other/images/2-targets.png')
-_2019_path_lst = (
-    '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/5-metres-80-range/other/images/3-targets.png')
-_2015_lst = cv2.imread(str(_2015_path_lst))
-_2019_lst = cv2.imread(str(_2019_path_lst))
-_2015_path_lst_pred = (
-    '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/5-metres-80-range/other/images/2-outputs.png')
-_2019_path_lst_pred = (
-    '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/5-metres-80-range/other/images/3-outputs.png')
-_2015_lst_pred = cv2.imread(str(_2015_path_lst_pred))
-_2019_lst_pred = cv2.imread(str(_2019_path_lst_pred))
+images = Path(
+    '/home/mat/github/U-of-T/capstone/pytorch-CycleGAN-and-pix2pix/results/uhinet_pix2pix/test_latest/images')
 
-_2015_lst[:, :, 0] = 0
-_2015_lst[:, :, 1] = 0
-_2019_lst[:, :, 0] = 0
-_2019_lst[:, :, 1] = 0
-_2015_lst_pred[:, :, 0] = 0
-_2015_lst_pred[:, :, 1] = 0
-_2019_lst_pred[:, :, 0] = 0
-_2019_lst_pred[:, :, 1] = 0
+# diff1, val = diff_images(reference=_2015_lst, other=_2015_lst_pred)
+# save_pyplot_image('2015_diff.png',
+#                   _2015_lst, cmap='jet', colorbar=True)
+# print(f'2015: {val}')
 
-diff1, val = diff_images(reference=_2015_lst, other=_2015_lst_pred)
-save_pyplot_image('2015_diff.png',
-                  _2015_lst, cmap='jet', colorbar=True)
-print(f'2015: {val}')
-
-diff2, val = diff_images(reference=_2019_lst, other=_2019_lst_pred)
-save_pyplot_image('2019_diff.png',
-                  diff2, cmap='jet', colorbar=True)
-print(f'2019: {val}')
-
-diff2, val = diff_images(reference=_2015_lst, other=_2019_lst_pred)
-save_pyplot_image('2015_2019_lst_pred.png',
-                  diff2, cmap='jet', colorbar=True)
-print(f'2019: {val}')
-
-
-diff, val = diff_images(reference=_2015_lst, other=_2019_lst)
-save_pyplot_image('2015_2019_lst_lst.png',
-                  diff, cmap='jet', colorbar=True)
-print(f'2015/9: {val}')
-
-
-diff1, val = diff_images(reference=_2015_lst_pred, other=_2019_lst_pred)
-save_pyplot_image('2015_2019_pred_pred.png',
-                  diff1, cmap='jet', colorbar=True)
-print(f'2015/9_pred: {val}')
+vals = []
+for img in images.iterdir():
+    if 'fake' in str(img):
+        fake = cv2.imread(str(img))
+        real = cv2.imread(str(img).replace('fake', 'real'))
+        diff, val = diff_images(reference=real, other=fake)
+        vals.append(val)
+print(np.mean(vals))
+print(np.max(vals))
+print(np.min(vals))
+# _2015_path_lst = (
+#     '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/5-metres-80-range/other/images/2-targets.png')
+# _2019_path_lst = (
+#     '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/5-metres-80-range/other/images/3-targets.png')
+# _2015_lst = cv2.imread(str(_2015_path_lst))
+# _2019_lst = cv2.imread(str(_2019_path_lst))
+# _2015_path_lst_pred = (
+#     '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/5-metres-80-range/other/images/2-outputs.png')
+# _2019_path_lst_pred = (
+#     '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/5-metres-80-range/other/images/3-outputs.png')
+# _2015_lst_pred = cv2.imread(str(_2015_path_lst_pred))
+# _2019_lst_pred = cv2.imread(str(_2019_path_lst_pred))
+#
+# _2015_lst[:, :, 0] = 0
+# _2015_lst[:, :, 1] = 0
+# _2019_lst[:, :, 0] = 0
+# _2019_lst[:, :, 1] = 0
+# _2015_lst_pred[:, :, 0] = 0
+# _2015_lst_pred[:, :, 1] = 0
+# _2019_lst_pred[:, :, 0] = 0
+# _2019_lst_pred[:, :, 1] = 0
+#
+# diff1, val = diff_images(reference=_2015_lst, other=_2015_lst_pred)
+# save_pyplot_image('2015_diff.png',
+#                   _2015_lst, cmap='jet', colorbar=True)
+# print(f'2015: {val}')
+#
+# diff2, val = diff_images(reference=_2019_lst, other=_2019_lst_pred)
+# save_pyplot_image('2019_diff.png',
+#                   diff2, cmap='jet', colorbar=True)
+# print(f'2019: {val}')
+#
+# diff2, val = diff_images(reference=_2015_lst, other=_2019_lst_pred)
+# save_pyplot_image('2015_2019_lst_pred.png',
+#                   diff2, cmap='jet', colorbar=True)
+# print(f'2019: {val}')
+#
+#
+# diff, val = diff_images(reference=_2015_lst, other=_2019_lst)
+# save_pyplot_image('2015_2019_lst_lst.png',
+#                   diff, cmap='jet', colorbar=True)
+# print(f'2015/9: {val}')
+#
+#
+# diff1, val = diff_images(reference=_2015_lst_pred, other=_2019_lst_pred)
+# save_pyplot_image('2015_2019_pred_pred.png',
+#                   diff1, cmap='jet', colorbar=True)
+# print(f'2015/9_pred: {val}')

@@ -118,21 +118,23 @@ def diff_images(reference: np.ndarray,
     error_b = np.fabs(np.subtract(
         reference[:, :, 2].astype(np.int16),
         other[:, :, 2].astype(np.int16))).astype(np.float16)
-    int_error_r = np.fabs(np.subtract(
-        reference[:, :, 0],
-        other[:, :, 0]))
-    int_error_g = np.fabs(np.subtract(
-        reference[:, :, 1],
-        other[:, :, 1]))
-    int_error_b = np.fabs(np.subtract(
-        reference[:, :, 2],
-        other[:, :, 2]))
+    int_error_r = np.subtract(
+        reference[:, :, 0].astype(np.int16),
+        other[:, :, 0].astype(np.int16))
+    # int_error_g = np.subtract(
+    #     reference[:, :, 1],
+    #     other[:, :, 1])
+    # int_error_b = np.subtract(
+    #     reference[:, :, 2],
+    #     other[:, :, 2])
 
     # Calculate the maximum error for each pixel
-    lum_img = np.maximum(np.maximum(int_error_r, int_error_g), int_error_b)
+    # lum_img = np.maximum(np.maximum(int_error_r, int_error_g), int_error_b)
 
+    _max = abs(np.min(int_error_r)) + abs(np.max(int_error_r))
+    lum_img = 255 * ((int_error_r[:, :] + 10) / 20)
     # Uncomment the next line to turn the colors upside-down
-    # lum_img = np.negative(lum_img)
+    lum_img = np.negative(lum_img)
 
     error = error_r + error_g + error_b
     shape = error.shape

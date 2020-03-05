@@ -73,8 +73,8 @@ def download_landsat_from_file(
             frame=frame,
             size=ImageSize(width=512, height=512),
             bbox=new_box,
-            column=HeightColumn.HEIGHT,
-            sort_by=HeightColumn.HEIGHT,
+            column=HeightColumn.HEIGHT_MSL,
+            sort_by=HeightColumn.HEIGHT_MSL,
             cmap='Greens')
         save_pyplot_image(save_to, height_map)
         for season in seasons:

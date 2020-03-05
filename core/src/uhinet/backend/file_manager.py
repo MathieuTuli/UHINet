@@ -46,6 +46,8 @@ def init_dirs(dir_name: Path):
 def save_pyplot_image(image_name: Path,
                       image: np.ndarray,
                       cmap: str = None,
+                      vmin: int = -1,
+                      vmax: int = -1,
                       colorbar: bool = False):
     """
     image: expecting value between [0, 1]
@@ -59,10 +61,23 @@ def save_pyplot_image(image_name: Path,
     fig.canvas.draw()
     fig.add_axes(ax)
     logging.debug(f"save_pyplot_image: {image_name} is of shape {image.shape}")
-    ax.imshow(image, aspect='equal')
+    norm = None
+    if vmin != -1:
+        norm = matplotlib.colors.Normalize(
+            vmin=vmin,
+            vmax=vmax)
     if cmap is not None:
-        mappable = plt.imshow(image)
-        mappable.set_cmap(cmap)
+        # mappable = plt.imshow(image)
+        # mappable.set_cmap(cmap)
+        if norm is not None:
+            ax.imshow(image, norm=norm, aspect='equal', cmap=cmap)
+        else:
+            ax.imshow(image, aspect='equal', cmap=cmap)
+    else:
+        if norm is not None:
+            ax.imshow(image, aspect='equal')
+        else:
+            ax.imshow(image, norm=norm, aspect='equal')
     if colorbar:
         plt.colorbar()
     plt.savefig(str(image_name), bbox_inches='tight')

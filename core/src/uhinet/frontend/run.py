@@ -82,7 +82,8 @@ def main(args: APNamespace):
         polygon_color = ast.literal_eval(request.args.get('polygon_color'))
         season = ast.literal_eval(request.args.get('season'))
         height = float(ast.literal_eval(request.args.get('height')))
-        energy = float(ast. literal_eval(request.args.get('energy')))
+        # energy = float(ast. literal_eval(request.args.get('energy')))
+        energy = 0.0
 
         lst_coords = []
         for coord in coords_polygon:

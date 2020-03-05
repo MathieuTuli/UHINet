@@ -14,7 +14,7 @@ from geopandas import GeoDataFrame
 from PIL import Image
 import torch
 
-from ..frontend.components import GISLayer, Polygon, Season
+from ..frontend.components import GISLayer, Polygon, Season, BuildingType
 from .data.helpers import conform_coordinates_to_spatial_resolution
 from .data.image_formatting import alter_area, diff_images, \
     square_resize
@@ -106,6 +106,9 @@ class Requests():
                 season: Season,
                 height: float,
                 energy: float) -> Tuple[GISLayer, GISLayer, GISLayer]:
+        if polygon.building_type == BuildingType.GREEN_SPACE or \
+                polygon.building_type == BuildingType.PARKING_LOT:
+            height = 0
         center_lat = np.mean([coord.lat for coord in polygon.coordinates])
         center_lon = np.mean([coord.lon for coord in polygon.coordinates])
         new_coords = conform_coordinates_to_spatial_resolution(
@@ -186,7 +189,9 @@ class Requests():
         save_pyplot_image(
             image_name=str(self.flask_static_dir / 'diff.png'),
             image=diff,
-            cmap='coolwarm')
+            cmap='bwr',
+            vmin=0,
+            vmax=255)
         save_pyplot_image(
             image_name=str(self.flask_static_dir / 'before_rgb.png'),
             image=before_rgb)
