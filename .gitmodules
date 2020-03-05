@@ -1,6 +1,6 @@
 [submodule "core/tensorflow-pix2pix"]
 	path = core/tensorflow-pix2pix
 	url = https://github.com/MathieuTuli/tensorflow-pix2pix.git
-[submodule "core/pytorch-CycleGAN-and-pix2pix"]
-	path = core/pytorch-CycleGAN-and-pix2pix
+[submodule "core/src/uhinet/backend/pytorch-CycleGAN-and-pix2pix"]
+	path = core/src/uhinet/backend/pytorch-CycleGAN-and-pix2pix
 	url = https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
