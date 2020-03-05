@@ -31,7 +31,6 @@ from .pytorch_pix2pix.data import base_dataset
 class Predictor():
     def __init__(self,
                  opts,
-                 weights: Path,
                  input_shape=Tuple[int, int, int]):
         self.model = create_model(opts)
         self.model.setup(opts)
@@ -46,15 +45,16 @@ class Predictor():
         self.model.set_input(data)
         self.model.test()
         image = self.model.get_current_visuals()
+        print(image.shape)
 
 
 class Requests():
     def __init__(self,
                  instance_id: str,
-                 winter_weights_file: Path,
-                 spring_weights_file: Path,
-                 summer_weights_file: Path,
-                 fall_weights_file: Path,
+                 # winter_weights_file: Path,
+                 # spring_weights_file: Path,
+                 # summer_weights_file: Path,
+                 # fall_weights_file: Path,
                  flask_static_dir: Path,
                  height_shp_file: Path,
                  energy_shp_file: Path) -> None:
@@ -66,14 +66,15 @@ class Requests():
         opts.display_id = -1
         opts.name = 'uhinet_pix2pix'
         opts.model = 'pix2pix'
+        opts.checkpoint = 'data/checkpoints'
         self.predictors = {
-            Season.WINTER: Predictor(opts=opts, weights=winter_weights_file,
+            Season.WINTER: Predictor(opts=opts,
                                      input_shape=(256, 256, 3)),
-            Season.SPRING: Predictor(opts=opts, weights=spring_weights_file,
+            Season.SPRING: Predictor(opts=opts,
                                      input_shape=(256, 256, 3)),
-            Season.SUMMER: Predictor(opts=opts, weights=summer_weights_file,
+            Season.SUMMER: Predictor(opts=opts,
                                      input_shape=(256, 256, 3)),
-            Season.FALL: Predictor(opts=opts, weights=fall_weights_file,
+            Season.FALL: Predictor(opts=opts,
                                    input_shape=(256, 256, 3))}
 
         self.accessor = SentinelHubAccessor(instance_id=instance_id)

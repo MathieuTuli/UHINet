@@ -54,17 +54,17 @@ def main(args: APNamespace):
             f"key={settings['google_maps_key']}" + \
             "&libraries=drawing&callback=initMap"
         global BACKEND
-        weights_path = Path(
-            '/home/mat/work/U-of-T/capstone/uhinet/data/feb-12/' +
-            '5-metres-80-range/pix2pix-training/summer/checkpoint')
+        # weights_path = Path(
+        #     '/home/mat/work/U-of-T/capstone/uhinet/data/feb-12/' +
+        #     '5-metres-80-range/pix2pix-training/summer/checkpoint')
         # weights_path = Path(
         #     '/home/mat/work/U-of-T/capstone/uhinet/data/feb-12/5-metres-v2/pix2pix-training/summer/checkpoint/')
         BACKEND = Requests(
             instance_id=str(settings['sentinel_hub_key']),
-            winter_weights_file=weights_path,
-            spring_weights_file=weights_path,
-            summer_weights_file=weights_path,
-            fall_weights_file=weights_path,
+            # winter_weights_file=weights_path,
+            # spring_weights_file=weights_path,
+            # summer_weights_file=weights_path,
+            # fall_weights_file=weights_path,
             flask_static_dir=STATIC_DIR,
             height_shp_file=Path(
                 'data/shp/2019_height.shp'),
@@ -102,13 +102,13 @@ def main(args: APNamespace):
         ''' Get Corresponding Building Type '''
         # TODO confirm this
         def getBuildingType(polygon_color, colors):
-            if polygon_color == colors[0]: #0-->Residential
+            if polygon_color == colors[0]:  # 0-->Residential
                 return BuildingType.RESIDENTIAL
-            elif polygon_color == colors[1]: #1-->Commercial
+            elif polygon_color == colors[1]:  # 1-->Commercial
                 return BuildingType.COMMERCIAL
-            elif polygon_color == colors[2]: #2-->Parking Lot
+            elif polygon_color == colors[2]:  # 2-->Parking Lot
                 return BuildingType.PARKING_LOT
-            else: #3-->Green Space
+            else:  # 3-->Green Space
                 return BuildingType.GREEN_SPACE
 
         # Polygon to use in the backend
