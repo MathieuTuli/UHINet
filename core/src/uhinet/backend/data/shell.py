@@ -42,7 +42,7 @@ def main(args: APNamespace):
 
             sentinelhub_accessor = SentinelHubAccessor(instance_id)
             download_landsat_from_file(
-                sentinelhub_accessor, shopping_list_path, Path(args.save_to))
+                sentinelhub_accessor, shopping_list_path, Path(args.height_file), Path(args.save_to))
 
     else:
         logging.error(
@@ -62,6 +62,11 @@ def args(sub_parser: _SubParsersAction) -> None:
         dest='instance_id',
         help="Default: instance_id.txt. File name of instance id for \n" +
         "data-set-specific API Accessor")
+    sub_parser.add_argument(
+        '--height-file', type=str,
+        default='data/shp/2019_height.shp',
+        dest='height_file',
+        help="")
     sub_parser.add_argument(
         '--shopping-list', type=str,
         default='shopping_list.json',

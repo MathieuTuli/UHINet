@@ -70,6 +70,7 @@ def map_from_frame(frame: GeoDataFrame,
     image = np.frombuffer(buf.getvalue(), dtype=np.uint8)
     buf.close()
     image = cv2.imdecode(image, 1)
+    plt.close(fig)
     return cv2.resize(cv2.cvtColor(image, cv2.COLOR_BGR2RGB),
                       (size.width, size.height))
 

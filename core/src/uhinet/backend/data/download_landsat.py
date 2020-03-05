@@ -17,6 +17,7 @@ from .helpers import conform_coordinates_to_spatial_resolution, get_seasons
 def download_landsat_from_file(
         sentinelhub_accessor: SentinelHubAccessor,
         file_name: Path,
+        height_file: Path,
         save_to: Path) -> bool:
     '''
     file_name: Pathlib Path to .csv file
@@ -56,12 +57,11 @@ def download_landsat_from_file(
     spatial_resolution = int(content['spatial_resolution'])
 
     seasons = get_seasons(year_from=year_from, year_to=year_to)
-    shp_path = Path('data/shp/2019_height.shp')
-    if ~shp_path.exists():
+    if not height_file.exists():
         logging.critical(
-            f"Shape file doesn't exist. Should be found at {shp_path}")
+            f"Shape file doesn't exist at {height_file}")
         return False
-    frame = GeoDataFrame.from_file(str(shp_path))
+    frame = GeoDataFrame.from_file(str(height_file))
     for center in centers:
         location = LatLon(lat=center['lat'],
                           lon=center['lon'])
