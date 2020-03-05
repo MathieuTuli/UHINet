@@ -127,14 +127,13 @@ function deleteSelectedShape () {
 
 function showHideLayer(){
     if(overlay.length >= 1){
+        var opacity = (document.getElementById("rangeinput").value) / 100.0;
         if(opacity==0){
-            var opacity = (document.getElementById("rangeinput").value) / 100.0;
             overlay[overlay_index].setOpacity(opacity);
             showOverlay();
         }
         else{
-            var opacity = 0;
-            overlay[overlay_index].setOpacity(opacity);
+            overlay[overlay_index].setOpacity(0);
             showOverlay();
         }
 
@@ -256,7 +255,8 @@ function initMap () {
 
     var Options = {
         strokeWeight: 0,
-        fillOpacity: 0.45,
+        fillOpacity: 0.55,
+        strokeColor: '#000000',
         editable: true,
         draggable: true
     };
