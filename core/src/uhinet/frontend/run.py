@@ -102,13 +102,13 @@ def main(args: APNamespace):
         ''' Get Corresponding Building Type '''
         # TODO confirm this
         def getBuildingType(polygon_color, colors):
-            if polygon_color == colors[0]:
+            if polygon_color == colors[0]: #0-->Residential
                 return BuildingType.RESIDENTIAL
-            elif polygon_color == colors[1]:
+            elif polygon_color == colors[1]: #1-->Commercial
                 return BuildingType.COMMERCIAL
-            elif polygon_color == colors[2]:
+            elif polygon_color == colors[2]: #2-->Parking Lot
                 return BuildingType.PARKING_LOT
-            else:
+            else: #3-->Green Space
                 return BuildingType.GREEN_SPACE
 
         # Polygon to use in the backend
