@@ -12,6 +12,7 @@ import cv2
 # from TFPix2Pix.predictor import Predictor
 from geopandas import GeoDataFrame
 from PIL import Image
+import torch
 
 from ..frontend.components import GISLayer, Polygon, Season
 from .data.helpers import conform_coordinates_to_spatial_resolution
@@ -38,14 +39,14 @@ class Predictor():
         self.transform = base_dataset.get_transform(opts, grayscale=False)
 
     def predict(self, input_image: np.ndarray):
-        data = {'A': Image.fromarray(input_image).convert('RGB'),
-                'B': Image.fromarray(input_image).convert('RGB'),
+        data = {'A': torch.unsqueeze(torch.tensor(self.transform(Image.fromarray(input_image).convert('RGB'))), axis=0),
+                'B': torch.unsqueeze(torch.tensor(self.transform(Image.fromarray(input_image).convert('RGB'))), axis=0),
                 'A_paths': Path(''),
                 'B_paths': Path('')}
         self.model.set_input(data)
         self.model.test()
         image = self.model.get_current_visuals()
-        print(image.shape)
+        print(type(image))
 
 
 class Requests():
@@ -66,7 +67,7 @@ class Requests():
         opts.display_id = -1
         opts.name = 'uhinet_pix2pix'
         opts.model = 'pix2pix'
-        opts.checkpoint = 'data/checkpoints'
+        opts.checkpoints_dir = 'data/checkpoints'
         self.predictors = {
             Season.WINTER: Predictor(opts=opts,
                                      input_shape=(256, 256, 3)),
@@ -140,13 +141,13 @@ class Requests():
         #     axis=0)
         before_rgb_tensor = cv2.resize(
             before_rgb, (512, 512), interpolation=cv2.INTER_NEAREST)
-        before_lst_tensor = tf.expand_dims((tf.image.resize(
-            images=tf.convert_to_tensor(
-                value=square_resize(before_lst, 512, cv2.INTER_AREA),
-                dtype=tf.float32),
-            size=[256, 256],
-            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
-            axis=0)
+        # before_lst_tensor = tf.expand_dims((tf.image.resize(
+        #     images=tf.convert_to_tensor(
+        #         value=square_resize(before_lst, 512, cv2.INTER_AREA),
+        #         dtype=tf.float32),
+        #     size=[256, 256],
+        #     method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
+        #     axis=0)
         # after_rgb_tensor = tf.expand_dims((tf.image.resize(
         #     images=tf.convert_to_tensor(
         #         value=square_resize(after_rgb, 512, cv2.INTER_AREA),
