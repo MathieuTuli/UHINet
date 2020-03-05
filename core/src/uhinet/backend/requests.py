@@ -23,9 +23,9 @@ from .data.components import ImageSize, LatLon, HeightColumn, \
 from .data.sentinel_hub import SentinelHubAccessor
 from .file_manager import save_pyplot_image
 
-from .pytorch_pix2pix.options import TestOptions
+from .pytorch_pix2pix.options.test_options import TestOptions
 from .pytorch_pix2pix.models import create_model
-from .pytorch_pix2pix.data import base_model
+from .pytorch_pix2pix.data import base_dataset
 
 
 class Predictor():
@@ -36,7 +36,7 @@ class Predictor():
         self.model = create_model(opts)
         self.model.setup(opts)
         self.model.eval()
-        self.transform = base_model.get_transform(opts, grayscale=False)
+        self.transform = base_dataset.get_transform(opts, grayscale=False)
 
     def predict(self, input_image: np.ndarray):
         data = {'A': Image.fromarray(input_image).convert('RGB'),
@@ -58,7 +58,7 @@ class Requests():
                  flask_static_dir: Path,
                  height_shp_file: Path,
                  energy_shp_file: Path) -> None:
-        opts = TestOptions.parse()
+        opts = TestOptions().parse()
         opts.num_threads = 0
         opts.batch_size = 1
         opts.serial_batches = True

@@ -1,6 +1,6 @@
 import os.path
-from data.base_dataset import BaseDataset, get_transform
-from data.image_folder import make_dataset
+from .base_dataset import BaseDataset, get_transform
+from .image_folder import make_dataset
 from PIL import Image
 import random
 
@@ -23,16 +23,22 @@ class UnalignedDataset(BaseDataset):
             opt (Option class) -- stores all the experiment flags; needs to be a subclass of BaseOptions
         """
         BaseDataset.__init__(self, opt)
-        self.dir_A = os.path.join(opt.dataroot, opt.phase + 'A')  # create a path '/path/to/data/trainA'
-        self.dir_B = os.path.join(opt.dataroot, opt.phase + 'B')  # create a path '/path/to/data/trainB'
+        # create a path '/path/to/data/trainA'
+        self.dir_A = os.path.join(opt.dataroot, opt.phase + 'A')
+        # create a path '/path/to/data/trainB'
+        self.dir_B = os.path.join(opt.dataroot, opt.phase + 'B')
 
-        self.A_paths = sorted(make_dataset(self.dir_A, opt.max_dataset_size))   # load images from '/path/to/data/trainA'
-        self.B_paths = sorted(make_dataset(self.dir_B, opt.max_dataset_size))    # load images from '/path/to/data/trainB'
+        # load images from '/path/to/data/trainA'
+        self.A_paths = sorted(make_dataset(self.dir_A, opt.max_dataset_size))
+        # load images from '/path/to/data/trainB'
+        self.B_paths = sorted(make_dataset(self.dir_B, opt.max_dataset_size))
         self.A_size = len(self.A_paths)  # get the size of dataset A
         self.B_size = len(self.B_paths)  # get the size of dataset B
         btoA = self.opt.direction == 'BtoA'
-        input_nc = self.opt.output_nc if btoA else self.opt.input_nc       # get the number of channels of input image
-        output_nc = self.opt.input_nc if btoA else self.opt.output_nc      # get the number of channels of output image
+        # get the number of channels of input image
+        input_nc = self.opt.output_nc if btoA else self.opt.input_nc
+        # get the number of channels of output image
+        output_nc = self.opt.input_nc if btoA else self.opt.output_nc
         self.transform_A = get_transform(self.opt, grayscale=(input_nc == 1))
         self.transform_B = get_transform(self.opt, grayscale=(output_nc == 1))
 
@@ -48,7 +54,8 @@ class UnalignedDataset(BaseDataset):
             A_paths (str)    -- image paths
             B_paths (str)    -- image paths
         """
-        A_path = self.A_paths[index % self.A_size]  # make sure index is within then range
+        A_path = self.A_paths[index %
+                              self.A_size]  # make sure index is within then range
         if self.opt.serial_batches:   # make sure index is within then range
             index_B = index % self.B_size
         else:   # randomize the index for domain B to avoid fixed pairs.

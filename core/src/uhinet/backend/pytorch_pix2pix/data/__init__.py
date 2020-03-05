@@ -12,7 +12,8 @@ See our template dataset class 'template_dataset.py' for more details.
 """
 import importlib
 import torch.utils.data
-from data.base_dataset import BaseDataset
+from .base_dataset import BaseDataset
+from .unaligned_dataset import UnalignedDataset
 
 
 def find_dataset_using_name(dataset_name):
@@ -22,6 +23,7 @@ def find_dataset_using_name(dataset_name):
     be instantiated. It has to be a subclass of BaseDataset,
     and it is case-insensitive.
     """
+    return UnalignedDataset
     dataset_filename = "data." + dataset_name + "_dataset"
     datasetlib = importlib.import_module(dataset_filename)
 
@@ -33,7 +35,8 @@ def find_dataset_using_name(dataset_name):
             dataset = cls
 
     if dataset is None:
-        raise NotImplementedError("In %s.py, there should be a subclass of BaseDataset with class name that matches %s in lowercase." % (dataset_filename, target_dataset_name))
+        raise NotImplementedError("In %s.py, there should be a subclass of BaseDataset with class name that matches %s in lowercase." % (
+            dataset_filename, target_dataset_name))
 
     return dataset
 

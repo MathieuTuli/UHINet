@@ -11,7 +11,7 @@ You need to implement the following functions:
     -- <__getitem__>: Return a data point and its metadata information.
     -- <__len__>: Return the number of images.
 """
-from data.base_dataset import BaseDataset, get_transform
+from .base_dataset import BaseDataset, get_transform
 # from data.image_folder import make_dataset
 # from PIL import Image
 
@@ -29,8 +29,10 @@ class TemplateDataset(BaseDataset):
         Returns:
             the modified parser.
         """
-        parser.add_argument('--new_dataset_option', type=float, default=1.0, help='new dataset option')
-        parser.set_defaults(max_dataset_size=10, new_dataset_option=2.0)  # specify dataset-specific default values
+        parser.add_argument('--new_dataset_option', type=float,
+                            default=1.0, help='new dataset option')
+        # specify dataset-specific default values
+        parser.set_defaults(max_dataset_size=10, new_dataset_option=2.0)
         return parser
 
     def __init__(self, opt):
@@ -47,7 +49,8 @@ class TemplateDataset(BaseDataset):
         # save the option and dataset root
         BaseDataset.__init__(self, opt)
         # get the image paths of your dataset;
-        self.image_paths = []  # You can call sorted(make_dataset(self.root, opt.max_dataset_size)) to get all the image paths under the directory self.root
+        # You can call sorted(make_dataset(self.root, opt.max_dataset_size)) to get all the image paths under the directory self.root
+        self.image_paths = []
         # define the default transform function. You can use <base_dataset.get_transform>; You can also define your custom transform function
         self.transform = get_transform(opt)
 
