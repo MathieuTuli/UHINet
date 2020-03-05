@@ -64,6 +64,7 @@ class Requests():
         opts.serial_batches = True
         opts.no_flip = True
         opts.display_id = -1
+        opts.name = 'uhinet_pix2pix'
         opts.model = 'pix2pix'
         self.predictors = {
             Season.WINTER: Predictor(opts=opts, weights=winter_weights_file,
@@ -129,13 +130,15 @@ class Requests():
                                window=new_coords,
                                building_type=polygon.building_type,
                                season=season)
-        before_rgb_tensor = tf.expand_dims((tf.image.resize(
-            images=tf.convert_to_tensor(
-                value=square_resize(before_rgb, 512, cv2.INTER_AREA),
-                dtype=tf.float32),
-            size=[256, 256],
-            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
-            axis=0)
+        # before_rgb_tensor = tf.expand_dims((tf.image.resize(
+        #     images=tf.convert_to_tensor(
+        #         value=square_resize(before_rgb, 512, cv2.INTER_AREA),
+        #         dtype=tf.float32),
+        #     size=[256, 256],
+        #     method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
+        #     axis=0)
+        before_rgb_tensor = cv2.resize(
+            before_rgb, (512, 512), interpolation=cv2.INTER_NEAREST)
         before_lst_tensor = tf.expand_dims((tf.image.resize(
             images=tf.convert_to_tensor(
                 value=square_resize(before_lst, 512, cv2.INTER_AREA),
@@ -143,13 +146,15 @@ class Requests():
             size=[256, 256],
             method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
             axis=0)
-        after_rgb_tensor = tf.expand_dims((tf.image.resize(
-            images=tf.convert_to_tensor(
-                value=square_resize(after_rgb, 512, cv2.INTER_AREA),
-                dtype=tf.float32),
-            size=[256, 256],
-            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
-            axis=0)
+        # after_rgb_tensor = tf.expand_dims((tf.image.resize(
+        #     images=tf.convert_to_tensor(
+        #         value=square_resize(after_rgb, 512, cv2.INTER_AREA),
+        #         dtype=tf.float32),
+        #     size=[256, 256],
+        #     method=tf.image.ResizeMethod.NEAREST_NEIGHBOR) / 127.5) - 1,
+        #     axis=0)
+        after_rgb_tensor = cv2.resize(
+            after_rgb, (512, 512), interpolation=cv2.INTER_NEAREST)
         before_height = array_from_ax(self.height_fig, self.height_ax,
                                       new_coords)
         self.height_ax.add_patch(
