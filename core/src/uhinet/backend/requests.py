@@ -27,6 +27,7 @@ from .file_manager import save_pyplot_image
 from .pytorch_pix2pix.options.test_options import TestOptions
 from .pytorch_pix2pix.models import create_model
 from .pytorch_pix2pix.data import base_dataset
+from .pytorch_pix2pix.util.util import tensor2im
 
 
 class Predictor():
@@ -39,14 +40,16 @@ class Predictor():
         self.transform = base_dataset.get_transform(opts, grayscale=False)
 
     def predict(self, input_image: np.ndarray):
-        data = {'A': torch.unsqueeze(torch.tensor(self.transform(Image.fromarray(input_image).convert('RGB'))), axis=0),
-                'B': torch.unsqueeze(torch.tensor(self.transform(Image.fromarray(input_image).convert('RGB'))), axis=0),
-                'A_paths': Path(''),
-                'B_paths': Path('')}
+        data = {'A': torch.unsqueeze(torch.tensor(self.transform(
+            Image.fromarray(input_image).convert('RGB'))), axis=0),
+            'B': torch.unsqueeze(torch.tensor(self.transform(
+                Image.fromarray(input_image).convert('RGB'))), axis=0),
+            'A_paths': Path(''),
+            'B_paths': Path('')}
         self.model.set_input(data)
         self.model.test()
         image = self.model.get_current_visuals()
-        print(type(image))
+        return tensor2im(image['fake_B'])
 
 
 class Requests():
