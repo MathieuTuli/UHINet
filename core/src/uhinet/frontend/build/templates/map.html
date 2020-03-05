@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Simple Map</title>
+    <title>UHINet</title>
     <script type=text/javascript src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type=text/javascript>
       $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -30,10 +30,6 @@
             </div>
         </nav>
     </header>
-
-
-    <div id="main-content" class="container col-md-12">
-
           <br>
           <div class="row">
               <div class="col-md-2" id = "selection">
@@ -62,6 +58,11 @@
                 </div id='Map Setting'>
                 <hr>
                 <input class="myButton" id=send_coords_button type=button value="Generate Prediction">
+                <hr>
+                <div id="loading_icon" class="col-md-1">
+                      <div class="spinner-border"></div>
+                      <div>Loading...</div>
+                </div>
                 <hr>
                 <input class="myButton" onclick="deleteSelectedShape();" type=button value="Delete Polygon">
                 <hr>
@@ -94,18 +95,6 @@
                         </div>
                         <input id="height" type="number" class="form-control" placeholder="0" value="0" aria-describedby="addon-wrapping">
                       </div>       
-                    </div>
-                    <div class="col-md-3">
-                      <div class="block input-group flex-nowrap">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text" id="addon-wrapping">Energy use (kJ/m<sup>2</sup>)</span>
-                        </div>
-                        <input id="energy" type="number" class="form-control" placeholder="0" value="0" aria-describedby="addon-wrapping">
-                      </div>       
-                    </div>
-                    <div id="loading_icon" class="col-md-1">
-                      <div class="spinner-border"></div>
-                      <div>Loading...</div>
                     </div>
                   </div>
                   <br>

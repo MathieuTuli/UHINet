@@ -275,4 +275,17 @@ h3.menu-item-title {
   border-radius: 50%;
 }
 
+div[title="Stop drawing"] {
+    content: url(https://cdn4.iconfinder.com/data/icons/whsr-january-flaticon-set/128/compass.png) !important;       
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+}
+
+div[title="Draw a shape"] {
+    content: url(https://www.shareicon.net/data/32x32/2015/07/04/64183_rectangle_256x256.png) !important;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+}
 

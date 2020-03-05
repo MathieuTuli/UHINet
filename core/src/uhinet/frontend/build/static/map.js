@@ -141,16 +141,20 @@ function showHideLayer(){
 }
 
 function showHidePolygon(){
+    console.log('poly');
     if (selectedShape) {
-        if (selectedShape.opacity==0){
-            selectedShape.set('opacity', 0.45)
+        if (selectedShape.fillOpacity==0){
+            console.log('1');
+            selectedShape.set('fillOpacity', 0.55);
         }
         else{
-            selectedShape.set('strokeColor', 0)
+            console.log('2');
+            selectedShape.set('fillOpacity', 0);
         }
         
     }
 }
+
 // Send coordinates of the polygon and the viewport to the backend
 // and get an image from the backend
 $(function() {
@@ -175,7 +179,6 @@ $(function() {
       colors: JSON.stringify(colors),
       season: JSON.stringify(season),
       height: JSON.stringify(selectedShape.height),
-      energy: JSON.stringify(selectedShape.width),
     }, function(data) {
       image_path = [];
       image_path.push(('/static/' + data.image_names[0]));
@@ -236,6 +239,8 @@ function initMap () {
         if(overlay.length >= 1)
             showOverlay();
     }
+    document.getElementById("rangeinput").value = 100;
+
     document.getElementById("Before").addEventListener("click", setOverlayIndex);
     document.getElementById("After").addEventListener("click", setOverlayIndex);
     document.getElementById("Difference").addEventListener("click", setOverlayIndex);
@@ -257,6 +262,7 @@ function initMap () {
         strokeWeight: 0,
         fillOpacity: 0.55,
         strokeColor: '#000000',
+        strokeOpacity: 1.0,
         editable: true,
         draggable: true
     };
@@ -279,24 +285,15 @@ function initMap () {
         }
     }
 
-    function setEnergy(){
-        if (selectedShape){
-            selectedShape.width = document.getElementById("energy").value;
-            console.log(selectedShape.width);
-        }
-    }
+
 
     var button_changeOverlay = document.getElementById("rangeinput")
     button_changeOverlay.addEventListener("click", changeOpacity);
 
     var height_input = document.getElementById("height")
     height_input.addEventListener("blur", setHeight);
-
-    var energy_input = document.getElementById("height")
-    energy_input.addEventListener("blur", setEnergy);
             
     document.getElementById("height").value = 0;
-    document.getElementById("energy").value = 0;
 
 
     // Keeps track of the coordinates of the current viewport
@@ -321,7 +318,6 @@ function initMap () {
         array = newShape.getPath();
         coords = [];
         newShape.height = document.getElementById("height").value;
-        newShape.width = document.getElementById("energy").value;
         for(var i = 0; i < array.length; i++)
             coords.push(array.getAt(i));
         // window.alert(coords);
@@ -330,7 +326,6 @@ function initMap () {
             array = newShape.getPath();
             coords = [];
             document.getElementById("height").value = newShape.height;
-            document.getElementById("energy").value = newShape.width;
             for(var i = 0; i < array.length; i++)
                 coords.push(array.getAt(i));
             // window.alert(coords);
