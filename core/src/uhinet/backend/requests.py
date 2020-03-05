@@ -9,8 +9,9 @@ import matplotlib
 import logging
 import cv2
 
-from TFPix2Pix.predictor import Predictor
+# from TFPix2Pix.predictor import Predictor
 from geopandas import GeoDataFrame
+from PIL import Image
 
 from ..frontend.components import GISLayer, Polygon, Season
 from .data.helpers import conform_coordinates_to_spatial_resolution
@@ -21,6 +22,30 @@ from .data.components import ImageSize, LatLon, HeightColumn, \
     EnergyColumn, BBox
 from .data.sentinel_hub import SentinelHubAccessor
 from .file_manager import save_pyplot_image
+
+from .pytorch_pix2pix.options import TestOptions
+from .pytorch_pix2pix.models import create_model
+from .pytorch_pix2pix.data import base_model
+
+
+class Predictor():
+    def __init__(self,
+                 opts,
+                 weights: Path,
+                 input_shape=Tuple[int, int, int]):
+        self.model = create_model(opts)
+        self.model.setup(opts)
+        self.model.eval()
+        self.transform = base_model.get_transform(opts, grayscale=False)
+
+    def predict(self, input_image: np.ndarray):
+        data = {'A': Image.fromarray(input_image).convert('RGB'),
+                'B': Image.fromarray(input_image).convert('RGB'),
+                'A_paths': Path(''),
+                'B_paths': Path('')}
+        self.model.set_input(data)
+        self.model.test()
+        image = self.model.get_current_visuals()
 
 
 class Requests():
@@ -33,14 +58,21 @@ class Requests():
                  flask_static_dir: Path,
                  height_shp_file: Path,
                  energy_shp_file: Path) -> None:
+        opts = TestOptions.parse()
+        opts.num_threads = 0
+        opts.batch_size = 1
+        opts.serial_batches = True
+        opts.no_flip = True
+        opts.display_id = -1
+        opts.model = 'pix2pix'
         self.predictors = {
-            Season.WINTER: Predictor(weights=winter_weights_file,
+            Season.WINTER: Predictor(opts=opts, weights=winter_weights_file,
                                      input_shape=(256, 256, 3)),
-            Season.SPRING: Predictor(weights=spring_weights_file,
+            Season.SPRING: Predictor(opts=opts, weights=spring_weights_file,
                                      input_shape=(256, 256, 3)),
-            Season.SUMMER: Predictor(weights=summer_weights_file,
+            Season.SUMMER: Predictor(opts=opts, weights=summer_weights_file,
                                      input_shape=(256, 256, 3)),
-            Season.FALL: Predictor(weights=fall_weights_file,
+            Season.FALL: Predictor(opts=opts, weights=fall_weights_file,
                                    input_shape=(256, 256, 3))}
 
         self.accessor = SentinelHubAccessor(instance_id=instance_id)
