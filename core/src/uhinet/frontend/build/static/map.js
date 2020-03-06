@@ -53,6 +53,7 @@ function makeColorButton (color) {
     button.className = 'color-button';
     button.value = color;
     button.style.backgroundColor = color;
+    button.style.borderWidth = "thick";    
     google.maps.event.addDomListener(button, 'click', function () {
         selectColor(color);
         setSelectedShapeColor(color);
