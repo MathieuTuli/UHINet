@@ -67,8 +67,6 @@ def save_pyplot_image(image_name: Path,
             vmin=vmin,
             vmax=vmax)
     if cmap is not None:
-        # mappable = plt.imshow(image)
-        # mappable.set_cmap(cmap)
         if norm is not None:
             ax.imshow(image, norm=norm, aspect='equal', cmap=cmap)
         else:
@@ -79,6 +77,9 @@ def save_pyplot_image(image_name: Path,
         else:
             ax.imshow(image, norm=norm, aspect='equal')
     if colorbar:
+        mappable = plt.imshow(image)
+        mappable.set_cmap(cmap)
+        plt.clim(-10, 10)
         plt.colorbar()
     plt.savefig(str(image_name), bbox_inches='tight')
     plt.close(fig)
