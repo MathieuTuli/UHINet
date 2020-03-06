@@ -33,18 +33,6 @@
           <br>
           <div class="row">
               <div class="col-md-2" id = "selection">
-                <div id='UHI Setting'>
-                    <strong><big>Season Setting</strong></big>
-                    <div id='Temporal Resolution'>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Spring" id="Spring"  onclick="setSeason();"> Spring
-                    <br>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Summer" id="Summer" Checked onclick="setSeason();"> Summer
-                    <br>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Autumn" id="Autumn" onclick="setSeason();"> Fall
-                    <br>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Winter" id="Winter" onclick="setSeason();"> Winter
-                    </div id='Temporal Resolution'>
-                </div id='UHI Setting'>
                 <hr>
                 <div id='Map Setting'>
                     <strong><big>Overlay Setting</strong></big>
@@ -59,11 +47,15 @@
                 <hr>
                 <div class="row">
                   <input class="myButton col-md-9" id=send_coords_button type=button value="Generate Prediction">
-                  
+                            
                   <div id="loading_icon" class="col-md-2">
                       <div class="spinner-border"></div>
                       <div>Loading...</div>
                   </div>
+
+                </div>
+                <div id="image" class="col-md-2">
+                      <img src="../static/colorbar.png" alt="Colorbar">
                 </div>
                 <hr>
                 <div class="row">
