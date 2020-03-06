@@ -10,20 +10,9 @@ var image_path = [];
 var colors = ['#B0AFAF', '#606060', '#1C1C1C','#32CD32'];
 var selectedColor;
 var colorButtons = {};
-var season;
 
 
-// Set current season
-function setSeason(){
-    if(document.getElementById('Spring').checked)
-        season = document.getElementById('Spring').value;
-    if(document.getElementById('Summer').checked)
-        season = document.getElementById('Summer').value;
-    if(document.getElementById('Autumn').checked)
-        season = document.getElementById('Autumn').value;
-    if(document.getElementById('Winter').checked)
-        season = document.getElementById('Winter').value;
-}
+
 
 
 function selectColor (color) {
@@ -147,10 +136,12 @@ function showHidePolygon(){
         if (selectedShape.fillOpacity==0){
             console.log('1');
             selectedShape.set('fillOpacity', 0.55);
+            selectedShape.set('strokeWeight', 2);
         }
         else{
             console.log('2');
             selectedShape.set('fillOpacity', 0);
+            selectedShape.set('strokeWeight', 0);
         }
         
     }
@@ -178,7 +169,6 @@ $(function() {
       coords_bound: JSON.stringify(coords_bound),
       polygon_color: JSON.stringify(selectedShape.fillColor),
       colors: JSON.stringify(colors),
-      season: JSON.stringify(season),
       height: JSON.stringify(selectedShape.height),
     }, function(data) {
       image_path = [];
@@ -223,7 +213,6 @@ function initMap () {
         zoomControl: true
     });
 
-    setSeason();
     document.getElementById("loading_icon").style.display="none";
 
 
