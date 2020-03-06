@@ -36,9 +36,9 @@
                 <div id='UHI Setting'>
                     <strong><big>Season Setting</strong></big>
                     <div id='Temporal Resolution'>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Spring" id="Spring" Checked onclick="setSeason();"> Spring
+                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Spring" id="Spring"  onclick="setSeason();"> Spring
                     <br>
-                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Summer" id="Summer" onclick="setSeason();"> Summer
+                    <input type="radio" class="option-input radio" name="Temporal Resolution" value="Summer" id="Summer" Checked onclick="setSeason();"> Summer
                     <br>
                     <input type="radio" class="option-input radio" name="Temporal Resolution" value="Autumn" id="Autumn" onclick="setSeason();"> Fall
                     <br>
@@ -57,24 +57,32 @@
                     </div id='UHI Comparison'>  
                 </div id='Map Setting'>
                 <hr>
-                <input class="myButton" id=send_coords_button type=button value="Generate Prediction">
-                <hr>
-                <div id="loading_icon" class="col-md-1">
+                <div class="row">
+                  <input class="myButton col-md-9" id=send_coords_button type=button value="Generate Prediction">
+                  
+                  <div id="loading_icon" class="col-md-2">
                       <div class="spinner-border"></div>
                       <div>Loading...</div>
+                  </div>
                 </div>
                 <hr>
-                <input class="myButton" onclick="deleteSelectedShape();" type=button value="Delete Polygon">
+                <div class="row">
+                  <input class="myButton col-md-9" onclick="deleteSelectedShape();" type=button value="Delete Polygon">
+                </div>
                 <hr>
-                <input class="myButton" onclick="showHidePolygon();" type=button value="Show/Hide Polygon">
+                <div class="row">
+                  <input class="myButton col-md-9" onclick="showHidePolygon();" type=button value="Show/Hide Polygon">
+                </div>
                 <hr>
-                <input class="myButton" onclick="showHideLayer();" type=button value="Show/Hide Layer">
+                <div class="row">
+                  <input class="myButton col-md-9" onclick="showHideLayer();" type=button value="Show/Hide Layer">
+                </div>
                 <hr>
                 <strong>Layer Opacity</strong>
                 <div id="slider">
                   <input class="bar custom-range col-sm-9" type="range" id="rangeinput" min="0" max="100" value="100" onchange="rangevalue.value=value"/>
                   <span class="highlight"></span>
-                  <output id="rangevalue"></output>
+                  <output id="rangevalue" value="100">100</output>
                 </div>
               </div>
 
@@ -82,10 +90,12 @@
                   <div class="row">
                     <div class="col-md-2">
                       <div id="color-palette1"></div>
+                      <br>
                       <div id="color-palette2"></div>
                     </div>
                     <div class="col-md-2">
                       <div id="color-palette3"></div>
+                      <br>
                       <div id="color-palette4"></div>
                     </div>
                     <div class="col-md-3">
