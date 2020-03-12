@@ -79,7 +79,7 @@ def save_pyplot_image(image_name: Path,
     if colorbar:
         mappable = plt.imshow(image)
         mappable.set_cmap(cmap)
-        plt.clim(-10, 10)
+        plt.clim(-3, 3)
         plt.colorbar()
     plt.savefig(str(image_name), bbox_inches='tight')
     plt.close(fig)

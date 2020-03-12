@@ -133,6 +133,7 @@ def diff_images(reference: np.ndarray,
     # lum_img = np.maximum(np.maximum(int_error_r, int_error_g), int_error_b)
 
     _min = -10  # np.min(int_error_r)
+    print(np.min(int_error_r))
     lum_img = 255 * \
         (np.clip(a=(int_error_r[:, :] - _min) /
                  (2 * abs(_min)), a_min=0, a_max=1))

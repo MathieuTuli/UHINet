@@ -80,7 +80,7 @@ def main(args: APNamespace):
         coords_bound = ast.literal_eval(request.args.get('coords_bound'))
         colors = ast.literal_eval(request.args.get('colors'))
         polygon_color = ast.literal_eval(request.args.get('polygon_color'))
-        season = ast.literal_eval(request.args.get('season'))
+        # season = ast.literal_eval(request.args.get('season'))
         height = float(ast.literal_eval(request.args.get('height')))
         # energy = float(ast. literal_eval(request.args.get('energy')))
         energy = 0.0
@@ -142,7 +142,7 @@ def main(args: APNamespace):
         global BACKEND
         layers = BACKEND.predict(
             polygon=polygon,
-            season=getSeason(season),
+            season=Season.SUMMER,  # getSeason(season),
             height=height,
             energy=energy)
         image_names = [str(layers[0].image),  # Before image
