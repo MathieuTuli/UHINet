@@ -38,12 +38,15 @@ label {
 }
 
 .color-button {
-    width: 14px;
-    height: 14px;
+    width: 30px;
+    height: 30px;
     font-size: 0;
-    margin: 2px;
+    margin: 5px;
     float: left;
     cursor: pointer;
+}
+.color-button:checked {
+  background: #FF0000;
 }
 
 .myButton {
@@ -77,7 +80,7 @@ label {
 body {
   font-size: 16px;
   color: #3A3A3A;
-  background: linear-gradient(to bottom, #DADADA, #6699cc);
+  background: linear-gradient(to bottom, #6699cc, #DADADA);
   font-family: Verdana, sans-serif;
 }
 
@@ -275,7 +278,7 @@ h3.menu-item-title {
   border-radius: 50%;
 }
 
-div[title="Stop drawing"] {
+div[title="Stop drawing"] {  
     content: url(https://cdn4.iconfinder.com/data/icons/whsr-january-flaticon-set/128/compass.png) !important;       
     height: 40px;
     width: 40px;
@@ -283,7 +286,7 @@ div[title="Stop drawing"] {
 }
 
 div[title="Draw a shape"] {
-    content: url(https://www.shareicon.net/data/32x32/2015/07/04/64183_rectangle_256x256.png) !important;
+    content: url(https://www.shareicon.net/data/64x64/2016/06/10/586360_polygon_512x512.png) !important;     
     height: 40px;
     width: 40px;
     cursor: pointer;

@@ -95,6 +95,7 @@ class Requests():
             vmin=self.height_frame['HEIGHT_MSL'].min(),
             vmax=self.height_frame['HEIGHT_MSL'].max())
         self.height_color = matplotlib.cm.get_cmap('Greens')
+        self.count = 0
         # self.energy_frame = GeoDataFrame.from_file(str(height_shp_file))
         # self.energy_frame = self.energy_frame.sort_values(by=str('ENERGY'))
 
@@ -165,6 +166,10 @@ class Requests():
             after_rgb, (512, 512), interpolation=cv2.INTER_NEAREST)
         before_height = array_from_ax(self.height_fig, self.height_ax,
                                       new_coords)
+        save_pyplot_image(
+            image_name=str(self.flask_static_dir /
+                           f'{self.count}_before_height.png'),
+            image=before_height)
         self.height_ax.add_patch(
             matplotlib.pyplot.Polygon(
                 [(c.lon, c.lat) for c in polygon.coordinates],
@@ -181,36 +186,38 @@ class Requests():
             reference=before_predicted_lst, other=after_predicted_lst)
 
         save_pyplot_image(
-            image_name=str(self.flask_static_dir / 'before_lst.png'),
+            image_name=str(self.flask_static_dir /
+                           f'{self.count}_before_lst.png'),
             image=before_predicted_lst)
         save_pyplot_image(
-            str(self.flask_static_dir / 'after_lst.png'),
+            str(self.flask_static_dir / f'{self.count}_after_lst.png'),
             image=after_predicted_lst)
         save_pyplot_image(
-            image_name=str(self.flask_static_dir / 'diff.png'),
-            image=diff,
+            image_name=str(self.flask_static_dir / f'{self.count}_diff.png'),
+            image=diff if polygon.building_type == BuildingType.GREEN_SPACE else -diff,
             cmap='bwr',
             vmin=0,
             vmax=255)
         save_pyplot_image(
-            image_name=str(self.flask_static_dir / 'before_rgb.png'),
+            image_name=str(self.flask_static_dir /
+                           f'{self.count}_before_rgb.png'),
             image=before_rgb)
         save_pyplot_image(
-            image_name=str(self.flask_static_dir / 'after_rgb.png'),
+            image_name=str(self.flask_static_dir /
+                           f'{self.count}_after_rgb.png'),
             image=after_rgb)
         save_pyplot_image(
-            image_name=str(self.flask_static_dir / 'before_height.png'),
-            image=before_height)
-        save_pyplot_image(
-            image_name=str(self.flask_static_dir / 'after_height.png'),
+            image_name=str(self.flask_static_dir /
+                           f'{self.count}_after_height.png'),
             image=after_height)
         # save_pyplot_image(
         #     image_name=str(self.flask_static_dir / 'before_energy.png'),
         #     image=before_energy)
-        before_lst = GISLayer(image=Path('before_lst.png'),
+        before_lst = GISLayer(image=Path(f'{self.count}_before_lst.png'),
                               coordinates=new_coords)
-        after_lst = GISLayer(image=Path('after_lst.png'),
+        after_lst = GISLayer(image=Path(f'{self.count}_after_lst.png'),
                              coordinates=new_coords)
-        diff = GISLayer(image=Path('diff.png'),
+        diff = GISLayer(image=Path(f'{self.count}_diff.png'),
                         coordinates=new_coords)
+        self.count += 1
         return (before_lst, after_lst, diff)
