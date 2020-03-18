@@ -31,7 +31,7 @@ import numpy as np
 vals = list()
 
 images = Path(
-    '/home/mat/github/U-of-T/capstone/pytorch-CycleGAN-and-pix2pix/results/uhinet_pix2pix/test_latest/images')
+    '/home/mat/github/U-of-T/capstone/pytorch-CycleGAN-and-pix2pix/results/uhinet_pix2pix/other/test_latest/images/')
 
 # diff1, val = diff_images(reference=_2015_lst, other=_2015_lst_pred)
 # save_pyplot_image('2015_diff.png',
@@ -44,10 +44,13 @@ for img in images.iterdir():
         fake = cv2.imread(str(img))
         real = cv2.imread(str(img).replace('fake', 'real'))
         diff, val = diff_images(reference=real, other=fake)
+        save_pyplot_image(image_name='/home/mat/Downloads/diff_2.png',
+                          image=diff, vmin=0, vmax=255, cmap='bwr')
         vals.append(val)
 print(np.mean(vals))
 print(np.max(vals))
 print(np.min(vals))
+print(np.std(vals))
 # _2015_path_lst = (
 #     '/home/mat/github/U-of-T/capstone/pix2pix-tensorflow/5-metres-80-range/other/images/2-targets.png')
 # _2019_path_lst = (

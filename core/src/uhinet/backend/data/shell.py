@@ -42,7 +42,8 @@ def main(args: APNamespace):
 
             sentinelhub_accessor = SentinelHubAccessor(instance_id)
             download_landsat_from_file(
-                sentinelhub_accessor, shopping_list_path, Path(args.height_file), Path(args.save_to))
+                sentinelhub_accessor, shopping_list_path, Path(args.save_to))
+            # sentinelhub_accessor, shopping_list_path, Path(args.height_file), Path(args.save_to))
 
     else:
         logging.error(

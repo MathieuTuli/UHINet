@@ -17,7 +17,7 @@ from .helpers import conform_coordinates_to_spatial_resolution, get_seasons
 def download_landsat_from_file(
         sentinelhub_accessor: SentinelHubAccessor,
         file_name: Path,
-        height_file: Path,
+        # height_file: Path,
         save_to: Path) -> bool:
     '''
     file_name: Pathlib Path to .csv file
@@ -57,11 +57,11 @@ def download_landsat_from_file(
     spatial_resolution = int(content['spatial_resolution'])
 
     seasons = get_seasons(year_from=year_from, year_to=year_to)
-    if not height_file.exists():
-        logging.critical(
-            f"Shape file doesn't exist at {height_file}")
-        return False
-    frame = GeoDataFrame.from_file(str(height_file))
+    # if not height_file.exists():
+    #     logging.critical(
+    #         f"Shape file doesn't exist at {height_file}")
+    #     return False
+    # frame = GeoDataFrame.from_file(str(height_file))
     for center in centers:
         location = LatLon(lat=center['lat'],
                           lon=center['lon'])
@@ -69,14 +69,14 @@ def download_landsat_from_file(
             spatial_resolution=spatial_resolution,
             image_size=image_size,
             center=location)
-        height_map = map_from_frame(
-            frame=frame,
-            size=ImageSize(width=512, height=512),
-            bbox=new_box,
-            column=HeightColumn.HEIGHT_MSL,
-            sort_by=HeightColumn.HEIGHT_MSL,
-            cmap='Greens')
-        save_pyplot_image(save_to, height_map)
+        # height_map = map_from_frame(
+        #     frame=frame,
+        #     size=ImageSize(width=512, height=512),
+        #     bbox=new_box,
+        #     column=HeightColumn.HEIGHT_MSL,
+        #     sort_by=HeightColumn.HEIGHT_MSL,
+        #     cmap='Greens')
+        # save_pyplot_image(save_to, height_map)
         for season in seasons:
             for layer in layers:
                 imgs = sentinelhub_accessor.get_landsat_image(
@@ -107,10 +107,10 @@ def download_landsat_from_file(
                             save_dir /
                             f"{count}_{layer}.png",
                             img, cmap='Greys')
-                        save_pyplot_image(
-                            save_dir /
-                            f"{count}_HEIGHT.png",
-                            height_map)
+                        # save_pyplot_image(
+                        #     save_dir /
+                        #     f"{count}_HEIGHT.png",
+                        #     height_map)
 
                         count += 1
     return True
