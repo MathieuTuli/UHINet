@@ -169,7 +169,6 @@ $(function() {
       coords_bound: JSON.stringify(coords_bound),
       polygon_color: JSON.stringify(selectedShape.fillColor),
       colors: JSON.stringify(colors),
-      height: JSON.stringify(selectedShape.height),
     }, function(data) {
       image_path = [];
       image_path.push(('/static/' + data.image_names[0]));
@@ -268,22 +267,11 @@ function initMap () {
     }
 
 
-    function setHeight(){
-        if (selectedShape){
-            selectedShape.height = document.getElementById("height").value;
-             console.log(selectedShape.height);
-        }
-    }
-
 
 
     var button_changeOverlay = document.getElementById("rangeinput")
     button_changeOverlay.addEventListener("click", changeOpacity);
 
-    var height_input = document.getElementById("height")
-    height_input.addEventListener("blur", setHeight);
-            
-    document.getElementById("height").value = 0;
 
 
     // Keeps track of the coordinates of the current viewport
@@ -307,7 +295,6 @@ function initMap () {
         drawingManager.setDrawingMode(null);
         array = newShape.getPath();
         coords = [];
-        newShape.height = document.getElementById("height").value;
         for(var i = 0; i < array.length; i++)
             coords.push(array.getAt(i));
         // window.alert(coords);
@@ -315,7 +302,6 @@ function initMap () {
             setSelection(newShape);
             array = newShape.getPath();
             coords = [];
-            document.getElementById("height").value = newShape.height;
             for(var i = 0; i < array.length; i++)
                 coords.push(array.getAt(i));
             // window.alert(coords);
