@@ -1,6 +1,7 @@
 from typing import Tuple
 from pathlib import Path
 
+import datetime
 import io
 
 import tensorflow as tf
@@ -30,6 +31,15 @@ from .pytorch_pix2pix.data import base_dataset
 from .pytorch_pix2pix.util.util import tensor2im
 
 
+def get_latest_summer():
+    now = datetime.datetime.now()
+    year = now.year
+    month = now.month
+    if month < 8:
+        year -= 1
+    return [f"{year}-06-01", f"{year}-08-31"]
+
+
 class Predictor():
     def __init__(self,
                  opts,
@@ -55,13 +65,9 @@ class Predictor():
 class Requests():
     def __init__(self,
                  instance_id: str,
-                 # winter_weights_file: Path,
-                 # spring_weights_file: Path,
-                 # summer_weights_file: Path,
-                 # fall_weights_file: Path,
-                 flask_static_dir: Path,
-                 height_shp_file: Path,
-                 energy_shp_file: Path) -> None:
+                 flask_static_dir: Path,) -> None:
+        # height_shp_file: Path,
+        # energy_shp_file: Path) -> None:
         opts = TestOptions().parse()
         opts.num_threads = 0
         opts.batch_size = 1
@@ -71,30 +77,23 @@ class Requests():
         opts.name = 'uhinet_pix2pix'
         opts.model = 'pix2pix'
         opts.checkpoints_dir = 'data/checkpoints'
-        self.predictors = {
-            Season.WINTER: Predictor(opts=opts,
-                                     input_shape=(256, 256, 3)),
-            Season.SPRING: Predictor(opts=opts,
-                                     input_shape=(256, 256, 3)),
-            Season.SUMMER: Predictor(opts=opts,
-                                     input_shape=(256, 256, 3)),
-            Season.FALL: Predictor(opts=opts,
-                                   input_shape=(256, 256, 3))}
+        self.predictor = Predictor(opts=opts,
+                                   input_shape=(256, 256, 3))
 
         self.accessor = SentinelHubAccessor(instance_id=instance_id)
         self.flask_static_dir = flask_static_dir
-        self.height_frame = GeoDataFrame.from_file(str(height_shp_file))
-        self.height_frame = self.height_frame.sort_values(by=str('HEIGHT'))
-        self.height_fig, self.height_ax = ax_from_frame(
-            frame=self.height_frame,
-            size=ImageSize(width=512, height=512),
-            column=HeightColumn.HEIGHT_MSL,
-            sort_by=HeightColumn.HEIGHT_MSL,
-            cmap='Greens')
-        self.height_norm = matplotlib.colors.Normalize(
-            vmin=self.height_frame['HEIGHT_MSL'].min(),
-            vmax=self.height_frame['HEIGHT_MSL'].max())
-        self.height_color = matplotlib.cm.get_cmap('Greens')
+        # self.height_frame = GeoDataFrame.from_file(str(height_shp_file))
+        # self.height_frame = self.height_frame.sort_values(by=str('HEIGHT'))
+        # self.height_fig, self.height_ax = ax_from_frame(
+        #     frame=self.height_frame,
+        #     size=ImageSize(width=512, height=512),
+        #     column=HeightColumn.HEIGHT_MSL,
+        #     sort_by=HeightColumn.HEIGHT_MSL,
+        #     cmap='Greens')
+        # self.height_norm = matplotlib.colors.Normalize(
+        #     vmin=self.height_frame['HEIGHT_MSL'].min(),
+        #     vmax=self.height_frame['HEIGHT_MSL'].max())
+        # self.height_color = matplotlib.cm.get_cmap('Greens')
         self.count = 0
         # self.energy_frame = GeoDataFrame.from_file(str(height_shp_file))
         # self.energy_frame = self.energy_frame.sort_values(by=str('ENERGY'))
@@ -118,22 +117,23 @@ class Requests():
             center=LatLon(lat=center_lat,
                           lon=center_lon))
         images = []
+        print(get_latest_summer())
         for layer in ['RGB', 'LST']:
             images.append(self.accessor.get_landsat_image(
                 layer=layer,
-                date='latest',
+                date=get_latest_summer(),
                 image_size=ImageSize(width=512, height=512),
                 cloud_cov_perc=0.1,
                 bbox=new_coords))
         before_rgb, before_lst = images
-        before_rgb = before_rgb[0]
-        before_lst = before_lst[0]
-        matplotlib.use('agg')
-        # TODO fix this
         if len(before_rgb) == 0:
             logging.critical(
                 'Requests: no RGB image found for those coordinates')
             raise
+        before_rgb = before_rgb[0]
+        before_lst = before_lst[0]
+        matplotlib.use('agg')
+        # TODO fix this
         after_rgb = alter_area(image=before_rgb,
                                polygon=polygon.coordinates,
                                window=new_coords,
@@ -164,23 +164,23 @@ class Requests():
         #     axis=0)
         after_rgb_tensor = cv2.resize(
             after_rgb, (512, 512), interpolation=cv2.INTER_NEAREST)
-        before_height = array_from_ax(self.height_fig, self.height_ax,
-                                      new_coords)
-        save_pyplot_image(
-            image_name=str(self.flask_static_dir /
-                           f'{self.count}_before_height.png'),
-            image=before_height)
-        self.height_ax.add_patch(
-            matplotlib.pyplot.Polygon(
-                [(c.lon, c.lat) for c in polygon.coordinates],
-                fill=True, edgecolor=None,
-                color=self.height_color(self.height_norm(height))))
-        after_height = array_from_ax(self.height_fig, self.height_ax,
-                                     new_coords)
+        # before_height=array_from_ax(self.height_fig, self.height_ax,
+        #                               new_coords)
+        # save_pyplot_image(
+        #     image_name = str(self.flask_static_dir /
+        #                    f'{self.count}_before_height.png'),
+        #     image = before_height)
+        # self.height_ax.add_patch(
+        #     matplotlib.pyplot.Polygon(
+        #         [(c.lon, c.lat) for c in polygon.coordinates],
+        #         fill=True, edgecolor=None,
+        #         color=self.height_color(self.height_norm(height))))
+        # after_height=array_from_ax(self.height_fig, self.height_ax,
+        #                              new_coords)
         # before_energy = self.generate_energy_map(bbox=new_coords)
-        before_predicted_lst = self.predictors[season].predict(
+        before_predicted_lst = self.predictor.predict(
             before_rgb_tensor)
-        after_predicted_lst = self.predictors[season].predict(after_rgb_tensor)
+        after_predicted_lst = self.predictor.predict(after_rgb_tensor)
 
         diff, val = diff_images(
             reference=before_predicted_lst, other=after_predicted_lst)
@@ -206,10 +206,10 @@ class Requests():
             image_name=str(self.flask_static_dir /
                            f'{self.count}_after_rgb.png'),
             image=after_rgb)
-        save_pyplot_image(
-            image_name=str(self.flask_static_dir /
-                           f'{self.count}_after_height.png'),
-            image=after_height)
+        # save_pyplot_image(
+        #     image_name = str(self.flask_static_dir /
+        #                    f'{self.count}_after_height.png'),
+        #     image = after_height)
         # save_pyplot_image(
         #     image_name=str(self.flask_static_dir / 'before_energy.png'),
         #     image=before_energy)

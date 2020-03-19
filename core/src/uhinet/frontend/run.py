@@ -65,10 +65,10 @@ def main(args: APNamespace):
             # spring_weights_file=weights_path,
             # summer_weights_file=weights_path,
             # fall_weights_file=weights_path,
-            flask_static_dir=STATIC_DIR,
-            height_shp_file=Path(
-                'data/shp/2019_height.shp'),
-            energy_shp_file=None)
+            flask_static_dir=STATIC_DIR,)
+            # height_shp_file=Path(
+            #     'data/shp/2019_height.shp'),
+            # energy_shp_file=None)
         logging.debug(f"Frontend: url specified: {url}")
         index = Path('map.html')
         return render_template(str(index), key=url)
