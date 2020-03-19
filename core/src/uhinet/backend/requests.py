@@ -98,6 +98,46 @@ class Requests():
         # self.energy_frame = GeoDataFrame.from_file(str(height_shp_file))
         # self.energy_frame = self.energy_frame.sort_values(by=str('ENERGY'))
 
+        # case2_2019 = cv2.cvtColor(cv2.imread(
+        #     '/home/mat/.uhinet/new-out/case2/2015/summer/0_RGB.png'), cv2.COLOR_BGR2RGB)
+        # case2_2019 = cv2.resize(
+        #     case2_2019, (512, 512), interpolation=cv2.INTER_NEAREST)
+        # save_pyplot_image('/home/mat/.uhinet/new-out/case2/2015/summer/_0_LST.png',
+        #                   self.predictor.predict(case2_2019))
+        # case2_2019 = cv2.cvtColor(cv2.imread(
+        #     '/home/mat/.uhinet/new-out/case2/2019/summer/MODIFIED_RGB.png'), cv2.COLOR_BGR2RGB)
+        # case2_2019 = cv2.resize(
+        #     case2_2019, (512, 512), interpolation=cv2.INTER_NEAREST)
+        # save_pyplot_image('/home/mat/.uhinet/new-out/case2/2019/summer/MODIFIED_LST.png',
+        #                   self.predictor.predict(case2_2019))
+
+        # case2_2019 = cv2.cvtColor(cv2.imread(
+        #     '/home/mat/.uhinet/new-out/case2/2019/summer/1_RGB.png'), cv2.COLOR_BGR2RGB)
+        # case2_2019 = cv2.resize(
+        #     case2_2019, (512, 512), interpolation=cv2.INTER_NEAREST)
+        # save_pyplot_image('/home/mat/.uhinet/new-out/case2/2019/summer/_1_LST.png',
+        #                   self.predictor.predict(case2_2019))
+        # case2_2019 = cv2.cvtColor(cv2.imread(
+        #     '/home/mat/.uhinet/new-out/case2/2015/summer/2015_2019.png'), cv2.COLOR_BGR2RGB)
+        # case2_2019 = cv2.resize(
+        #     case2_2019, (512, 512), interpolation=cv2.INTER_NEAREST)
+        # save_pyplot_image('/home/mat/.uhinet/new-out/case2/2015/summer/2015_2019_LST.png',
+        #                   self.predictor.predict(case2_2019))
+
+        # case3_2015 = cv2.cvtColor(cv2.imread(
+        #     '/home/mat/.uhinet/new-out/case3/2019/summer/0_RGB.png'), cv2.COLOR_BGR2RGB)
+        # case3_2015 = cv2.resize(
+        #     case3_2015, (512, 512), interpolation=cv2.INTER_NEAREST)
+        # save_pyplot_image('/home/mat/.uhinet/new-out/case3/2019/summer/_0_LST.png',
+        #                   self.predictor.predict(case3_2015))
+
+        # case4_2019 = cv2.cvtColor(cv2.imread(
+        #     '/home/mat/.uhinet/new-out/case4/2015/summer/0_RGB.png'), cv2.COLOR_BGR2RGB)
+        # case4_2019 = cv2.resize(
+        #     case4_2019, (512, 512), interpolation=cv2.INTER_NEAREST)
+        # save_pyplot_image('/home/mat/.uhinet/new-out/case4/2015/summer/_0_LST.png',
+        #                   self.predictor.predict(case4_2019))
+
     def __str__(self) -> str:
         return 'Requests'
 
