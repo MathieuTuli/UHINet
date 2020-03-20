@@ -234,7 +234,7 @@ class Requests():
             image=after_predicted_lst)
         save_pyplot_image(
             image_name=str(self.flask_static_dir / f'{self.count}_diff.png'),
-            image=diff if polygon.building_type == BuildingType.GREEN_SPACE else -diff,
+            image=diff,
             cmap='bwr',
             vmin=0,
             vmax=255)
