@@ -35,7 +35,7 @@ img = cv2.cvtColor(cv2.imread(
     str(img_bank / 'case1_2015_rgb_fake_B.png')), cv2.COLOR_BGR2RGB)
 img2 = cv2.cvtColor(cv2.imread(
     str(img_bank / 'case1_2019_modified_fake_B.png')), cv2.COLOR_BGR2RGB)
-diff, val = diff_images(img, img2)
+diff, val = diff_images(img2, img)
 save_pyplot_image('1_diff_same.png', diff, cmap='bwr', vmin=0, vmax=255)
 print(val)
 
@@ -51,7 +51,7 @@ img = cv2.cvtColor(cv2.imread(
     str(img_bank / 'case1_2019_modified_fake_B.png')), cv2.COLOR_BGR2RGB)
 img2 = cv2.cvtColor(cv2.imread(
     str(img_bank / 'case1_2019_rgb_fake_B.png')), cv2.COLOR_BGR2RGB)
-diff, val = diff_images(img2, img)
+diff, val = diff_images(img, img2)
 save_pyplot_image('1_diff_modified.png', diff, cmap='bwr', vmin=0, vmax=255)
 print(val)
 

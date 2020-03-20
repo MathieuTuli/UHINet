@@ -127,13 +127,13 @@ def diff_images(reference: np.ndarray,
     int_error_b = np.subtract(
         reference[:, :, 2],
         other[:, :, 2])
-    int_error_r = (int_error_r + int_error_b + int_error_g) / 3
+    # int_error_r = (int_error_r + int_error_b + int_error_g) / 3
 
     # Calculate the maximum error for each pixel
     # lum_img = np.maximum(np.maximum(int_error_r, int_error_g), int_error_b)
 
     lum_img = int_error_r
-    _min = -10  # np.min(int_error_r)
+    _min = np.min(int_error_r)
     # # print(np.min(int_error_r))
     # # print(np.max(int_error_r))
     lum_img = 255 * \
