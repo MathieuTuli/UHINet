@@ -90,7 +90,6 @@ torchfile==0.1.0
 torchvision==0.5.0
 tornado==6.0.4
 traitlets==4.3.3
--e git+https://github.com/mathieutuli/uhinet@59601d2e8926f5b69e2542ea88befd27cddddcdd#egg=uhinet&subdirectory=core
 urllib3==1.25.7
 utm==0.5.0
 visdom==0.1.8.9
