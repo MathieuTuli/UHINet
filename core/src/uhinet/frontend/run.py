@@ -66,9 +66,9 @@ def main(args: APNamespace):
             # summer_weights_file=weights_path,
             # fall_weights_file=weights_path,
             flask_static_dir=STATIC_DIR,)
-            # height_shp_file=Path(
-            #     'data/shp/2019_height.shp'),
-            # energy_shp_file=None)
+        # height_shp_file=Path(
+        #     'data/shp/2019_height.shp'),
+        # energy_shp_file=None)
         logging.debug(f"Frontend: url specified: {url}")
         index = Path('map.html')
         return render_template(str(index), key=url)
@@ -81,7 +81,7 @@ def main(args: APNamespace):
         colors = ast.literal_eval(request.args.get('colors'))
         polygon_color = ast.literal_eval(request.args.get('polygon_color'))
         # season = ast.literal_eval(request.args.get('season'))
-        height = float(ast.literal_eval(request.args.get('height')))
+        # height = float(ast.literal_eval(request.args.get('height')))
         # energy = float(ast. literal_eval(request.args.get('energy')))
         energy = 0.0
 
@@ -143,7 +143,7 @@ def main(args: APNamespace):
         layers = BACKEND.predict(
             polygon=polygon,
             season=Season.SUMMER,  # getSeason(season),
-            height=height,
+            height=0,
             energy=energy)
         image_names = [str(layers[0].image),  # Before image
                        str(layers[1].image),  # After image
